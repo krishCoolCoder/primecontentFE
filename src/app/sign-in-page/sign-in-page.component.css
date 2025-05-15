@@ -1,0 +1,21 @@
+/* .signInContainer {
+    position: absolute;
+    right : 50%;
+    left : 50%;
+    transform: translate(-50%,-50%);
+    width: 200px;
+    height: 500px;
+} */
+
+.signInContainer {
+    background-color: #D9D9D9;
+    padding : 30px;
+    border-radius: 20px;
+}
+button {
+    background-color: white;
+    color: black;
+}
+.btn-primary {
+    --bs-btn-border-color: none;
+}

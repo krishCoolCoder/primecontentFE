@@ -1,0 +1,35 @@
+ul {
+    list-style: none;
+    padding-left: 0px;
+    margin-top : 2px;
+}
+li {
+    z-index: -2;
+    border-bottom: 2px solid #AFAFAF;
+    padding : 5px;
+}
+li:hover {
+    background-color: #AFAFAF;
+}
+.subHeaderContainer {
+    width: 200px;
+    border-right: 2px solid #AFAFAF;
+    /* height: 92vh; */
+    position: absolute;
+    top: 50px;
+    bottom: 0px;
+}
+.signout{
+    position: absolute;
+    bottom: -16px;
+    right:0px;
+    left:0px;
+}
+.signout li {
+    border-top: 2px solid #AFAFAF;
+    border-bottom: none;
+}
+.signout li:hover {
+    
+    background-color: #AFAFAF;
+}

@@ -2,3 +2,9 @@
     font-size: 30px;
     font-weight: 500px;
 }
+button {
+    background-color: #535353;
+}
+.btn-primary {
+    --bs-btn-border-color: #535353;
+}
