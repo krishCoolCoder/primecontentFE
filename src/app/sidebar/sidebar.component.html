@@ -1,17 +1,17 @@
 <div class="subHeaderContainer">
 <ul>
-    <li>Dashboard</li>
-    <li>Content</li>
-    <li>Content Type</li>
-    <li>Tag</li>
-    <li>Collection</li>
-    <li>Users</li>
-    <li>Users Access</li>
-    <li>Users Role</li>
+    <li (click)="redirect('dashboard')">Dashboard</li>
+    <li (click)="redirect('content')" >Content</li>
+    <li (click)="redirect('contentType')" >Content Type</li>
+    <li (click)="redirect('tag')" >Tag</li>
+    <li (click)="redirect('collection')" >Collection</li>
+    <li (click)="redirect('users')" >Users</li>
+    <li (click)="redirect('userAccess')" >Users Access</li>
+    <li (click)="redirect('role')" >Users Role</li>
 </ul>
 <ul class="signout">
     
-    <li>Settings</li>
-    <li>Sign Out</li>
+    <li (click)="redirect('settings')">Settings</li>
+    <li (click)="redirect('loggout')">Sign Out</li>
 </ul>
 </div>
