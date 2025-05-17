@@ -1,0 +1,83 @@
+<!-- Modal -->
+  <div class="modal fade" id="createContentModelSummon" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 defaultContentChoice" id="exampleModalLabel">Default content type</h1>
+          <h1 class="modal-title fs-5 ms-5 customContentChoice" id="exampleModalLabel">Custom content type</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form >
+            <!-- [formGroup]="signinForm" -->
+                <div class="mb-3 d-flex">
+                    <!-- <label for="exampleInputEmail1" class="form-label">User id / Email address</label> -->
+                    <input formControlName="userId me-2" placeholder="Content Type" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <div class="custom-select-wrapper ms-3">
+                        <select class="custom-select" name="cars" id="cars">
+                        <option value="volvo">String</option>
+                        <option value="saab">Number</option>
+                        <option value="opel">Boolean</option>
+                        <option value="audi">Counter</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="mb-3 d-flex">
+                    <input formControlName="userId" placeholder="Content body" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <div class="custom-select-wrapper ms-3">
+                        <select class="custom-select" name="cars" id="cars">
+                        <option value="volvo">String</option>
+                        <option value="saab">Number</option>
+                        <option value="opel">Boolean</option>
+                        <option value="audi">Counter</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="mb-3 d-flex">
+                    <input formControlName="userId" placeholder="Comment" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <div class="custom-select-wrapper ms-3">
+                        <select class="custom-select" name="cars" id="cars">
+                        <option value="volvo">String</option>
+                        <option value="saab">Number</option>
+                        <option value="opel">Boolean</option>
+                        <option value="audi">Counter</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="mb-3 d-flex">
+                    <input formControlName="userId" placeholder="Like" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <div class="custom-select-wrapper ms-3">
+                        <select class="custom-select" name="cars" id="cars">
+                        <option value="volvo">String</option>
+                        <option value="saab">Number</option>
+                        <option value="opel">Boolean</option>
+                        <option value="audi">Counter</option>
+                      </select>
+                    </div>
+                    </div>
+                    <div class="mb-3 d-flex">
+                      <input formControlName="userId" placeholder="Dislike" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                      <div class="custom-select-wrapper ms-3">
+                        <select class="custom-select" name="cars" id="cars">
+                        <option value="volvo">String</option>
+                        <option value="saab">Number</option>
+                        <option value="opel">Boolean</option>
+                        <option value="audi">Counter</option>
+                      </select>
+                    </div>
+                    
+                </div>
+                <!-- <div class="d-flex flex-column justify-content-center align-items-center">
+                <button type="submit" class="btn btn-primary" (click)="login()">Login </button>
+                <button type="submit" class="btn btn-primary mt-2" (click)="signUpRedirect()">Create new account</button>
+                <a href="/" class="mt-2">forgot password?</a> -->
+            <!-- </div> -->
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
