@@ -6,6 +6,7 @@ import { SignUpPageComponent } from './sign-up-page/sign-up-page.component';
 import { HeaderComponent } from './header/header.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { authGuard, noAuthGuard } from './auth.guard';
+import { ContentComponent } from './content/content.component';
 
 export const routes: Routes = [
     {
@@ -35,7 +36,7 @@ export const routes: Routes = [
     }, 
     {
         path : "content",
-        component : DashboardComponent,
+        component : ContentComponent,
         canActivate : [authGuard]
     }, 
     {
