@@ -4,21 +4,25 @@
     <div class="container">
         <form>
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Type</label>
-
-                    <select id="exampleInputEmail1" class="form-select w-25">
-                        <option>Default</option>
-                      <option>Blog</option>
-                      <option>Payment</option>
-                      <option>Flash News</option>
-                      <option>Testing</option>
-                    </select>
+                <label for="exampleInputEmail1" class="form-label">Content Type Title</label>
+                <input type="text" placeholder="Content Type Title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Title</label>
-                <div class="d-flex">
-                    <input type="text" placeholder="Content Title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2">
+            <div class="mb-1 d-flex">
+                <label for="exampleInputEmail1" class="form-label flex-grow-1">Content Field Name</label>
+                <label for="exampleInputEmail1" class="form-label flex-grow-2 me-5 ">Field type</label>
+            </div>
+            <div class="" *ngFor="let item of contentTypeList; index as i">
+            <div class="mb-3 d-flex">
+                <div class="flex-grow-1">
+                    <!-- <label for="exampleInputEmail1" class="form-label">Content Field Name</label> -->
+                    <input type="text" name="fieldName{{ i }}" [(ngModel)]="item.fieldName" placeholder="Content Field Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+                <div class="flex-grow-2 me-2 ms-2">
+                <!-- <label for="exampleInputEmail1" class="form-label">Content Field Name</label> -->
+                    <select id="exampleInputEmail1" class="form-select w-15"
+                    name="fieldType{{ i }}"
+                    [(ngModel)]="item.fieldType"
+                    >
                       <option>String</option>
                       <option>Number</option>
                       <option>Boolean</option>
@@ -26,55 +30,10 @@
                     </select>
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Description</label>
-                <div class="d-flex">
-                    <textarea class="form-control" id="textAreaExample1" rows="5"></textarea>
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2 h-90">
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Comment</label>
-                <div class="d-flex">
-                    <input type="email" placeholder="Content Comment" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2">
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Like</label>
-                <div class="d-flex">
-                    <input type="email" placeholder="Content Like" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2">
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Dislike</label>
-                <div class="d-flex">
-                    <input type="email" placeholder="Content Dislike" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2">
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+            
+            <button class="btn btn-primary me-3" (click)="addAnotherField()">Add another field</button>
+            <button class="btn btn-primary" (click)="createContentType()">Create content type</button>
         </form>
     </div>
 </div>
