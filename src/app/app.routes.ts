@@ -7,6 +7,9 @@ import { HeaderComponent } from './header/header.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { authGuard, noAuthGuard } from './auth.guard';
 import { ContentComponent } from './content/content.component';
+import { CreateContentPageComponent } from './create-content-page/create-content-page.component';
+import { ContentTypePageComponent } from './content-type-page/content-type-page.component';
+import { CreateContentTypePageComponent } from './create-content-type-page/create-content-type-page.component';
 
 export const routes: Routes = [
     {
@@ -40,8 +43,18 @@ export const routes: Routes = [
         canActivate : [authGuard]
     }, 
     {
+        path : "createContent",
+        component : CreateContentPageComponent,
+        canActivate : [authGuard]
+    }, 
+    {
         path : "contentType",
-        component : DashboardComponent,
+        component : ContentTypePageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "createContentType",
+        component : CreateContentTypePageComponent,
         canActivate : [authGuard]
     },
     {
