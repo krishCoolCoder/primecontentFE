@@ -7,3 +7,7 @@
 select{
     height:40px;
 }
+.container{
+    height: 93.5vh;
+    overflow: auto;
+}

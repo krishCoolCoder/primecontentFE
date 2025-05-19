@@ -10,6 +10,8 @@ import { ContentComponent } from './content/content.component';
 import { CreateContentPageComponent } from './create-content-page/create-content-page.component';
 import { ContentTypePageComponent } from './content-type-page/content-type-page.component';
 import { CreateContentTypePageComponent } from './create-content-type-page/create-content-type-page.component';
+import { CreateTagsPageComponent } from './create-tags-page/create-tags-page.component';
+import { TagsPageComponent } from './tags-page/tags-page.component';
 
 export const routes: Routes = [
     {
@@ -59,7 +61,12 @@ export const routes: Routes = [
     },
     {
         path : "tag",
-        component : DashboardComponent,
+        component : TagsPageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "createTagPage",
+        component : CreateTagsPageComponent,
         canActivate : [authGuard]
     },
     {

@@ -1,3 +1,20 @@
+.container{
+    height: 93.5vh;
+    overflow: auto;
+}
 select{
     height:40px;
+}
+button {
+    height : 30px;
+    padding-top: 1px;
+    background-color: #4b4b4b;
+}
+.btn-primary {
+    --bs-btn-border-color: none;
+}
+.btn:hover {
+    color: white;
+    background-color: black;
+    border-color: black;
 }
