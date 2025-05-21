@@ -15,7 +15,7 @@
                     [(ngModel)]="collectionName" 
                     (ngModelChange)="onCollectionNameChange($event)"
                     placeholder="Content Collection Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <p class="mt-2">API route : /{{collectionName}}</p>
+                    <p class="mt-2">API route : https://api.primecontent.in/collection/{{collectionName}}</p>
                 </div>
                 <!-- <div class="flex-grow-2 me-2 ms-2">
                     <select id="exampleInputEmail1" class="form-select w-15"
@@ -33,6 +33,7 @@
                     </select>
                 </div> -->
             </div>
+            <label for="exampleInputEmail1" class="form-label">Content Type</label>
             <select 
             id="exampleInputEmail1" 
             class="form-select w-25 mb-3"
@@ -56,6 +57,7 @@
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Field Name</th>
+                            <th scope="col">Field Type</th>
                             <th scope="col">Visibility</th>
                             <th scope="col">Populate</th>
                           </tr>
@@ -64,6 +66,7 @@
                           <tr>
                             <th scope="row">{{i+1}}</th>
                             <td>{{ field.fieldName || 'Unnamed Field' }}</td>
+                            <td>{{ field.fieldType || 'Unnamed Field' }}</td>
                             <td>
                                 <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
                             </td>
@@ -78,7 +81,7 @@
         <!-- </div> -->
             
             <button class="btn btn-primary me-3" >Add another field</button>
-            <button class="btn btn-primary" >Create content type</button>
+            <button class="btn btn-primary" >Create Collection</button>
         </form>
     </div>
 </div>
