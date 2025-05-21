@@ -12,6 +12,8 @@ import { ContentTypePageComponent } from './content-type-page/content-type-page.
 import { CreateContentTypePageComponent } from './create-content-type-page/create-content-type-page.component';
 import { CreateTagsPageComponent } from './create-tags-page/create-tags-page.component';
 import { TagsPageComponent } from './tags-page/tags-page.component';
+import { CollectionPageComponent } from './collection-page/collection-page.component';
+import { CreateCollectionPageComponent } from './create-collection-page/create-collection-page.component';
 
 export const routes: Routes = [
     {
@@ -71,7 +73,12 @@ export const routes: Routes = [
     },
     {
         path : "collection",
-        component : DashboardComponent,
+        component : CollectionPageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "createCollection",
+        component : CreateCollectionPageComponent,
         canActivate : [authGuard]
     },
     {
