@@ -1,0 +1,8 @@
+.container{
+    overflow: auto;
+}
+table th {
+    white-space: nowrap;
+    width: auto;
+  }
+  

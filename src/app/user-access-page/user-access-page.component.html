@@ -1,0 +1,94 @@
+<app-header></app-header>
+<div class="d-flex">
+    <app-sidebar></app-sidebar>
+    <!-- <app-create-content-model></app-create-content-model> -->
+    <div class="container">
+        <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Role Name</th>
+        <th scope="col">Read Content Access</th>
+        <th scope="col">Edit Content Access</th>
+        <th scope="col">Delete Content Access</th>
+        <th scope="col">Read Content Type Access</th>
+        <th scope="col">Edit Content Type Access</th>
+        <th scope="col">Delete Content Type Access</th>
+        <th scope="col">Read Tag Access</th>
+        <th scope="col">Edit Tag Access</th>
+        <th scope="col">Delete Tag Access</th>
+        <th scope="col">Read Collection Access</th>
+        <th scope="col">Edit Collection Access</th>
+        <th scope="col">Delete Collection Access</th>
+        <th scope="col">Read User Access</th>
+        <th scope="col">Edit User Access</th>
+        <th scope="col">Delete User Access</th>
+        <th scope="col">Read User Role Access</th>
+        <th scope="col">Edit User Role Access</th>
+        <th scope="col">Delete User Role Access</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let field of userRoles, index as i" >
+      <tr>
+        <th scope="row">{{i+1}}</th>
+        <td>{{ field.roleName || 'Unnamed Field' }}</td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+        <td class="text-center align-middle">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+  </div>
+</div>

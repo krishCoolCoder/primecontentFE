@@ -1,5 +1,6 @@
 <app-header></app-header>
 <div class="d-flex">
+    <app-bulk-upload-modal></app-bulk-upload-modal>
     <app-sidebar></app-sidebar>
     <!-- <app-create-content-model></app-create-content-model> -->
     <div class="container">
@@ -11,11 +12,18 @@
             data-bs-target="#createContentModelSummon"
             (click)="redirectToCreateContent()"
             >Create content</button> -->
+            <div class="">
+            <button 
+            type="button createContent" 
+            class="btn btn-primary me-3" 
+            (click)="redirectToCreateUsersPage()"
+            >Create User</button>
             <button 
             type="button createContent" 
             class="btn btn-primary" 
-            (click)="redirectToCreateCollection()"
-            >Create collection</button>
+            data-bs-toggle="modal" data-bs-target="#bulkUploadModal"
+            >Create Bulk User</button>
+        </div>
             <!-- <div class="viewOptions d-flex justify-content-center align-items-center">
                 <div class="gridView me-2">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +43,7 @@
                 </div>
             </div> -->
             <div class="contentFilter">
-                <button type="button createContent" class="btn btn-primary">Content filter</button>
+                <button type="button createContent" class="btn btn-primary">Users filter</button>
             </div>
         </div>
         <div class="container viewContainer">

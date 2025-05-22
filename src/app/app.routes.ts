@@ -14,6 +14,9 @@ import { CreateTagsPageComponent } from './create-tags-page/create-tags-page.com
 import { TagsPageComponent } from './tags-page/tags-page.component';
 import { CollectionPageComponent } from './collection-page/collection-page.component';
 import { CreateCollectionPageComponent } from './create-collection-page/create-collection-page.component';
+import { UsersPageComponent } from './users-page/users-page.component';
+import { CreateUserPageComponent } from './create-user-page/create-user-page.component';
+import { UserAccessPageComponent } from './user-access-page/user-access-page.component';
 
 export const routes: Routes = [
     {
@@ -83,12 +86,17 @@ export const routes: Routes = [
     },
     {
         path : "users",
-        component : DashboardComponent,
+        component : UsersPageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "createUsers",
+        component : CreateUserPageComponent ,
         canActivate : [authGuard]
     },
     {
         path : "userAccess",
-        component : DashboardComponent,
+        component : UserAccessPageComponent,
         canActivate : [authGuard]
     },
     {
