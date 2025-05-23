@@ -17,6 +17,8 @@ import { CreateCollectionPageComponent } from './create-collection-page/create-c
 import { UsersPageComponent } from './users-page/users-page.component';
 import { CreateUserPageComponent } from './create-user-page/create-user-page.component';
 import { UserAccessPageComponent } from './user-access-page/user-access-page.component';
+import { UserRolePageComponent } from './user-role-page/user-role-page.component';
+import { CreateUserRolePageComponent } from './create-user-role-page/create-user-role-page.component';
 
 export const routes: Routes = [
     {
@@ -101,7 +103,12 @@ export const routes: Routes = [
     },
     {
         path : "userRole",
-        component : DashboardComponent,
+        component : UserRolePageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "createUserRole",
+        component : CreateUserRolePageComponent,
         canActivate : [authGuard]
     },
     {

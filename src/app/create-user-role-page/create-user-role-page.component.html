@@ -1,0 +1,34 @@
+<app-header></app-header>
+<div class="d-flex">
+    <app-sidebar></app-sidebar>
+    <div class="container">
+        <div class="userCreationForm mt-3 d-flex justify-content-center align-items-center">
+        <form class="w-50">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">User Role Name</label>
+                <div class="d-flex">
+                    <input type="text" placeholder="User First Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Tag</label>
+                <div class="d-flex">
+                    <input type="text" placeholder="User Last Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Inherit Existing Role</label>
+                    <select id="exampleInputEmail1" class="form-select w-50">
+                        <option value="" selected>Select the user role type</option>
+                        <option>SuperAdmin</option>
+                      <option>Admin</option>
+                      <option>User</option>
+                      <option>Annonymous</option>
+                    </select>
+            </div>
+            <button type="submit" class="btn btn-primary me-4">Create Role</button>
+            <button type="submit" class="btn btn-primary" (click)="redirectToUserRolePage()">Cancel</button>
+        </form>
+    </div>
+    </div>
+</div>
