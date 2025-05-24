@@ -5,7 +5,7 @@
         <form>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Content Type Title</label>
-                <input type="text" placeholder="Content Type Title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input [(ngModel)]="contentTypeName" name="contentTypeName" type="text" placeholder="Content Type Title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             </div>
             <div class="mb-1 d-flex">
                 <label for="exampleInputEmail1" class="form-label flex-grow-1">Content Field Name</label>

@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './create-content-type-page.component.css'
 })
 export class CreateContentTypePageComponent {
+  contentTypeName: any;
   fieldName:any;
   contentTypeList = [
     {
@@ -29,5 +30,16 @@ export class CreateContentTypePageComponent {
   };
   createContentType() {
     console.log("The contentTypeList is this : ", this.contentTypeList);
+    let existingContentTypeList: any = JSON.parse(localStorage.getItem("contentTypeList") ?? "[]");
+    console.log("The existingContentTypeList is this : ", existingContentTypeList)
+    localStorage.setItem("contentTypeList", JSON.stringify([...existingContentTypeList,
+      {
+        contentTypeName : this.contentTypeName,
+        // contentTypeList : [this.contentTypeList, ...existingContentTypeList]
+        contentTypeList : this.contentTypeList
+      }
+    ]
+    ));
+    console.log("after saving contentTypeList in localStorage is this : ", JSON.parse(localStorage.getItem("contentTypeList") ?? "[]"))
   }
 }

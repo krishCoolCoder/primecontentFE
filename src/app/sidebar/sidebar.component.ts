@@ -44,6 +44,7 @@ export class SidebarComponent {
         case "loggout":
           console.log("Loggout is clicked : ")
           localStorage.removeItem("userInfo")
+          localStorage.removeItem("contentTypeList")
           this.router.navigate(["/"])
         break;
       default:
