@@ -42,6 +42,7 @@ export class SignInPageComponent {
           password : this.signinForm.value.password
         }
       ))
+      localStorage.setItem("content", "[]")
       this.router.navigate(["/dashboard"])
     } else {
       this.router.navigate(["/"])

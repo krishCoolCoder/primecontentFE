@@ -3,78 +3,109 @@
     <app-sidebar></app-sidebar>
     <div class="container">
         <form>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Type</label>
+            <div class="mb-3 mt-2 d-flex">
+                <div class="w-auto me-3">
+                    <label for="exampleInputEmail1" class="form-label">Content Type</label>
 
-                    <select id="exampleInputEmail1" class="form-select w-25">
-                        <option>Default</option>
-                      <option>Blog</option>
-                      <option>Payment</option>
-                      <option>Flash News</option>
-                      <option>Testing</option>
+                    <select class="form-select w-auto" [(ngModel)]="selectedContentType" name="contentTypeList"
+                        (change)="contentTypeSelected($event)">
+                        <option [value]="'Default'">Default</option>
+                        <option *ngFor="let item of contentTypeList" [value]="item.contentTypeName">
+                            {{ item.contentTypeName }}
+                        </option>
                     </select>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Title</label>
-                <div class="d-flex">
-                    <input type="text" placeholder="Content Title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2">
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
+                </div>
+                <div class="w-auto">
+                    <label for="exampleInputEmail1" class="form-label">Tag</label>
+
+                    <select class="form-select w-auto" [(ngModel)]="selectedContentType" name="contentTypeList"
+                        (change)="contentTypeSelected($event)">
+                        <option [value]="'Default'">Default</option>
+                        <option *ngFor="let item of contentTypeList" [value]="item.contentTypeName">
+                            {{ item.contentTypeName }}
+                        </option>
                     </select>
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Description</label>
-                <div class="d-flex">
-                    <textarea class="form-control" id="textAreaExample1" rows="5"></textarea>
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2 h-90">
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
-                    </select>
+            <div class="" *ngIf=" selectedContentType!='Default'; else defaultContent">
+                <div class="mb-3" *ngFor="let item of contentFields; let i = index">
+                    <label for="exampleInputEmail1" class="form-label">{{item.fieldName}}</label>
+                    <div class="d-flex">
+                        <input (change)="getFieldValue($event, i)" type="text" placeholder="Enter value"
+                            class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <select id="exampleInputEmail1" class="form-select w-25 ms-2">
+                            <option>{{item.fieldType}}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Comment</label>
-                <div class="d-flex">
-                    <input type="email" placeholder="Content Comment" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2">
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
-                    </select>
+            <ng-template class="" #defaultContent>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Content Title</label>
+                    <div class="d-flex">
+                        <input type="text" placeholder="Content Title" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp">
+                        <select id="exampleInputEmail1" class="form-select w-25 ms-2">
+                            <option>String</option>
+                            <option>Number</option>
+                            <option>Boolean</option>
+                            <option>Count</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Like</label>
-                <div class="d-flex">
-                    <input type="email" placeholder="Content Like" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2">
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
-                    </select>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Content Description</label>
+                    <div class="d-flex">
+                        <textarea class="form-control" id="textAreaExample1" rows="5"></textarea>
+                        <select id="exampleInputEmail1" class="form-select w-25 ms-2 h-90">
+                            <option>String</option>
+                            <option>Number</option>
+                            <option>Boolean</option>
+                            <option>Count</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Content Dislike</label>
-                <div class="d-flex">
-                    <input type="email" placeholder="Content Dislike" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <select id="exampleInputEmail1" class="form-select w-25 ms-2">
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
-                    </select>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Content Comment</label>
+                    <div class="d-flex">
+                        <input type="email" placeholder="Content Comment" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp">
+                        <select id="exampleInputEmail1" class="form-select w-25 ms-2">
+                            <option>String</option>
+                            <option>Number</option>
+                            <option>Boolean</option>
+                            <option>Count</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Content Like</label>
+                    <div class="d-flex">
+                        <input type="email" placeholder="Content Like" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp">
+                        <select id="exampleInputEmail1" class="form-select w-25 ms-2">
+                            <option>String</option>
+                            <option>Number</option>
+                            <option>Boolean</option>
+                            <option>Count</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Content Dislike</label>
+                    <div class="d-flex">
+                        <input type="email" placeholder="Content Dislike" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp">
+                        <select id="exampleInputEmail1" class="form-select w-25 ms-2">
+                            <option>String</option>
+                            <option>Number</option>
+                            <option>Boolean</option>
+                            <option>Count</option>
+                        </select>
+                    </div>
+                </div>
+            </ng-template>
+            <button type="submit" (click)="createContent()" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>

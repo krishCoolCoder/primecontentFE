@@ -3,6 +3,7 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-content-type-page',
@@ -20,6 +21,7 @@ export class CreateContentTypePageComponent {
       fieldType: "String"
     }
   ];
+  constructor(private router: Router){}
   addAnotherField() {
     this.contentTypeList.push(
       {
@@ -41,5 +43,6 @@ export class CreateContentTypePageComponent {
     ]
     ));
     console.log("after saving contentTypeList in localStorage is this : ", JSON.parse(localStorage.getItem("contentTypeList") ?? "[]"))
+    this.router.navigate(["/contentType"])
   }
 }
