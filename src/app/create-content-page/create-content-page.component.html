@@ -18,11 +18,11 @@
                 <div class="w-auto">
                     <label for="exampleInputEmail1" class="form-label">Tag</label>
 
-                    <select class="form-select w-auto" [(ngModel)]="selectedContentType" name="contentTypeList"
-                        (change)="contentTypeSelected($event)">
-                        <option [value]="'Default'">Default</option>
-                        <option *ngFor="let item of contentTypeList" [value]="item.contentTypeName">
-                            {{ item.contentTypeName }}
+                    <select class="form-select w-auto" [(ngModel)]="selectedTagType" name="contentTagList"
+                        (change)="contentTagSelected($event)">
+                        <option [value]="'Default Tag'">Default Tag</option>
+                        <option *ngFor="let item of tagList" [value]="item.tagName">
+                            {{ item.tagName }}
                         </option>
                     </select>
                 </div>

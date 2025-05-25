@@ -16,16 +16,22 @@ export class CreateContentPageComponent {
   contentTypeList : any;
   selectedContentType: string ="Default";
   contentFields : any = [];
+  tagList: any;
+  selectedTagType: string = "Default Tag"
 
   constructor(private router: Router){}
   ngOnInit() {
     this.contentTypeList = JSON.parse(localStorage.getItem("contentTypeList") ?? "[]");
+    this.tagList = JSON.parse(localStorage.getItem("tags")??"[]");
   }
   contentTypeSelected(event: any){
     this.selectedContentType = event.target.value;
     console.log("The selected content type is this : ", this.selectedContentType)
     this.contentFields = this.contentTypeList.find((data: any)=>data.contentTypeName==this.selectedContentType).contentTypeList;
     console.log("The contentFields is this : ", this.contentFields)
+  }
+  contentTagSelected(event: any){
+    this.selectedTagType = event.target.value;
   }
   getFieldValue(event: any, index: number) {
     this.contentFields[index]["fieldValue"] = event.target.value;
@@ -42,6 +48,7 @@ export class CreateContentPageComponent {
     console.log("The content to be created is this : ", 
       {
         contentType : this.selectedContentType,
+        contentTag : this.selectedTagType,
         contentFields : this.contentFields
       }
     )

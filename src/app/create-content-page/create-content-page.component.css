@@ -15,3 +15,16 @@ select{
     width: 200px;
     background-color: red;
 }
+button {
+    height : 30px;
+    padding-top: 1px;
+    background-color: #595959;
+}
+.btn-primary {
+    --bs-btn-border-color: none;
+}
+.btn:hover {
+    color: white;
+    background-color: black;
+    border-color: black;
+}

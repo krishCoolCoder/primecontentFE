@@ -43,6 +43,7 @@ export class SignInPageComponent {
         }
       ))
       localStorage.setItem("content", "[]")
+      localStorage.setItem("tags","[]")
       this.router.navigate(["/dashboard"])
     } else {
       this.router.navigate(["/"])

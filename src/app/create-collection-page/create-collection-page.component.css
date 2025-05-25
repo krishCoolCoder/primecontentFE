@@ -1,0 +1,13 @@
+button {
+    height : 30px;
+    padding-top:1.3px;
+    background-color: #595959;
+}
+.btn-primary {
+    --bs-btn-border-color: none;
+}
+.btn:hover {
+    color: white;
+    background-color: black;
+    border-color: black;
+}
