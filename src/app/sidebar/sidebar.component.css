@@ -34,3 +34,10 @@ li:hover {
     
     background-color: #AFAFAF;
 }
+
+@media only screen and (max-width: 800px) {
+    .subHeaderContainer{
+        visibility: hidden;
+        width: 0px;
+    }
+}
