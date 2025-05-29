@@ -9,7 +9,10 @@
     margin-right: 20px;
 }
 .hamburger {
-    visibility: hidden;
+    display: none;
+}
+.dummy{
+    display: block;
 }
 
 @media only screen and (max-width: 800px) {
@@ -17,9 +20,12 @@
         font-size: 15px;
     }
     .hamburger {
-        visibility: visible;
+        display: block;
         margin-left: 20px;
         padding-top: 5px;
+    }
+    .dummy {
+        display: none;
     }
     #menuToggle{
         height: 39px;
