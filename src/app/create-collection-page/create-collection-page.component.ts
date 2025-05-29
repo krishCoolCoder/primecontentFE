@@ -14,7 +14,7 @@ import { CommonModule, NgFor } from '@angular/common';
 export class CreateCollectionPageComponent {
   collectionName:string = "";
   selectedContentType:string = "";
-  contentTypeFields : any;
+  contentTypeFields : any = [];
 
   contentTypeList = [
     {
