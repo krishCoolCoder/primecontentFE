@@ -1,23 +1,22 @@
 <app-header></app-header>
 <div class="d-flex">
-    <app-sidebar></app-sidebar>
-    <div class="container">
-        <form>
-            <div class="mb-1">
-                <label for="exampleInputEmail1" class="form-label mt-3">Content Collection</label>
-                <!-- <input type="text" placeholder="Enter tag name here..." class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
-            </div>
-            <!-- <div class="" *ngFor="let item of tagList; index as i"> -->
-            <div class="mb-3 d-flex">
-                <div class="flex-grow-1">
-                    <!-- <label for="exampleInputEmail1" class="form-label">Content Field Name</label> -->
-                    <input type="text" name="collectionName" 
-                    [(ngModel)]="collectionName" 
-                    (ngModelChange)="onCollectionNameChange($event)"
-                    placeholder="Content Collection Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <p class="mt-2">API route : https://api.primecontent.in/collection/{{collectionName}}</p>
-                </div>
-                <!-- <div class="flex-grow-2 me-2 ms-2">
+  <app-sidebar></app-sidebar>
+  <div class="container">
+    <form>
+      <div class="mb-1">
+        <label for="exampleInputEmail1" class="form-label mt-3">Content Collection</label>
+        <!-- <input type="text" placeholder="Enter tag name here..." class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+      </div>
+      <!-- <div class="" *ngFor="let item of tagList; index as i"> -->
+      <div class="mb-3 d-flex">
+        <div class="flex-grow-1">
+          <!-- <label for="exampleInputEmail1" class="form-label">Content Field Name</label> -->
+          <input type="text" name="collectionName" [(ngModel)]="collectionName"
+            (ngModelChange)="onCollectionNameChange($event)" placeholder="Content Collection Name" class="form-control"
+            id="exampleInputEmail1" aria-describedby="emailHelp">
+          <p class="mt-2">API route : https://api.primecontent.in/collection/{{collectionName}}</p>
+        </div>
+        <!-- <div class="flex-grow-2 me-2 ms-2">
                     <select id="exampleInputEmail1" class="form-select w-15"
                     name="fieldType{{ i }}"
                     [(ngModel)]="item.tagName"
@@ -32,56 +31,63 @@
                       <option>Content Type Reference</option>
                     </select>
                 </div> -->
-            </div>
-            <label for="exampleInputEmail1" class="form-label">Content Type</label>
-            <select 
-            id="exampleInputEmail1" 
-            class="form-select w-25 mb-3"
-            [(ngModel)]="selectedContentType"
-            name = "testing"
-            (change)="renderContentTypeFields($event)"
-                    >
-                    <option value="" selected>Select the content type</option>
-                      <option value = "Blog">Blog</option>
-                      <option value = "LandingPage">LandingPage</option>
-                      <option value = "About">About</option>
-                      <option value = "PaymentData">PaymentData</option>
-                      <option value = "Default">Default</option>
-                      <option value = "Testing">Testing</option>
-                      <option value = "User mail">User mail</option>
-                      <option value = "Reference">Reference</option>
-                    </select>
+      </div>
+      <label for="exampleInputEmail1" class="form-label">Content Type</label>
+      <select id="exampleInputEmail1" class="form-select w-25 mb-3" 
+      [(ngModel)]="selectedContentType" name="testing"
+      *ngFor="let item of contentTypeList"
+        (change)="renderContentTypeFields($event)">
+        <option value="" selected>Select the content type</option>
+        <option >{{item.contentTypeName}}</option>
+      </select>
 
-                    <table class="table" *ngIf="contentTypeFields.length > 0">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Field Name</th>
-                            <th scope="col">Field Type</th>
-                            <th scope="col">Visibility</th>
-                            <th scope="col">Populate</th>
-                          </tr>
-                        </thead>
-                        <tbody *ngFor="let field of contentTypeFields, index as i" >
-                          <tr>
-                            <th scope="row">{{i+1}}</th>
-                            <td>{{ field.fieldName || 'Unnamed Field' }}</td>
-                            <td>{{ field.fieldType || 'Unnamed Field' }}</td>
-                            <td>
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                            </td>
-                            <td>
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-                            </td>
-                          </tr>
-                          
-                        </tbody>
-                      </table>
-                      
-        <!-- </div> -->
-            
-            <button class="btn btn-primary me-3" >Add another field</button>
-            <button class="btn btn-primary" >Create Collection</button>
-        </form>
-    </div>
+      <table class="table" *ngIf="contentTypeFields.length > 0">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Field Name</th>
+            <th scope="col">Field Type</th>
+            <th scope="col">Visibility</th>
+            <th scope="col">Populate</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let field of contentTypeFields, index as i">
+          <tr>
+            <th scope="row">{{i+1}}</th>
+            <td>{{ field.fieldName || 'Unnamed Field' }}</td>
+            <td>{{ field.fieldType || 'Unnamed Field' }}</td>
+            <td>
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+            </td>
+            <td>
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+      <div class=" d-flex flex-column" *ngIf="filterFields.length > 0 && isContentTypeSelected == true">
+        <div class="d-flex" *ngFor="let item of this.filterFields, index as i">
+          <div class="me-2">
+            <label for="exampleInputEmail1" class="form-label">Filter</label>
+            <select id="exampleInputEmail1" class="form-select w-100 mb-3 me-2" [(ngModel)]="selectedContentType"
+              name="testing" (change)="onFilterFieldNameChange($event, i)">
+              <option value="Blog" *ngFor="let field of contentTypeFields, index as i">{{field.fieldName}}</option>
+
+            </select>
+          </div>
+          <div class="">
+            <label for="exampleInputEmail1" class="form-label">filter property name</label>
+            <input type="text" name="collectionName" 
+              (change)="onFilterValueChange($event, i)" placeholder="Filter Name" class="form-control"
+              id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary me-3" (click)="addfield()" *ngIf="isContentTypeSelected">Add filter</button>
+      <button class="btn btn-primary me-3" (click)="removeFilters()" *ngIf="isContentTypeSelected">Clear filter</button>
+      <button class="btn btn-primary" (click)="createCollection()">Create Collection</button>
+    </form>
+  </div>
 </div>
