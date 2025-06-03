@@ -5,4 +5,7 @@ table th {
     white-space: nowrap;
     width: auto;
   }
-  
+  .roles {
+    position: sticky;
+    left:0px;
+  }

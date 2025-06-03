@@ -6,8 +6,8 @@
         <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">Role Name</th>
+        <th scope="col" class="roles">#</th>
+        <th scope="col" class="roles">Role Name</th>
         <th scope="col">Read Content Access</th>
         <th scope="col">Edit Content Access</th>
         <th scope="col">Delete Content Access</th>
@@ -29,9 +29,9 @@
       </tr>
     </thead>
     <tbody *ngFor="let field of userRoles, index as i" >
-      <tr>
-        <th scope="row">{{i+1}}</th>
-        <td>{{ field.roleName || 'Unnamed Field' }}</td>
+      <tr >
+        <th scope="row" class="roles">{{i+1}}</th>
+        <td class="roles">{{ field.roleName || 'Unnamed Field' }}</td>
         <td class="text-center align-middle">
             <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
         </td>

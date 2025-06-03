@@ -42,6 +42,24 @@
             <div class="row row-cols-4" >
                 <div class="col w-auto" *ngFor="let item of contentTypeList"> 
                     <div class="item">
+                        <div class="dropdown">
+                            <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">...</div>
+                            <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Dropdown button
+                            </button> -->
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <div class="View" class="dropdown-item">View</div>
+                                </li>
+                                <li>
+                                    <div class="Edit" class="dropdown-item">Edit</div>
+                                </li>
+                                <li>
+                                    <div class="Delete" class="dropdown-item">Delete</div>
+                                </li>
+                            </ul>
+                        </div>
                         <p class="title fs-2">
                             {{item.contentTypeName}}
                         </p>

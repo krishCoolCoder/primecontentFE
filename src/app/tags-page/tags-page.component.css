@@ -44,3 +44,11 @@ button {
 .listView:hover .listViewBg{
     fill: black;
 }
+.dropdown-toggle::after{
+    display: none;
+}
+.options{
+    position: absolute;
+    right : -30px;
+    top: -5px;
+}
