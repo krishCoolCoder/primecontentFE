@@ -3,16 +3,18 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CreateContentModelComponent } from '../modals/create-content-model/create-content-model.component';
 import { Router } from '@angular/router';
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-content',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule],
+  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule, NgIf],
   templateUrl: './content.component.html',
   styleUrl: './content.component.css'
 })
 export class ContentComponent {
+  listView: boolean = true;
+  gridView: boolean = false;
   constructor(private router: Router){}
   contentList : any;
   ngOnInit(){
@@ -21,5 +23,13 @@ export class ContentComponent {
   }
   redirectToCreateContent(){
     this.router.navigate(["/createContent"])
+  }
+  setGridView() {
+    this.listView = false;
+    this.gridView = true;
+  }
+  setListView() {
+    this.listView = true;
+    this.gridView = false;
   }
 }

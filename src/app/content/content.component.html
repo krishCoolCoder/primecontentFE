@@ -14,7 +14,7 @@
             <button type="button createContent" class="btn btn-primary" (click)="redirectToCreateContent()">Create
                 content</button>
             <div class="viewOptions d-flex justify-content-center align-items-center">
-                <div class="gridView me-2">
+                <div class="gridView me-2" (click)="setGridView()">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="29" height="29" rx="5" fill="#D9D9D9" class="gridViewBg" />
                         <rect x="6" y="5" width="7" height="7" rx="2" fill="#FBFBFB" />
@@ -23,7 +23,7 @@
                         <rect x="16" y="17" width="7" height="7" rx="2" fill="#FBFBFB" />
                     </svg>
                 </div>
-                <div class="listView">
+                <div class="listView" (click)="setListView()">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="29" height="29" rx="5" fill="#D9D9D9" class="listViewBg" />
                         <rect x="6" y="5" width="17" height="7" rx="2" fill="#FBFBFB" />
@@ -35,17 +35,15 @@
                 <button type="button createContent" class="btn btn-primary">Content filter</button>
             </div>
         </div>
-        <div class="container viewContainer">
-            <div class="row row-cols-4">
-                <div class="col w-auto" *ngFor="let item of contentList">
+        <!-- <div class="row row-cols-1"> -->
+        <div class="listItemView" *ngIf="listView; else gridViewTemplate">
+            <div class="d-flex justify-content-center align-items-center flex-column pt-2">
+                <div class="w-50" *ngFor="let item of contentList">
                     <div class="item">
 
                         <div class="dropdown">
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">...</div>
-                            <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Dropdown button
-                            </button> -->
                             <ul class="dropdown-menu">
                                 <li>
                                     <div class="View" class="dropdown-item">View</div>
@@ -71,6 +69,41 @@
                 </div>
             </div>
         </div>
+        <ng-template #gridViewTemplate>
+            <div class="container viewContainer">
+                <div class="row row-cols-4">
+                    <div class="col w-auto" *ngFor="let item of contentList">
+                        <div class="item">
+
+                            <div class="dropdown">
+                                <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">...</div>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <div class="View" class="dropdown-item">View</div>
+                                    </li>
+                                    <li>
+                                        <div class="Edit" class="dropdown-item">Edit</div>
+                                    </li>
+                                    <li>
+                                        <div class="Delete" class="dropdown-item">Delete</div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <p class="title">
+                                {{item.contentType}}
+                            </p>
+                            <div class="" *ngFor="let childItem of item.contentFields">
+                                <p class="description">
+                                    {{childItem.fieldName}} : {{childItem.fieldValue}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
 
     </div>
 </div>
