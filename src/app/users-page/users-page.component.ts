@@ -20,6 +20,8 @@ export class UsersPageComponent implements OnInit {
   users: User[] = [];
   selectedUser: User | null = null;
   isFilterOpen: boolean = false;
+  listView: boolean = true;
+  gridView: boolean = false;
 
   constructor(private router: Router, private userService: UserService) {}
 
@@ -33,6 +35,16 @@ export class UsersPageComponent implements OnInit {
 
   redirectToCreateUsersPage() {
     this.router.navigate(['/createUsers']);
+  }
+
+  setGridView() {
+    this.listView = false;
+    this.gridView = true;
+  }
+
+  setListView() {
+    this.listView = true;
+    this.gridView = false;
   }
 
   openFilter() {

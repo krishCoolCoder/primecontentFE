@@ -16,8 +16,8 @@
             class="btn btn-primary" 
             (click)="redirectToCreateCollection()"
             >Create collection</button>
-            <!-- <div class="viewOptions d-flex justify-content-center align-items-center">
-                <div class="gridView me-2">
+            <div class="viewOptions d-flex justify-content-center align-items-center">
+                <div class="gridView me-2" (click)="setGridView()">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="29" height="29" rx="5" fill="#D9D9D9" class="gridViewBg" />
                         <rect x="6" y="5" width="7" height="7" rx="2" fill="#FBFBFB" />
@@ -26,28 +26,27 @@
                         <rect x="16" y="17" width="7" height="7" rx="2" fill="#FBFBFB" />
                     </svg>
                 </div>
-                <div class="listView">
+                <div class="listView" (click)="setListView()">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="29" height="29" rx="5" fill="#D9D9D9" class="listViewBg" />
                         <rect x="6" y="5" width="17" height="7" rx="2" fill="#FBFBFB" />
                         <rect x="6" y="17" width="17" height="7" rx="2" fill="#FBFBFB" />
                     </svg>
                 </div>
-            </div> -->
+            </div>
             <div class="contentFilter">
                 <button type="button createContent" class="btn btn-primary" (click)="openFilter()">Content filter</button>
             </div>
         </div>
-        <div class="container viewContainer">
-            <div class="row row-cols-4">
-                <div class="col w-auto" *ngFor="let item of collectionList">
+        
+        <!-- List View -->
+        <div class="listItemView" *ngIf="listView; else gridViewTemplate">
+            <div class="d-flex justify-content-center align-items-center flex-column pt-2">
+                <div class="w-50" *ngFor="let item of collectionList">
                     <div class="item">
                         <div class="dropdown">
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">...</div>
-                            <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Dropdown button
-                            </button> -->
                             <ul class="dropdown-menu">
                                 <li>
                                     <div class="View" class="dropdown-item">View</div>
@@ -82,7 +81,51 @@
                 <p class="text-muted">No collections found. Create your first collection!</p>
             </div>
         </div>
-        
+
+        <!-- Grid View -->
+        <ng-template #gridViewTemplate>
+            <div class="container viewContainer">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+                    <div class="col mb-3" *ngFor="let item of collectionList">
+                        <div class="item">
+                            <div class="dropdown">
+                                <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">...</div>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <div class="View" class="dropdown-item">View</div>
+                                    </li>
+                                    <li>
+                                        <div class="Edit" class="dropdown-item">Edit</div>
+                                    </li>
+                                    <li>
+                                        <div class="Delete" class="dropdown-item">Delete</div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p class="title">
+                                Collection Name : {{item.collectionName}}
+                            </p>
+                            <p class="description">
+                                Collection Type : {{item.contentType}}
+                            </p>
+                            <p class="description">
+                                API : {{item.api}}
+                            </p>
+                            <div class="description">
+                                filters : 
+                                <ul class="description" *ngFor="let filterItem of item.filters">
+                                    {{filterItem.fieldName}} : {{filterItem.filterValue}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4" *ngIf="collectionList.length === 0">
+                    <p class="text-muted">No collections found. Create your first collection!</p>
+                </div>
+            </div>
+        </ng-template>
     </div>
 </div>
 

@@ -30,11 +30,11 @@ export class SidebarComponent implements OnInit {
   setActiveRoute(url: string) {
     if (url.includes('/dashboard')) {
       this.activeRoute = 'dashboard';
-    } else if (url.includes('/content')) {
-      this.activeRoute = 'content';
     } else if (url.includes('/contentType')) {
       this.activeRoute = 'contentType';
-    } else if (url.includes('/tag')) {
+    } else if (url.includes('/content')) {
+      this.activeRoute = 'content';
+    } else  if (url.includes('/tag')) {
       this.activeRoute = 'tag';
     } else if (url.includes('/collection')) {
       this.activeRoute = 'collection';

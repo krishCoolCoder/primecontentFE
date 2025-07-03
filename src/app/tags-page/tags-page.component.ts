@@ -15,6 +15,8 @@ import { FilterModalComponent } from '../modals/filter-modal/filter-modal.compon
 export class TagsPageComponent implements OnInit {
   tags: any[] = [];
   isFilterOpen: boolean = false;
+  listView: boolean = true;
+  gridView: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -28,6 +30,16 @@ export class TagsPageComponent implements OnInit {
 
   redirectToCreateTagPage() {
     this.router.navigate(['/createTag']);
+  }
+
+  setGridView() {
+    this.listView = false;
+    this.gridView = true;
+  }
+
+  setListView() {
+    this.listView = true;
+    this.gridView = false;
   }
 
   openFilter() {
