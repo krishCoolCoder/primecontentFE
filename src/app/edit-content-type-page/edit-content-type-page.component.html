@@ -1,0 +1,47 @@
+<app-header></app-header>
+<div class="d-flex">
+    <app-sidebar></app-sidebar>
+    <div class="container">
+        <div class="contentContainer d-flex justify-content-between align-items-center">
+            <h3>Edit Content Type</h3>
+            <button type="button" class="btn btn-primary" (click)="cancel()">Cancel</button>
+        </div>
+        
+        <div class="container viewContainer">
+            <form>
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Content Type Title</label>
+                    <input [(ngModel)]="contentType.contentTypeName" name="contentTypeName" type="text" placeholder="Content Type Title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-1 d-flex">
+                    <label for="exampleInputEmail1" class="form-label flex-grow-1">Content Field Name</label>
+                    <label for="exampleInputEmail1" class="form-label flex-grow-2 me-5 ">Field type</label>
+                </div>
+                <div class="" *ngFor="let field of contentType.contentTypeList; index as i">
+                <div class="mb-3 d-flex">
+                    <div class="flex-grow-1">
+                        <input type="text" name="fieldName{{ i }}" [(ngModel)]="field.fieldName" placeholder="Content Field Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="flex-grow-2 me-2 ms-2">
+                        <select id="exampleInputEmail1" class="form-select w-15"
+                        name="fieldType{{ i }}"
+                        [(ngModel)]="field.fieldType"
+                        >
+                          <option value="String">String</option>
+                          <option value="Number">Number</option>
+                          <option value="Boolean">Boolean</option>
+                          <option value="Date">Date</option>
+                          <option value="Array">Array</option>
+                          <option value="Object">Object</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+                
+                <button class="btn btn-primary me-3" (click)="addAnotherField()">Add another field</button>
+                <button class="btn btn-primary me-3" (click)="updateContentType()">Update content type</button>
+                <button class="btn btn-primary" (click)="cancel()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div> 

@@ -1,28 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { NgFor } from '@angular/common';
+import { NgFor, CommonModule } from '@angular/common';
+import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
 
 @Component({
   selector: 'app-collection-page',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent, NgFor],
+  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule, FilterModalComponent],
   templateUrl: './collection-page.component.html',
   styleUrl: './collection-page.component.css'
 })
-export class CollectionPageComponent {
+export class CollectionPageComponent implements OnInit {
+  collectionList: any[] = [];
+  isFilterOpen: boolean = false;
 
-  collectionList : any;
-  constructor(private router: Router){}
+  constructor(private router: Router) {}
 
   ngOnInit() {
-    this.collectionList = JSON.parse(localStorage.getItem("collections") ?? "[]");
-    console.log("The collectionList is this : ", this.collectionList)
+    this.loadCollections();
+  }
+
+  loadCollections() {
+    this.collectionList = JSON.parse(localStorage.getItem('collections') ?? '[]');
   }
 
   redirectToCreateCollection() {
-    this.router.navigate(["/createCollection"])
+    this.router.navigate(['/createCollection']);
   }
 
+  openFilter() {
+    this.isFilterOpen = true;
+  }
+
+  closeFilter() {
+    this.isFilterOpen = false;
+  }
 }

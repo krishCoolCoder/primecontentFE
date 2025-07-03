@@ -7,9 +7,18 @@ li {
     z-index: -2;
     border-bottom: 2px solid #AFAFAF;
     padding : 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 li:hover {
     background-color: #AFAFAF;
+}
+li.active {
+    background-color: black;
+    color: white;
+}
+li.active:hover {
+    background-color: black;
 }
 .subHeaderContainer {
     width: 140px;
@@ -33,6 +42,13 @@ li:hover {
 .signout li:hover {
     
     background-color: #AFAFAF;
+}
+.signout li.active {
+    background-color: black;
+    color: white;
+}
+.signout li.active:hover {
+    background-color: black;
 }
 
 @media only screen and (max-width: 800px) {

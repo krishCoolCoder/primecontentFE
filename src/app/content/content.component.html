@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="contentFilter">
-                <button type="button createContent" class="btn btn-primary">Content filter</button>
+                <button type="button createContent" class="btn btn-primary" (click)="openFilter()">Content filter</button>
             </div>
         </div>
         <!-- <div class="row row-cols-1"> -->
@@ -107,3 +107,9 @@
 
     </div>
 </div>
+
+<!-- Filter Modal -->
+<app-filter-modal 
+    [isOpen]="isFilterOpen"
+    (closeFilter)="closeFilter()">
+</app-filter-modal>

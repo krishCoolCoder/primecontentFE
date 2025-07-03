@@ -35,7 +35,7 @@
                 </div>
             </div> -->
             <div class="contentFilter">
-                <button type="button createContent" class="btn btn-primary">Content filter</button>
+                <button type="button createContent" class="btn btn-primary" (click)="openFilter()">Content filter</button>
             </div>
         </div>
         <div class="container viewContainer">
@@ -78,7 +78,16 @@
                     </div>
                 </div>
             </div>
+            <div class="text-center mt-4" *ngIf="collectionList.length === 0">
+                <p class="text-muted">No collections found. Create your first collection!</p>
+            </div>
         </div>
         
     </div>
 </div>
+
+<!-- Filter Modal -->
+<app-filter-modal 
+    [isOpen]="isFilterOpen"
+    (closeFilter)="closeFilter()">
+</app-filter-modal>

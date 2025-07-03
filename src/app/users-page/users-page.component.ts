@@ -7,17 +7,19 @@ import { ViewUserModalComponent } from '../modals/view-user-modal/view-user-moda
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { CommonModule } from '@angular/common';
+import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
 
 @Component({
   selector: 'app-users-page',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent, BulkUploadModalComponent, ViewUserModalComponent, CommonModule],
+  imports: [HeaderComponent, SidebarComponent, BulkUploadModalComponent, ViewUserModalComponent, CommonModule, FilterModalComponent],
   templateUrl: './users-page.component.html',
   styleUrl: './users-page.component.css'
 })
 export class UsersPageComponent implements OnInit {
   users: User[] = [];
   selectedUser: User | null = null;
+  isFilterOpen: boolean = false;
 
   constructor(private router: Router, private userService: UserService) {}
 
@@ -31,6 +33,14 @@ export class UsersPageComponent implements OnInit {
 
   redirectToCreateUsersPage() {
     this.router.navigate(['/createUsers']);
+  }
+
+  openFilter() {
+    this.isFilterOpen = true;
+  }
+
+  closeFilter() {
+    this.isFilterOpen = false;
   }
 
   viewUser(user: User) {

@@ -1,17 +1,16 @@
 <div class="subHeaderContainer">
 <ul>
-    <li (click)="redirect('dashboard')">Dashboard</li>
-    <li (click)="redirect('content')" >Content</li>
-    <li (click)="redirect('contentType')" >Content Type</li>
-    <li (click)="redirect('tag')" >Tag</li>
-    <li (click)="redirect('collection')" >Collection</li>
-    <li (click)="redirect('users')" >Users</li>
-    <li (click)="redirect('userAccess')" >Users Access</li>
-    <li (click)="redirect('role')" >Users Role</li>
+    <li (click)="redirect('dashboard')" [class.active]="activeRoute === 'dashboard'">Dashboard</li>
+    <li (click)="redirect('content')" [class.active]="activeRoute === 'content'">Content</li>
+    <li (click)="redirect('contentType')" [class.active]="activeRoute === 'contentType'">Content Type</li>
+    <li (click)="redirect('tag')" [class.active]="activeRoute === 'tag'">Tag</li>
+    <li (click)="redirect('collection')" [class.active]="activeRoute === 'collection'">Collection</li>
+    <li (click)="redirect('users')" [class.active]="activeRoute === 'users'">Users</li>
+    <li (click)="redirect('userAccess')" [class.active]="activeRoute === 'userAccess'">Users Access</li>
+    <li (click)="redirect('role')" [class.active]="activeRoute === 'role'">Users Role</li>
 </ul>
 <ul class="signout">
-    
-    <li (click)="redirect('settings')">Settings</li>
+    <li (click)="redirect('settings')" [class.active]="activeRoute === 'settings'">Settings</li>
     <li (click)="redirect('loggout')">Sign Out</li>
 </ul>
 </div>

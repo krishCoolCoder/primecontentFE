@@ -43,7 +43,7 @@
                 </div>
             </div> -->
             <div class="contentFilter">
-                <button type="button createContent" class="btn btn-primary">Users filter</button>
+                <button type="button createContent" class="btn btn-primary" (click)="openFilter()">Users filter</button>
             </div>
         </div>
         <div class="container viewContainer">
@@ -89,3 +89,9 @@
 
 <!-- View User Modal -->
 <app-view-user-modal [user]="selectedUser"></app-view-user-modal>
+
+<!-- Filter Modal -->
+<app-filter-modal 
+    [isOpen]="isFilterOpen"
+    (closeFilter)="closeFilter()">
+</app-filter-modal>

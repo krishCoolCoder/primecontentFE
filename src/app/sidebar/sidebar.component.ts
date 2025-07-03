@@ -1,18 +1,57 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
+  activeRoute: string = '';
 
-  constructor ( private router : Router){}
+  constructor(private router: Router) {}
 
-  redirect (channel: string){
+  ngOnInit() {
+    // Get initial route
+    this.setActiveRoute(this.router.url);
+    
+    // Listen for route changes
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.setActiveRoute(event.url);
+    });
+  }
+
+  setActiveRoute(url: string) {
+    if (url.includes('/dashboard')) {
+      this.activeRoute = 'dashboard';
+    } else if (url.includes('/content')) {
+      this.activeRoute = 'content';
+    } else if (url.includes('/contentType')) {
+      this.activeRoute = 'contentType';
+    } else if (url.includes('/tag')) {
+      this.activeRoute = 'tag';
+    } else if (url.includes('/collection')) {
+      this.activeRoute = 'collection';
+    } else if (url.includes('/users')) {
+      this.activeRoute = 'users';
+    } else if (url.includes('/userAccess')) {
+      this.activeRoute = 'userAccess';
+    } else if (url.includes('/userRole')) {
+      this.activeRoute = 'role';
+    } else if (url.includes('/settings')) {
+      this.activeRoute = 'settings';
+    } else {
+      this.activeRoute = '';
+    }
+  }
+
+  redirect(channel: string) {
     switch (channel) {
       case "dashboard":
         this.router.navigate(["/dashboard"])
@@ -41,16 +80,14 @@ export class SidebarComponent {
       case "settings":
         this.router.navigate(["/settings"])
         break;
-        case "loggout":
-          console.log("Loggout is clicked : ")
-          localStorage.removeItem("userInfo")
-          localStorage.removeItem("contentTypeList")
-          this.router.navigate(["/"])
+      case "loggout":
+        console.log("Loggout is clicked : ")
+        localStorage.removeItem("userInfo")
+        localStorage.removeItem("contentTypeList")
+        this.router.navigate(["/"])
         break;
       default:
         console.log("None of the above is passed as argument on redirect function")
     }
-
   }
-
 }

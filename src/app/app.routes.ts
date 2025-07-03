@@ -19,6 +19,8 @@ import { CreateUserPageComponent } from './create-user-page/create-user-page.com
 import { UserAccessPageComponent } from './user-access-page/user-access-page.component';
 import { UserRolePageComponent } from './user-role-page/user-role-page.component';
 import { CreateUserRolePageComponent } from './create-user-role-page/create-user-role-page.component';
+import { ViewContentTypePageComponent } from './view-content-type-page/view-content-type-page.component';
+import { EditContentTypePageComponent } from './edit-content-type-page/edit-content-type-page.component';
 
 export const routes: Routes = [
     {
@@ -64,6 +66,16 @@ export const routes: Routes = [
     {
         path : "createContentType",
         component : CreateContentTypePageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "viewContentType/:id",
+        component : ViewContentTypePageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "editContentType/:id",
+        component : EditContentTypePageComponent,
         canActivate : [authGuard]
     },
     {

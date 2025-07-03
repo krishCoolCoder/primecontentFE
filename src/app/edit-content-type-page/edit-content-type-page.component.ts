@@ -1,20 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ContentTypeService } from '../services/content-type.service';
 import { ContentType, ContentTypeField } from '../models/content-type.model';
 
 @Component({
-  selector: 'app-create-content-type-page',
+  selector: 'app-edit-content-type-page',
   standalone: true,
-  imports: [HeaderComponent,SidebarComponent, CommonModule, NgFor, FormsModule],
-  templateUrl: './create-content-type-page.component.html',
-  styleUrl: './create-content-type-page.component.css'
+  imports: [HeaderComponent, SidebarComponent, CommonModule, NgFor, FormsModule],
+  templateUrl: './edit-content-type-page.component.html',
+  styleUrl: './edit-content-type-page.component.css'
 })
-export class CreateContentTypePageComponent {
+export class EditContentTypePageComponent implements OnInit {
   contentType: ContentType = {
     id: '',
     contentTypeName: '',
@@ -24,8 +24,22 @@ export class CreateContentTypePageComponent {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private contentTypeService: ContentTypeService
   ) {}
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        const existingContentType = this.contentTypeService.getContentTypeById(params['id']);
+        if (existingContentType) {
+          this.contentType = { ...existingContentType };
+        } else {
+          this.router.navigate(['/contentType']);
+        }
+      }
+    });
+  }
 
   addAnotherField() {
     this.contentType.contentTypeList.push({
@@ -40,11 +54,9 @@ export class CreateContentTypePageComponent {
     }
   }
 
-  createContentType() {
+  updateContentType() {
     if (this.contentType.contentTypeName.trim() && this.contentType.contentTypeList.length > 0) {
-      this.contentType.id = this.contentTypeService.generateId();
-      this.contentType.createdAt = new Date();
-      this.contentTypeService.saveContentType(this.contentType);
+      this.contentTypeService.updateContentType(this.contentType);
       this.router.navigate(['/contentType']);
     }
   }
@@ -52,4 +64,4 @@ export class CreateContentTypePageComponent {
   cancel() {
     this.router.navigate(['/contentType']);
   }
-}
+} 

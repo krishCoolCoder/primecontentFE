@@ -1,0 +1,89 @@
+.contentContainer {
+    margin-top: 10px;
+}
+
+.viewContainer {
+    margin-top: 1%;
+    padding-right: 25px;
+    padding-top: 15px;
+    height: 87vh;
+    width: 99.5%;
+    overflow: auto;
+}
+
+.content-details {
+    padding: 20px 0;
+}
+
+.content-type-name {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.detail-value {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.fields-table {
+    margin-top: 15px;
+}
+
+.table {
+    border: none;
+    background-color: transparent;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    border: none;
+    color: #555;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 12px 8px;
+}
+
+.table td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 12px 8px;
+    color: #333;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.field-type-badge {
+    background-color: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+button {
+    height: 30px;
+    padding-top: 1px;
+    background-color: #4b4b4b;
+}
+
+.btn-primary {
+    --bs-btn-border-color: none;
+}
+
+.btn:hover {
+    color: white;
+    background-color: black;
+    border-color: black;
+} 

@@ -16,8 +16,8 @@
             class="btn btn-primary" 
             (click)="redirectToCreateContentType()"
             >Create content type</button>
-            <!-- <div class="viewOptions d-flex justify-content-center align-items-center">
-                <div class="gridView me-2">
+            <div class="viewOptions d-flex justify-content-center align-items-center">
+                <div class="gridView me-2" (click)="setGridView()">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="29" height="29" rx="5" fill="#D9D9D9" class="gridViewBg" />
                         <rect x="6" y="5" width="7" height="7" rx="2" fill="#FBFBFB" />
@@ -26,21 +26,23 @@
                         <rect x="16" y="17" width="7" height="7" rx="2" fill="#FBFBFB" />
                     </svg>
                 </div>
-                <div class="listView">
+                <div class="listView" (click)="setListView()">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="29" height="29" rx="5" fill="#D9D9D9" class="listViewBg" />
                         <rect x="6" y="5" width="17" height="7" rx="2" fill="#FBFBFB" />
                         <rect x="6" y="17" width="17" height="7" rx="2" fill="#FBFBFB" />
                     </svg>
                 </div>
-            </div> -->
+            </div>
             <div class="contentFilter">
-                <button type="button createContent" class="btn btn-primary">Content filter</button>
+                <button type="button createContent" class="btn btn-primary" (click)="openFilter()">Content filter</button>
             </div>
         </div>
-        <div class="container viewContainer">
-            <div class="row row-cols-4" >
-                <div class="col w-auto" *ngFor="let item of contentTypeList"> 
+        
+        <!-- List View -->
+        <div class="listItemView" *ngIf="listView; else gridViewTemplate">
+            <div class="d-flex justify-content-center align-items-center flex-column pt-2">
+                <div class="w-50" *ngFor="let contentType of contentTypeList">
                     <div class="item">
                         <div class="dropdown">
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
@@ -50,20 +52,20 @@
                             </button> -->
                             <ul class="dropdown-menu">
                                 <li>
-                                    <div class="View" class="dropdown-item">View</div>
+                                    <div class="dropdown-item" (click)="viewContentType(contentType)">View</div>
                                 </li>
                                 <li>
-                                    <div class="Edit" class="dropdown-item">Edit</div>
+                                    <div class="dropdown-item" (click)="editContentType(contentType)">Edit</div>
                                 </li>
                                 <li>
-                                    <div class="Delete" class="dropdown-item">Delete</div>
+                                    <div class="dropdown-item" (click)="deleteContentType(contentType)">Delete</div>
                                 </li>
                             </ul>
                         </div>
                         <p class="title fs-2">
-                            {{item.contentTypeName}}
+                            {{contentType.contentTypeName}}
                         </p>
-                        <div class="" *ngFor="let childItem of item.contentTypeList">
+                        <div class="" *ngFor="let childItem of contentType.contentTypeList">
                         <p class="description fs-6" >
                             {{childItem.fieldName}} : {{childItem.fieldType}}
                             <!-- {{item.fieldType}} -->
@@ -72,7 +74,62 @@
                     </div>
                 </div>
             </div>
+            <div class="text-center mt-4" *ngIf="contentTypeList.length === 0">
+                <p class="text-muted">No content types found. Create your first content type!</p>
+            </div>
         </div>
-        
+
+        <!-- Grid View -->
+        <ng-template #gridViewTemplate>
+            <div class="container viewContainer">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+                    <div class="col mb-3" *ngFor="let contentType of contentTypeList"> 
+                        <div class="item">
+                            <div class="dropdown">
+                                <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">...</div>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <div class="dropdown-item" (click)="viewContentType(contentType)">View</div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-item" (click)="editContentType(contentType)">Edit</div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-item" (click)="deleteContentType(contentType)">Delete</div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p class="title fs-2">
+                                {{contentType.contentTypeName}}
+                            </p>
+                            <div class="" *ngFor="let childItem of contentType.contentTypeList">
+                            <p class="description fs-6" >
+                                {{childItem.fieldName}} : {{childItem.fieldType}}
+                                <!-- {{item.fieldType}} -->
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4" *ngIf="contentTypeList.length === 0">
+                    <p class="text-muted">No content types found. Create your first content type!</p>
+                </div>
+            </div>
+        </ng-template>
     </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-confirmation-modal 
+    [itemName]="selectedContentType?.contentTypeName || ''" 
+    [itemType]="'content type'"
+    (confirmDelete)="onConfirmDelete()"
+    (cancelDelete)="onCancelDelete()">
+</app-delete-confirmation-modal>
+
+<!-- Filter Modal -->
+<app-filter-modal 
+    [isOpen]="isFilterOpen"
+    (closeFilter)="closeFilter()">
+</app-filter-modal>
