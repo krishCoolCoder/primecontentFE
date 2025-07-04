@@ -27,7 +27,9 @@ export class TagsPageComponent implements OnInit {
   }
 
   loadTags() {
-    this.tags = JSON.parse(localStorage.getItem('tags') ?? '[]');
+    const tagsFromStorage = JSON.parse(localStorage.getItem('tags') ?? '[]');
+    // Reverse the array to show recent tags first
+    this.tags = tagsFromStorage.reverse();
   }
 
   redirectToCreateTagPage() {
