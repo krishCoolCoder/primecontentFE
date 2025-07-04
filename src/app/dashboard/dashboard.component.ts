@@ -18,83 +18,164 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements AfterViewInit {
-  @ViewChild('barChart') lineChartForContent!: ElementRef;
-  @ViewChild('contentTypeChart') lineChartForContentTypeChart!: ElementRef;
+  @ViewChild('contentChart') contentChart!: ElementRef;
+  @ViewChild('contentTypeChart') contentTypeChart!: ElementRef;
+  @ViewChild('tagsChart') tagsChart!: ElementRef;
+  @ViewChild('usersChart') usersChart!: ElementRef;
 
   ngAfterViewInit() {
-    const ctx = this.lineChartForContent.nativeElement.getContext('2d');
-    const contentTypeCtx = this.lineChartForContentTypeChart.nativeElement.getContext('2d');
+    this.createCharts();
+  }
 
-    new Chart(ctx, {
-      type: 'line',
+  createCharts() {
+    // Get counts from localStorage
+    const contentCount = this.getContentCount();
+    const contentTypeCount = this.getContentTypeCount();
+    const tagsCount = this.getTagsCount();
+    const usersCount = this.getUsersCount();
+
+    // Content Chart
+    const contentCtx = this.contentChart.nativeElement.getContext('2d');
+    new Chart(contentCtx, {
+      type: 'doughnut',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['Content'],
         datasets: [{
-          label: 'Content created',
-          data: [20, 40, 80, 20, 56, 55, 40],
-          fill: false,
-          borderColor: 'rgb(60, 60, 60)',
-          tension: 0.1
+          data: [contentCount],
+          backgroundColor: ['#4CAF50'],
+          borderColor: ['#45a049'],
+          borderWidth: 2
         }]
       },
       options: {
         responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `Content: ${context.parsed}`;
+              }
+            }
           }
         }
       }
     });
+
+    // Content Type Chart
+    const contentTypeCtx = this.contentTypeChart.nativeElement.getContext('2d');
     new Chart(contentTypeCtx, {
-      type: 'line',
+      type: 'doughnut',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['Content Types'],
         datasets: [{
-          label: 'Content Type created',
-          data: [20, 40, 80, 20, 56, 55, 40],
-          fill: false,
-          borderColor: 'rgb(60, 60, 60)',
-          tension: 0.1
+          data: [contentTypeCount],
+          backgroundColor: ['#2196F3'],
+          borderColor: ['#1976D2'],
+          borderWidth: 2
         }]
       },
       options: {
         responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `Content Types: ${context.parsed}`;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Tags Chart
+    const tagsCtx = this.tagsChart.nativeElement.getContext('2d');
+    new Chart(tagsCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Tags'],
+        datasets: [{
+          data: [tagsCount],
+          backgroundColor: ['#FF9800'],
+          borderColor: ['#F57C00'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `Tags: ${context.parsed}`;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Users Chart
+    const usersCtx = this.usersChart.nativeElement.getContext('2d');
+    new Chart(usersCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Users'],
+        datasets: [{
+          data: [usersCount],
+          backgroundColor: ['#9C27B0'],
+          borderColor: ['#7B1FA2'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `Users: ${context.parsed}`;
+              }
+            }
           }
         }
       }
     });
   }
-  //   new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-  //       datasets: [{
-  //         label: '# of Votes',
-  //         data: [12, 19, 3, 5, 2, 3],
-  //         backgroundColor: [
-  //           'rgb(60, 60, 60)',
-  //           'rgb(60, 60, 60)',
-  //           'rgb(60, 60, 60)',
-  //           'rgb(60, 60, 60)',
-  //           'rgb(60, 60, 60)',
-  //           'rgb(60, 60, 60)'
-  //         ],
-  //         borderColor: 'rgba(0,0,0,0.1)',
-  //         borderWidth: 0
-  //       }]
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       scales: {
-  //         y: {
-  //           beginAtZero: true
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
+
+  getContentCount(): number {
+    const content = JSON.parse(localStorage.getItem('content') || '[]');
+    return content.length;
+  }
+
+  getContentTypeCount(): number {
+    const contentTypes = JSON.parse(localStorage.getItem('contentTypeList') || '[]');
+    return contentTypes.length;
+  }
+
+  getTagsCount(): number {
+    const tags = JSON.parse(localStorage.getItem('tags') || '[]');
+    return tags.length;
+  }
+
+  getUsersCount(): number {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    return users.length;
+  }
 }

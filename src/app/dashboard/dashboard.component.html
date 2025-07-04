@@ -1,9 +1,37 @@
 <app-header></app-header>
 <div class="d-flex">
-<app-sidebar></app-sidebar>
-
-    <div class="d-flex justify-content-between align-items-center chartView flex-column">
-        <canvas #barChart></canvas>
-        <canvas #contentTypeChart></canvas>
+    <app-sidebar></app-sidebar>
+    
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Dashboard Overview</h1>
+            <p class="dashboard-subtitle">Statistics and counts of your content management system</p>
+        </div>
+        
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3 class="chart-title">Content Count</h3>
+                <div class="count-number">{{getContentCount()}}</div>
+                <canvas #contentChart></canvas>
+            </div>
+            
+            <div class="chart-card">
+                <h3 class="chart-title">Content Types Count</h3>
+                <div class="count-number">{{getContentTypeCount()}}</div>
+                <canvas #contentTypeChart></canvas>
+            </div>
+            
+            <div class="chart-card">
+                <h3 class="chart-title">Tags Count</h3>
+                <div class="count-number">{{getTagsCount()}}</div>
+                <canvas #tagsChart></canvas>
+            </div>
+            
+            <div class="chart-card">
+                <h3 class="chart-title">Users Count</h3>
+                <div class="count-number">{{getUsersCount()}}</div>
+                <canvas #usersChart></canvas>
+            </div>
+        </div>
     </div>
 </div>
