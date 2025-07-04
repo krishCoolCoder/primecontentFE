@@ -14,6 +14,8 @@ import { ContentTypePageComponent } from './content-type-page/content-type-page.
 import { CreateContentTypePageComponent } from './create-content-type-page/create-content-type-page.component';
 import { CreateTagsPageComponent } from './create-tags-page/create-tags-page.component';
 import { TagsPageComponent } from './tags-page/tags-page.component';
+import { ViewTagPageComponent } from './view-tag-page/view-tag-page.component';
+import { EditTagPageComponent } from './edit-tag-page/edit-tag-page.component';
 import { CollectionPageComponent } from './collection-page/collection-page.component';
 import { CreateCollectionPageComponent } from './create-collection-page/create-collection-page.component';
 import { UsersPageComponent } from './users-page/users-page.component';
@@ -93,6 +95,16 @@ export const routes: Routes = [
     {
         path : "tag",
         component : TagsPageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "viewTag/:id",
+        component : ViewTagPageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "editTag/:id",
+        component : EditTagPageComponent,
         canActivate : [authGuard]
     },
     {

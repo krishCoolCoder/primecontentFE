@@ -1,0 +1,44 @@
+<app-header></app-header>
+<div class="d-flex">
+    <app-sidebar></app-sidebar>
+    <div class="container">
+        <div class="content-header d-flex justify-content-between align-items-center mt-3">
+            <h4>View Tag</h4>
+            <div class="action-buttons">
+                <button type="button" class="btn btn-secondary me-2" (click)="goBack()">
+                    Back
+                </button>
+                <button type="button" class="btn btn-primary" (click)="editTag()">
+                    Edit Tag
+                </button>
+            </div>
+        </div>
+        
+        <div class="content-details mt-4" *ngIf="tag">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Tag Details</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Tag Name:</label>
+                                <p class="form-control-plaintext">{{ tag.tagName }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Description:</label>
+                                <p class="form-control-plaintext">{{ tag.description || 'No description provided' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4" *ngIf="!tag">
+            <p class="text-muted">Tag not found.</p>
+        </div>
+    </div>
+</div> 

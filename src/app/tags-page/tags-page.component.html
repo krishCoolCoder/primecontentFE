@@ -49,13 +49,13 @@
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <div class="View" class="dropdown-item">View</div>
+                                    <div class="dropdown-item" (click)="viewTag(item)">View</div>
                                 </li>
                                 <li>
-                                    <div class="Edit" class="dropdown-item">Edit</div>
+                                    <div class="dropdown-item" (click)="editTag(item)">Edit</div>
                                 </li>
                                 <li>
-                                    <div class="Delete" class="dropdown-item">Delete</div>
+                                    <div class="dropdown-item" (click)="deleteTag(item)">Delete</div>
                                 </li>
                             </ul>
                         </div>
@@ -81,13 +81,13 @@
                                     aria-expanded="false">...</div>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <div class="View" class="dropdown-item">View</div>
+                                        <div class="dropdown-item" (click)="viewTag(item)">View</div>
                                     </li>
                                     <li>
-                                        <div class="Edit" class="dropdown-item">Edit</div>
+                                        <div class="dropdown-item" (click)="editTag(item)">Edit</div>
                                     </li>
                                     <li>
-                                        <div class="Delete" class="dropdown-item">Delete</div>
+                                        <div class="dropdown-item" (click)="deleteTag(item)">Delete</div>
                                     </li>
                                 </ul>
                             </div>
@@ -110,3 +110,10 @@
     [isOpen]="isFilterOpen"
     (closeFilter)="closeFilter()">
 </app-filter-modal>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-tag-modal 
+    [tagName]="selectedTag?.tagName || ''" 
+    (confirmDelete)="onConfirmDelete()"
+    (cancelDelete)="onCancelDelete()">
+</app-delete-tag-modal>
