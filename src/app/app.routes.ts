@@ -8,6 +8,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { authGuard, noAuthGuard } from './auth.guard';
 import { ContentComponent } from './content/content.component';
 import { CreateContentPageComponent } from './create-content-page/create-content-page.component';
+import { ViewContentPageComponent } from './view-content-page/view-content-page.component';
+import { EditContentPageComponent } from './edit-content-page/edit-content-page.component';
 import { ContentTypePageComponent } from './content-type-page/content-type-page.component';
 import { CreateContentTypePageComponent } from './create-content-type-page/create-content-type-page.component';
 import { CreateTagsPageComponent } from './create-tags-page/create-tags-page.component';
@@ -58,6 +60,16 @@ export const routes: Routes = [
         component : CreateContentPageComponent,
         canActivate : [authGuard]
     }, 
+    {
+        path : "viewContent/:id",
+        component : ViewContentPageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "editContent/:id",
+        component : EditContentPageComponent,
+        canActivate : [authGuard]
+    },
     {
         path : "contentType",
         component : ContentTypePageComponent,

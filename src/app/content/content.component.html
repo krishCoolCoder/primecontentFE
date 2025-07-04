@@ -46,13 +46,13 @@
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <div class="View" class="dropdown-item">View</div>
+                                    <div class="dropdown-item" (click)="viewContent(item)">View</div>
                                 </li>
                                 <li>
-                                    <div class="Edit" class="dropdown-item">Edit</div>
+                                    <div class="dropdown-item" (click)="editContent(item)">Edit</div>
                                 </li>
                                 <li>
-                                    <div class="Delete" class="dropdown-item">Delete</div>
+                                    <div class="dropdown-item" (click)="deleteContent(item)">Delete</div>
                                 </li>
                             </ul>
                         </div>
@@ -68,6 +68,9 @@
                     </div>
                 </div>
             </div>
+            <div class="text-center mt-4" *ngIf="contentList.length === 0">
+                <p class="text-muted">No content found. Create your first content!</p>
+            </div>
         </div>
         <ng-template #gridViewTemplate>
             <div class="container viewContainer">
@@ -80,13 +83,13 @@
                                     aria-expanded="false">...</div>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <div class="View" class="dropdown-item">View</div>
+                                        <div class="dropdown-item" (click)="viewContent(item)">View</div>
                                     </li>
                                     <li>
-                                        <div class="Edit" class="dropdown-item">Edit</div>
+                                        <div class="dropdown-item" (click)="editContent(item)">Edit</div>
                                     </li>
                                     <li>
-                                        <div class="Delete" class="dropdown-item">Delete</div>
+                                        <div class="dropdown-item" (click)="deleteContent(item)">Delete</div>
                                     </li>
                                 </ul>
                             </div>
@@ -102,6 +105,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-center mt-4" *ngIf="contentList.length === 0">
+                    <p class="text-muted">No content found. Create your first content!</p>
+                </div>
             </div>
         </ng-template>
 
@@ -113,3 +119,10 @@
     [isOpen]="isFilterOpen"
     (closeFilter)="closeFilter()">
 </app-filter-modal>
+
+<!-- Delete Confirmation Modal -->
+<app-delete-content-modal 
+    [contentName]="selectedContent?.contentType || ''" 
+    (confirmDelete)="onConfirmDelete()"
+    (cancelDelete)="onCancelDelete()">
+</app-delete-content-modal>
