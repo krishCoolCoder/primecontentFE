@@ -4,6 +4,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-create-tags-page',
@@ -15,7 +16,11 @@ import { Router } from '@angular/router';
 export class CreateTagsPageComponent {
   @ViewChild('tagForm') tagForm!: NgForm;
   tag = { tagName: "", description: "" };
-  constructor(private router: Router){}
+  
+  constructor(
+    private router: Router,
+    private apiService: ApiService
+  ) {}
 
   createTag() {
     console.log("=== CREATE TAG FUNCTION CALLED ===");
@@ -32,40 +37,27 @@ export class CreateTagsPageComponent {
       return;
     }
     
-    try {
-      let existingTags = JSON.parse(localStorage.getItem("tags")??"[]");
-      console.log("Existing tags before adding:", existingTags);
-      
-      // Create a new tag object to avoid reference issues
-      const newTag = {
-        tagName: this.tag.tagName.trim(),
-        description: this.tag.description ? this.tag.description.trim() : ""
-      };
-      
-      console.log("New tag to be added:", newTag);
-      
-      existingTags.push(newTag);
-      console.log("Tags after adding new tag:", existingTags);
-      
-      localStorage.setItem("tags", JSON.stringify(existingTags));
-      console.log("Tag saved to localStorage successfully");
-      
-      console.log("Navigating to /tag");
-      this.router.navigate(["/tag"]);
-    } catch (error) {
-      console.error("Error creating tag:", error);
-      alert("Error creating tag. Please try again.");
-    }
-  }
-
-  // Backup method in case form submission doesn't work
-  createTagClick() {
-    console.log("=== CREATE TAG CLICK METHOD CALLED ===");
-    this.createTag();
+    const tagData = {
+      tagName: this.tag.tagName.trim(),
+      description: this.tag.description ? this.tag.description.trim() : ""
+    };
+    
+    console.log("Tag data to be sent:", tagData);
+    
+    this.apiService.createTag(tagData).subscribe({
+      next: (response) => {
+        console.log('Tag created successfully:', response);
+        alert('Tag created successfully!');
+        this.router.navigate(["/tag"]);
+      },
+      error: (error) => {
+        console.error('Error creating tag:', error);
+        alert('Error creating tag. Please try again.');
+      }
+    });
   }
 
   redirectToTagList(){
     this.router.navigate(["/tag"])
   }
-
 }

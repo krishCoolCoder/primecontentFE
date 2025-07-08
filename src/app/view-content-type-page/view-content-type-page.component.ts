@@ -3,8 +3,7 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ContentTypeService } from '../services/content-type.service';
-import { ContentType } from '../models/content-type.model';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-view-content-type-page',
@@ -14,21 +13,33 @@ import { ContentType } from '../models/content-type.model';
   styleUrl: './view-content-type-page.component.css'
 })
 export class ViewContentTypePageComponent implements OnInit {
-  contentType: ContentType | null = null;
+  contentType: any = null;
+  contentTypeId: string = '';
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private contentTypeService: ContentTypeService
+    private apiService: ApiService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params['id']) {
-        this.contentType = this.contentTypeService.getContentTypeById(params['id']) || null;
-        if (!this.contentType) {
-          this.router.navigate(['/contentType']);
-        }
+        this.contentTypeId = params['id'];
+        this.loadContentType();
+      }
+    });
+  }
+
+  loadContentType() {
+    this.apiService.getContentTypeByIdData(this.contentTypeId).subscribe({
+      next: (response) => {
+        console.log('Content type loaded:', response);
+        this.contentType = response;
+      },
+      error: (error) => {
+        console.error('Error loading content type:', error);
+        this.router.navigate(['/contentType']);
       }
     });
   }
@@ -39,7 +50,7 @@ export class ViewContentTypePageComponent implements OnInit {
 
   editContentType() {
     if (this.contentType) {
-      this.router.navigate(['/editContentType', this.contentType.id]);
+      this.router.navigate(['/editContentType', this.contentType._id]);
     }
   }
 } 

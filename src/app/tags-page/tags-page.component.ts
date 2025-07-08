@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgFor, CommonModule } from '@angular/common';
 import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
 import { DeleteTagModalComponent } from '../modals/delete-tag-modal/delete-tag-modal.component';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-tags-page',
@@ -20,30 +21,39 @@ export class TagsPageComponent implements OnInit {
   gridView: boolean = false;
   selectedTag: any = null;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private apiService: ApiService
+  ) {}
 
   ngOnInit() {
     this.loadTags();
   }
 
   loadTags() {
-    const tagsFromStorage = JSON.parse(localStorage.getItem('tags') ?? '[]');
-    // Reverse the array to show recent tags first
-    this.tags = tagsFromStorage.reverse();
+    this.apiService.getAllTagsData().subscribe({
+      next: (response) => {
+        console.log('Tags loaded:', response);
+        this.tags = response.reverse(); // Reverse to show recent tags first
+      },
+      error: (error) => {
+        console.error('Error loading tags:', error);
+      }
+    });
   }
 
   redirectToCreateTagPage() {
     this.router.navigate(['/createTagPage']);
   }
 
-  setGridView() {
-    this.listView = false;
-    this.gridView = true;
-  }
-
   setListView() {
     this.listView = true;
     this.gridView = false;
+  }
+
+  setGridView() {
+    this.listView = false;
+    this.gridView = true;
   }
 
   openFilter() {
@@ -56,18 +66,12 @@ export class TagsPageComponent implements OnInit {
 
   viewTag(tag: any) {
     console.log('View tag clicked:', tag);
-    // Create a unique identifier using tag name and description
-    const uniqueId = this.createUniqueId(tag);
-    console.log('Navigating to viewTag with ID:', uniqueId);
-    this.router.navigate(['/viewTag', uniqueId]);
+    this.router.navigate(['/viewTag', tag._id]);
   }
 
   editTag(tag: any) {
     console.log('Edit tag clicked:', tag);
-    // Create a unique identifier using tag name and description
-    const uniqueId = this.createUniqueId(tag);
-    console.log('Navigating to editTag with ID:', uniqueId);
-    this.router.navigate(['/editTag', uniqueId]);
+    this.router.navigate(['/editTag', tag._id]);
   }
 
   deleteTag(tag: any) {
@@ -78,49 +82,28 @@ export class TagsPageComponent implements OnInit {
     modal.show();
   }
 
-  private createUniqueId(tag: any): string {
-    // Create a unique identifier based on tag name and description
-    return `${tag.tagName}-${tag.description || ''}`;
-  }
-
   onConfirmDelete() {
     console.log('Confirm delete clicked for:', this.selectedTag);
     if (this.selectedTag) {
-      const tagsList = JSON.parse(localStorage.getItem('tags') ?? '[]');
-      console.log('Current tags list:', tagsList);
-      console.log('Tag to delete:', this.selectedTag);
-      
-      // Remove the selected tag by comparing tag name and description
-      const updatedList = tagsList.filter((item: any) => {
-        console.log('Comparing item:', item);
-        console.log('Selected tag:', this.selectedTag);
-        
-        if (item.tagName !== this.selectedTag.tagName) {
-          console.log('Tag name mismatch');
-          return true;
+      this.apiService.deleteTag(this.selectedTag._id).subscribe({
+        next: (response) => {
+          console.log('Tag deleted successfully:', response);
+          
+          // Hide the modal
+          const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteTagModal'));
+          if (modal) {
+            modal.hide();
+          }
+          
+          // Reload tags list
+          this.loadTags();
+          this.selectedTag = null;
+        },
+        error: (error) => {
+          console.error('Error deleting tag:', error);
+          alert('Error deleting tag. Please try again.');
         }
-        if (item.description !== this.selectedTag.description) {
-          console.log('Description mismatch');
-          return true;
-        }
-        console.log('Found matching tag to delete');
-        return false; // This is the item to delete
       });
-      
-      console.log('Updated list:', updatedList);
-      localStorage.setItem('tags', JSON.stringify(updatedList));
-      this.tags = updatedList;
-      this.selectedTag = null;
-      
-      // Hide the modal
-      const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteTagModal'));
-      if (modal) {
-        modal.hide();
-      }
-      
-      console.log('Tag deleted successfully');
-    } else {
-      console.log('No selected tag to delete');
     }
   }
 

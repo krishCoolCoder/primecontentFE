@@ -9,6 +9,7 @@ Chart.register(...registerables);
 
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,25 +24,80 @@ export class DashboardComponent implements AfterViewInit {
   @ViewChild('tagsChart') tagsChart!: ElementRef;
   @ViewChild('usersChart') usersChart!: ElementRef;
 
+  // Counts
+  contentCount: number = 0;
+  contentTypeCount: number = 0;
+  tagsCount: number = 0;
+  usersCount: number = 0;
+
+  constructor(private apiService: ApiService) {}
+
   ngAfterViewInit() {
-    this.createCharts();
+    this.loadCounts();
   }
 
-  createCharts() {
-    // Get counts from localStorage
-    const contentCount = this.getContentCount();
-    const contentTypeCount = this.getContentTypeCount();
-    const tagsCount = this.getTagsCount();
-    const usersCount = this.getUsersCount();
+  loadCounts() {
+    // Load contents count
+    this.apiService.getContentsCountData().subscribe({
+      next: (count) => {
+        this.contentCount = count;
+        this.updateContentChart();
+      },
+      error: (error) => {
+        console.error('Error loading contents count:', error);
+        this.contentCount = 0;
+        this.updateContentChart();
+      }
+    });
 
-    // Content Chart
+    // Load content types count
+    this.apiService.getContentTypesCountData().subscribe({
+      next: (count) => {
+        this.contentTypeCount = count;
+        this.updateContentTypeChart();
+      },
+      error: (error) => {
+        console.error('Error loading content types count:', error);
+        this.contentTypeCount = 0;
+        this.updateContentTypeChart();
+      }
+    });
+
+    // Load tags count
+    this.apiService.getTagsCountData().subscribe({
+      next: (count) => {
+        this.tagsCount = count;
+        this.updateTagsChart();
+      },
+      error: (error) => {
+        console.error('Error loading tags count:', error);
+        this.tagsCount = 0;
+        this.updateTagsChart();
+      }
+    });
+
+    // Load users count
+    this.apiService.getUsersCountData().subscribe({
+      next: (count) => {
+        this.usersCount = count;
+        this.updateUsersChart();
+      },
+      error: (error) => {
+        console.error('Error loading users count:', error);
+        this.usersCount = 0;
+        this.updateUsersChart();
+      }
+    });
+  }
+
+  updateContentChart() {
     const contentCtx = this.contentChart.nativeElement.getContext('2d');
     new Chart(contentCtx, {
       type: 'doughnut',
       data: {
         labels: ['Content'],
         datasets: [{
-          data: [contentCount],
+          data: [this.contentCount || 1],
           backgroundColor: ['#4CAF50'],
           borderColor: ['#45a049'],
           borderWidth: 2
@@ -64,15 +120,16 @@ export class DashboardComponent implements AfterViewInit {
         }
       }
     });
+  }
 
-    // Content Type Chart
+  updateContentTypeChart() {
     const contentTypeCtx = this.contentTypeChart.nativeElement.getContext('2d');
     new Chart(contentTypeCtx, {
       type: 'doughnut',
       data: {
         labels: ['Content Types'],
         datasets: [{
-          data: [contentTypeCount],
+          data: [this.contentTypeCount || 1],
           backgroundColor: ['#2196F3'],
           borderColor: ['#1976D2'],
           borderWidth: 2
@@ -95,15 +152,16 @@ export class DashboardComponent implements AfterViewInit {
         }
       }
     });
+  }
 
-    // Tags Chart
+  updateTagsChart() {
     const tagsCtx = this.tagsChart.nativeElement.getContext('2d');
     new Chart(tagsCtx, {
       type: 'doughnut',
       data: {
         labels: ['Tags'],
         datasets: [{
-          data: [tagsCount],
+          data: [this.tagsCount || 1],
           backgroundColor: ['#FF9800'],
           borderColor: ['#F57C00'],
           borderWidth: 2
@@ -126,15 +184,16 @@ export class DashboardComponent implements AfterViewInit {
         }
       }
     });
+  }
 
-    // Users Chart
+  updateUsersChart() {
     const usersCtx = this.usersChart.nativeElement.getContext('2d');
     new Chart(usersCtx, {
       type: 'doughnut',
       data: {
         labels: ['Users'],
         datasets: [{
-          data: [usersCount],
+          data: [this.usersCount || 1],
           backgroundColor: ['#9C27B0'],
           borderColor: ['#7B1FA2'],
           borderWidth: 2
@@ -160,22 +219,18 @@ export class DashboardComponent implements AfterViewInit {
   }
 
   getContentCount(): number {
-    const content = JSON.parse(localStorage.getItem('content') || '[]');
-    return content.length;
+    return this.contentCount;
   }
 
   getContentTypeCount(): number {
-    const contentTypes = JSON.parse(localStorage.getItem('contentTypeList') || '[]');
-    return contentTypes.length;
+    return this.contentTypeCount;
   }
 
   getTagsCount(): number {
-    const tags = JSON.parse(localStorage.getItem('tags') || '[]');
-    return tags.length;
+    return this.tagsCount;
   }
 
   getUsersCount(): number {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    return users.length;
+    return this.usersCount;
   }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-sign-in-page',
@@ -13,12 +14,13 @@ export class SignInPageComponent {
 
   constructor (
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private apiService: ApiService
   ) {}
 
   signinForm  = new FormGroup(
     {
-      userId : new FormControl(""), 
+      email : new FormControl(""), 
       password : new FormControl("")
     }
   )
@@ -33,22 +35,27 @@ export class SignInPageComponent {
 
   login() {
     console.log('The value of login function call is this : ', this.signinForm.value);
-    if (this.signinForm.value.userId=="saikrishnatechno@gmail.com" && 
-      this.signinForm.value.password=="admin"
-    ) {
-      localStorage.setItem("userInfo", JSON.stringify(
-        {
-          userId : this.signinForm.value.userId,
-          password : this.signinForm.value.password
-        }
-      ))
-      localStorage.setItem("content", "[]")
-      localStorage.setItem("tags","[]")
-      localStorage.setItem("collections","[]")
-      this.router.navigate(["/dashboard"])
-    } else {
-      this.router.navigate(["/"])
-    }
-  }
+    
+    const credentials = {
+      email: this.signinForm.value.email,
+      password: this.signinForm.value.password
+    };
 
+    this.apiService.login(credentials).subscribe({
+      next: (response) => {
+        console.log('Login successful:', response);
+        
+        // Store token and user info
+        this.apiService.setToken(response.data.token);
+        this.apiService.setUserInfo(response.data.user);
+        
+        // Navigate to dashboard
+        this.router.navigate(["/dashboard"]);
+      },
+      error: (error) => {
+        console.error('Login failed:', error);
+        alert('Login failed. Please check your credentials and try again.');
+      }
+    });
+  }
 }

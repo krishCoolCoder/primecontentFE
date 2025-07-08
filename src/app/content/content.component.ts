@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CreateContentModelComponent } from '../modals/create-content-model/create-content-model.component';
@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
 import { DeleteContentModalComponent } from '../modals/delete-content-modal/delete-content-modal.component';
+import { ApiService } from '../services/api.service';
+import { Content } from '../models/content.model';
 
 @Component({
   selector: 'app-content',
@@ -14,23 +16,36 @@ import { DeleteContentModalComponent } from '../modals/delete-content-modal/dele
   templateUrl: './content.component.html',
   styleUrl: './content.component.css'
 })
-export class ContentComponent {
+export class ContentComponent implements OnInit {
   listView: boolean = true;
   gridView: boolean = false;
   isFilterOpen: boolean = false;
-  selectedContent: any = null;
+  selectedContent: Content | null = null;
+  contentList: Content[] = [];
   
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private apiService: ApiService
+  ) {}
   
-  contentList : any;
-  
-  ngOnInit(){
-    this.contentList = JSON.parse(localStorage.getItem("content") ?? "[]");
-    console.log("The contentList data is this : ", this.contentList)
+  ngOnInit() {
+    this.loadContents();
+  }
+
+  loadContents() {
+    this.apiService.getAllContentsData().subscribe({
+      next: (response) => {
+        console.log('Contents loaded:', response);
+        this.contentList = response.reverse(); // Reverse to show recent contents first
+      },
+      error: (error) => {
+        console.error('Error loading contents:', error);
+      }
+    });
   }
   
-  redirectToCreateContent(){
-    this.router.navigate(["/createContent"])
+  redirectToCreateContent() {
+    this.router.navigate(["/createContent"]);
   }
   
   setGridView() {
@@ -51,29 +66,17 @@ export class ContentComponent {
     this.isFilterOpen = false;
   }
 
-  viewContent(content: any) {
+  viewContent(content: Content) {
     console.log('View content clicked:', content);
-    // Create a unique identifier using content type and field values
-    const uniqueId = this.createUniqueId(content);
-    console.log('Navigating to viewContent with ID:', uniqueId);
-    this.router.navigate(['/viewContent', uniqueId]);
+    this.router.navigate(['/viewContent', content._id]);
   }
 
-  editContent(content: any) {
+  editContent(content: Content) {
     console.log('Edit content clicked:', content);
-    // Create a unique identifier using content type and field values
-    const uniqueId = this.createUniqueId(content);
-    console.log('Navigating to editContent with ID:', uniqueId);
-    this.router.navigate(['/editContent', uniqueId]);
+    this.router.navigate(['/editContent', content._id]);
   }
 
-  private createUniqueId(content: any): string {
-    // Create a unique identifier based on content type and field values
-    const fieldValues = content.contentFields.map((field: any) => `${field.fieldName}:${field.fieldValue}`).join('|');
-    return `${content.contentType}-${fieldValues}`;
-  }
-
-  deleteContent(content: any) {
+  deleteContent(content: Content) {
     console.log('Delete content clicked:', content);
     this.selectedContent = content;
     // Trigger Bootstrap modal
@@ -83,51 +86,25 @@ export class ContentComponent {
 
   onConfirmDelete() {
     console.log('Confirm delete clicked for:', this.selectedContent);
-    if (this.selectedContent) {
-      const contentList = JSON.parse(localStorage.getItem('content') ?? '[]');
-      console.log('Current content list:', contentList);
-      console.log('Content to delete:', this.selectedContent);
-      
-      // Remove the selected content by comparing content type and fields
-      const updatedList = contentList.filter((item: any) => {
-        console.log('Comparing item:', item);
-        console.log('Selected content:', this.selectedContent);
-        
-        if (item.contentType !== this.selectedContent.contentType) {
-          console.log('Content type mismatch');
-          return true;
-        }
-        if (item.contentFields.length !== this.selectedContent.contentFields.length) {
-          console.log('Content fields length mismatch');
-          return true;
-        }
-        
-        // Compare each field
-        for (let i = 0; i < item.contentFields.length; i++) {
-          if (item.contentFields[i].fieldName !== this.selectedContent.contentFields[i].fieldName ||
-              item.contentFields[i].fieldValue !== this.selectedContent.contentFields[i].fieldValue) {
-            console.log('Field mismatch at index', i);
-            return true;
+    if (this.selectedContent && this.selectedContent._id) {
+      this.apiService.deleteContent(this.selectedContent._id).subscribe({
+        next: (response) => {
+          console.log('Content deleted successfully:', response);
+          
+          // Hide the modal
+          const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteContentModal'));
+          if (modal) {
+            modal.hide();
           }
+          
+          // Reload contents list
+          this.loadContents();
+          this.selectedContent = null;
+        },
+        error: (error) => {
+          console.error('Error deleting content:', error);
         }
-        console.log('Found matching item to delete');
-        return false; // This is the item to delete
       });
-      
-      console.log('Updated list:', updatedList);
-      localStorage.setItem('content', JSON.stringify(updatedList));
-      this.contentList = updatedList;
-      this.selectedContent = null;
-      
-      // Hide the modal
-      const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteContentModal'));
-      if (modal) {
-        modal.hide();
-      }
-      
-      console.log('Content deleted successfully');
-    } else {
-      console.log('No selected content to delete');
     }
   }
 

@@ -3,8 +3,7 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Router } from '@angular/router';
 import { NgFor, CommonModule } from '@angular/common';
-import { ContentTypeService } from '../services/content-type.service';
-import { ContentType } from '../models/content-type.model';
+import { ApiService } from '../services/api.service';
 import { DeleteConfirmationModalComponent } from '../modals/delete-confirmation-modal/delete-confirmation-modal.component';
 import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
 
@@ -16,15 +15,15 @@ import { FilterModalComponent } from '../modals/filter-modal/filter-modal.compon
   styleUrl: './content-type-page.component.css'
 })
 export class ContentTypePageComponent implements OnInit {
-  contentTypeList: ContentType[] = [];
-  selectedContentType: ContentType | null = null;
+  contentTypeList: any[] = [];
+  selectedContentType: any = null;
   listView: boolean = true;
   gridView: boolean = false;
   isFilterOpen: boolean = false;
 
   constructor(
     private router: Router,
-    private contentTypeService: ContentTypeService
+    private apiService: ApiService
   ) {}
 
   ngOnInit() {
@@ -32,7 +31,15 @@ export class ContentTypePageComponent implements OnInit {
   }
 
   loadContentTypes() {
-    this.contentTypeList = this.contentTypeService.getContentTypes();
+    this.apiService.getAllContentTypesData().subscribe({
+      next: (response) => {
+        console.log('Content types loaded:', response);
+        this.contentTypeList = response;
+      },
+      error: (error) => {
+        console.error('Error loading content types:', error);
+      }
+    });
   }
 
   redirectToCreateContentType() {
@@ -57,15 +64,15 @@ export class ContentTypePageComponent implements OnInit {
     this.isFilterOpen = false;
   }
 
-  viewContentType(contentType: ContentType) {
-    this.router.navigate(['/viewContentType', contentType.id]);
+  viewContentType(contentType: any) {
+    this.router.navigate(['/viewContentType', contentType._id]);
   }
 
-  editContentType(contentType: ContentType) {
-    this.router.navigate(['/editContentType', contentType.id]);
+  editContentType(contentType: any) {
+    this.router.navigate(['/editContentType', contentType._id]);
   }
 
-  deleteContentType(contentType: ContentType) {
+  deleteContentType(contentType: any) {
     this.selectedContentType = contentType;
     // Trigger Bootstrap modal
     const modal = new (window as any).bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
@@ -74,9 +81,17 @@ export class ContentTypePageComponent implements OnInit {
 
   onConfirmDelete() {
     if (this.selectedContentType) {
-      this.contentTypeService.deleteContentType(this.selectedContentType.id);
-      this.loadContentTypes();
-      this.selectedContentType = null;
+      this.apiService.deleteContentType(this.selectedContentType._id).subscribe({
+        next: (response) => {
+          console.log('Content type deleted successfully:', response);
+          this.loadContentTypes(); // Refresh the list
+          this.selectedContentType = null;
+        },
+        error: (error) => {
+          console.error('Error deleting content type:', error);
+          this.selectedContentType = null;
+        }
+      });
     }
   }
 

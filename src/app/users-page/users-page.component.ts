@@ -2,74 +2,90 @@ import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Router } from '@angular/router';
-import { BulkUploadModalComponent } from '../modals/bulk-upload-modal/bulk-upload-modal.component';
-import { ViewUserModalComponent } from '../modals/view-user-modal/view-user-modal.component';
-import { UserService } from '../services/user.service';
+import { NgFor, CommonModule } from '@angular/common';
+import { ApiService } from '../services/api.service';
 import { User } from '../models/user.model';
-import { CommonModule } from '@angular/common';
-import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
 
 @Component({
   selector: 'app-users-page',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent, BulkUploadModalComponent, ViewUserModalComponent, CommonModule, FilterModalComponent],
+  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule],
   templateUrl: './users-page.component.html',
   styleUrl: './users-page.component.css'
 })
 export class UsersPageComponent implements OnInit {
   users: User[] = [];
   selectedUser: User | null = null;
-  isFilterOpen: boolean = false;
-  listView: boolean = true;
-  gridView: boolean = false;
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(
+    private router: Router,
+    private apiService: ApiService
+  ) {}
 
   ngOnInit() {
     this.loadUsers();
   }
 
   loadUsers() {
-    this.users = this.userService.getUsers();
+    this.apiService.getUsersWithMapping().subscribe({
+      next: (response) => {
+        console.log('Users loaded:', response);
+        this.users = response.data.reverse(); // Reverse to show recent users first
+      },
+      error: (error) => {
+        console.error('Error loading users:', error);
+      }
+    });
   }
 
-  redirectToCreateUsersPage() {
+  redirectToCreateUser() {
     this.router.navigate(['/createUsers']);
   }
 
-  setGridView() {
-    this.listView = false;
-    this.gridView = true;
-  }
-
-  setListView() {
-    this.listView = true;
-    this.gridView = false;
-  }
-
-  openFilter() {
-    this.isFilterOpen = true;
-  }
-
-  closeFilter() {
-    this.isFilterOpen = false;
-  }
-
-  viewUser(user: User) {
-    this.selectedUser = user;
-    // Trigger Bootstrap modal
-    const modal = new (window as any).bootstrap.Modal(document.getElementById('viewUserModal'));
-    modal.show();
-  }
-
   editUser(user: User) {
-    this.router.navigate(['/editUser', user.id]);
+    console.log('Edit user clicked:', user);
+    this.router.navigate(['/editUser', user._id]);
   }
 
   deleteUser(user: User) {
-    if (confirm(`Are you sure you want to delete user ${user.firstName} ${user.lastName}?`)) {
-      this.userService.deleteUser(user.id);
-      this.loadUsers();
+    console.log('Delete user clicked:', user);
+    this.selectedUser = user;
+    // Trigger Bootstrap modal
+    const modal = new (window as any).bootstrap.Modal(document.getElementById('deleteUserModal'));
+    modal.show();
+  }
+
+  onConfirmDelete() {
+    console.log('Confirm delete clicked for:', this.selectedUser);
+    if (this.selectedUser && this.selectedUser._id) {
+      this.apiService.deleteUser(this.selectedUser._id).subscribe({
+        next: (response) => {
+          console.log('User deleted successfully:', response);
+          
+          // Hide the modal
+          const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteUserModal'));
+          if (modal) {
+            modal.hide();
+          }
+          
+          // Reload users list
+          this.loadUsers();
+          this.selectedUser = null;
+        },
+        error: (error) => {
+          console.error('Error deleting user:', error);
+        }
+      });
+    }
+  }
+
+  onCancelDelete() {
+    console.log('Cancel delete clicked');
+    this.selectedUser = null;
+    // Hide the modal
+    const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteUserModal'));
+    if (modal) {
+      modal.hide();
     }
   }
 }

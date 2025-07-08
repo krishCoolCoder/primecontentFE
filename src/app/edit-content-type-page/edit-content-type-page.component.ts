@@ -4,8 +4,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ContentTypeService } from '../services/content-type.service';
-import { ContentType, ContentTypeField } from '../models/content-type.model';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-edit-content-type-page',
@@ -15,28 +14,39 @@ import { ContentType, ContentTypeField } from '../models/content-type.model';
   styleUrl: './edit-content-type-page.component.css'
 })
 export class EditContentTypePageComponent implements OnInit {
-  contentType: ContentType = {
-    id: '',
+  contentType: any = {
     contentTypeName: '',
-    contentTypeList: [{ fieldName: '', fieldType: 'String' }],
-    createdAt: new Date()
+    contentTypeList: [{ fieldName: '', fieldType: 'String' }]
   };
+  contentTypeId: string = '';
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private contentTypeService: ContentTypeService
+    private apiService: ApiService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params['id']) {
-        const existingContentType = this.contentTypeService.getContentTypeById(params['id']);
-        if (existingContentType) {
-          this.contentType = { ...existingContentType };
-        } else {
-          this.router.navigate(['/contentType']);
-        }
+        this.contentTypeId = params['id'];
+        this.loadContentType();
+      }
+    });
+  }
+
+  loadContentType() {
+    this.apiService.getContentTypeByIdData(this.contentTypeId).subscribe({
+      next: (response) => {
+        console.log('Content type loaded:', response);
+        this.contentType = {
+          contentTypeName: response.contentTypeName,
+          contentTypeList: response.contentTypeList || [{ fieldName: '', fieldType: 'String' }]
+        };
+      },
+      error: (error) => {
+        console.error('Error loading content type:', error);
+        this.router.navigate(['/contentType']);
       }
     });
   }
@@ -56,8 +66,20 @@ export class EditContentTypePageComponent implements OnInit {
 
   updateContentType() {
     if (this.contentType.contentTypeName.trim() && this.contentType.contentTypeList.length > 0) {
-      this.contentTypeService.updateContentType(this.contentType);
-      this.router.navigate(['/contentType']);
+      const contentTypeData = {
+        contentTypeName: this.contentType.contentTypeName,
+        contentTypeList: this.contentType.contentTypeList
+      };
+
+      this.apiService.updateContentType(this.contentTypeId, contentTypeData).subscribe({
+        next: (response) => {
+          console.log('Content type updated successfully:', response);
+          this.router.navigate(['/contentType']);
+        },
+        error: (error) => {
+          console.error('Error updating content type:', error);
+        }
+      });
     }
   }
 

@@ -3,7 +3,7 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '../services/user.service';
+import { ApiService } from '../services/api.service';
 import { User } from '../models/user.model';
 import { CommonModule } from '@angular/common';
 
@@ -16,13 +16,13 @@ import { CommonModule } from '@angular/common';
 })
 export class CreateUserPageComponent implements OnInit {
   user: User = {
-    id: '',
+    _id: '',
     firstName: '',
     lastName: '',
     username: '',
     email: '',
     password: '',
-    role: '',
+    role: 'user',
     createdAt: new Date()
   };
 
@@ -32,7 +32,7 @@ export class CreateUserPageComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private userService: UserService
+    private apiService: ApiService
   ) {}
 
   ngOnInit() {
@@ -46,21 +46,51 @@ export class CreateUserPageComponent implements OnInit {
   }
 
   loadUserForEdit() {
-    const user = this.userService.getUserById(this.userId);
-    if (user) {
-      this.user = { ...user };
-    }
+    this.apiService.getUserByIdWithMapping(this.userId).subscribe({
+      next: (response) => {
+        console.log('User loaded for edit:', response);
+        console.log('Available user fields:', Object.keys(response.data));
+        console.log('Username field value:', response.data.username);
+        
+        this.user = { 
+          ...response.data,
+          // Ensure username is set, fallback to email if username doesn't exist
+          username: response.data.username || response.data.email || '',
+          // Make sure password is empty for edit mode (security)
+          password: ''
+        };
+        
+        console.log('User object after assignment:', this.user);
+      },
+      error: (error) => {
+        console.error('Error loading user:', error);
+        this.router.navigate(['/users']);
+      }
+    });
   }
 
   onSubmit() {
     if (this.isEditMode) {
-      this.userService.updateUser(this.user);
+      this.apiService.updateUserWithMapping(this.user._id!, this.user).subscribe({
+        next: (response) => {
+          console.log('User updated successfully:', response);
+          this.router.navigate(['/users']);
+        },
+        error: (error) => {
+          console.error('Error updating user:', error);
+        }
+      });
     } else {
-      this.user.id = this.userService.generateId();
-      this.user.createdAt = new Date();
-      this.userService.saveUser(this.user);
+      this.apiService.createUserWithMapping(this.user).subscribe({
+        next: (response) => {
+          console.log('User created successfully:', response);
+          this.router.navigate(['/users']);
+        },
+        error: (error) => {
+          console.error('Error creating user:', error);
+        }
+      });
     }
-    this.router.navigate(['/users']);
   }
 
   redirectToUserPage() {

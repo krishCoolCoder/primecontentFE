@@ -1,54 +1,19 @@
 <app-header></app-header>
 <div class="d-flex">
-    <app-bulk-upload-modal></app-bulk-upload-modal>
     <app-sidebar></app-sidebar>
-    <!-- <app-create-content-model></app-create-content-model> -->
     <div class="container">
         <div class="contentContainer d-flex justify-content-between align-items-center">
-            <!-- <button 
-            type="button createContent" 
-            class="btn btn-primary" 
-            data-bs-toggle="modal" 
-            data-bs-target="#createContentModelSummon"
-            (click)="redirectToCreateContent()"
-            >Create content</button> -->
             <div class="">
-            <button 
-            type="button createContent" 
-            class="btn btn-primary me-3" 
-            (click)="redirectToCreateUsersPage()"
-            >Create User</button>
-            <button 
-            type="button createContent" 
-            class="btn btn-primary" 
-            data-bs-toggle="modal" data-bs-target="#bulkUploadModal"
-            >Create Bulk User</button>
-        </div>
-            <div class="viewOptions d-flex justify-content-center align-items-center">
-                <div class="gridView me-2" (click)="setGridView()">
-                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="29" height="29" rx="5" fill="#D9D9D9" class="gridViewBg" />
-                        <rect x="6" y="5" width="7" height="7" rx="2" fill="#FBFBFB" />
-                        <rect x="6" y="17" width="7" height="7" rx="2" fill="#FBFBFB" />
-                        <rect x="16" y="5" width="7" height="7" rx="2" fill="#FBFBFB" />
-                        <rect x="16" y="17" width="7" height="7" rx="2" fill="#FBFBFB" />
-                    </svg>
-                </div>
-                <div class="listView" (click)="setListView()">
-                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="29" height="29" rx="5" fill="#D9D9D9" class="listViewBg" />
-                        <rect x="6" y="5" width="17" height="7" rx="2" fill="#FBFBFB" />
-                        <rect x="6" y="17" width="17" height="7" rx="2" fill="#FBFBFB" />
-                    </svg>
-                </div>
-            </div>
-            <div class="contentFilter">
-                <button type="button createContent" class="btn btn-primary" (click)="openFilter()">Users filter</button>
+                <button 
+                type="button createContent" 
+                class="btn btn-primary me-3" 
+                (click)="redirectToCreateUser()"
+                >Create User</button>
             </div>
         </div>
         
         <!-- List View -->
-        <div class="listItemView" *ngIf="listView; else gridViewTemplate">
+        <div class="listItemView">
             <div class="d-flex justify-content-center align-items-center flex-column pt-2">
                 <div class="w-50" *ngFor="let user of users">
                     <div class="item">
@@ -56,9 +21,6 @@
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <div class="dropdown-item" (click)="viewUser(user)">View</div>
-                                </li>
                                 <li>
                                     <div class="dropdown-item" (click)="editUser(user)">Edit</div>
                                 </li>
@@ -83,53 +45,25 @@
                 <p class="text-muted">No users found. Create your first user!</p>
             </div>
         </div>
-
-        <!-- Grid View -->
-        <ng-template #gridViewTemplate>
-            <div class="container viewContainer">
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-                    <div class="col mb-3" *ngFor="let user of users">
-                        <div class="item">
-                            <div class="dropdown">
-                                <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">...</div>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="dropdown-item" (click)="viewUser(user)">View</div>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-item" (click)="editUser(user)">Edit</div>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-item" (click)="deleteUser(user)">Delete</div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <p class="title">
-                                {{ user.firstName }} {{ user.lastName }}
-                            </p>
-                            <p class="description">
-                                {{ user.email }}
-                            </p>
-                            <p class="role">
-                                <span class="badge bg-secondary">{{ user.role }}</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center mt-4" *ngIf="users.length === 0">
-                    <p class="text-muted">No users found. Create your first user!</p>
-                </div>
-            </div>
-        </ng-template>
     </div>
 </div>
 
-<!-- View User Modal -->
-<app-view-user-modal [user]="selectedUser"></app-view-user-modal>
-
-<!-- Filter Modal -->
-<app-filter-modal 
-    [isOpen]="isFilterOpen"
-    (closeFilter)="closeFilter()">
-</app-filter-modal>
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteUserModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete user "<strong>{{ selectedUser?.firstName }} {{ selectedUser?.lastName }}</strong>"?</p>
+        <p class="text-muted">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="onConfirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

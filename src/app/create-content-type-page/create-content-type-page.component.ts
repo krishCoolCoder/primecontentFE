@@ -4,8 +4,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ContentTypeService } from '../services/content-type.service';
-import { ContentType, ContentTypeField } from '../models/content-type.model';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-create-content-type-page',
@@ -15,16 +14,14 @@ import { ContentType, ContentTypeField } from '../models/content-type.model';
   styleUrl: './create-content-type-page.component.css'
 })
 export class CreateContentTypePageComponent {
-  contentType: ContentType = {
-    id: '',
+  contentType: any = {
     contentTypeName: '',
-    contentTypeList: [{ fieldName: '', fieldType: 'String' }],
-    createdAt: new Date()
+    contentTypeList: [{ fieldName: '', fieldType: 'String' }]
   };
 
   constructor(
     private router: Router,
-    private contentTypeService: ContentTypeService
+    private apiService: ApiService
   ) {}
 
   addAnotherField() {
@@ -42,10 +39,20 @@ export class CreateContentTypePageComponent {
 
   createContentType() {
     if (this.contentType.contentTypeName.trim() && this.contentType.contentTypeList.length > 0) {
-      this.contentType.id = this.contentTypeService.generateId();
-      this.contentType.createdAt = new Date();
-      this.contentTypeService.saveContentType(this.contentType);
-      this.router.navigate(['/contentType']);
+      const contentTypeData = {
+        contentTypeName: this.contentType.contentTypeName,
+        contentTypeList: this.contentType.contentTypeList
+      };
+
+      this.apiService.createContentType(contentTypeData).subscribe({
+        next: (response) => {
+          console.log('Content type created successfully:', response);
+          this.router.navigate(['/contentType']);
+        },
+        error: (error) => {
+          console.error('Error creating content type:', error);
+        }
+      });
     }
   }
 

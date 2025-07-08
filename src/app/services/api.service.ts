@@ -1,0 +1,351 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  private baseUrl = 'http://13.200.165.82:3000/api';
+
+  constructor(private http: HttpClient) {}
+
+  // Helper method to get headers with token
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
+  // USER AUTHENTICATION APIs
+  register(userData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/register`, userData);
+  }
+
+  login(credentials: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/login`, credentials);
+  }
+
+  // USER MANAGEMENT APIs
+  
+  // 1. Get All Users
+  getAllUsers(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/users`, { headers: this.getHeaders() });
+  }
+
+  // 2. Get Users Count
+  getUsersCount(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/users/count`, { headers: this.getHeaders() });
+  }
+
+  // 3. Get User by ID
+  getUserById(userId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/users/${userId}`, { headers: this.getHeaders() });
+  }
+
+  // 4. Create User (Register)
+  createUser(userData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/register`, userData);
+  }
+
+  // 5. Update User
+  updateUser(userId: string, userData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/users/${userId}`, userData, { headers: this.getHeaders() });
+  }
+
+  // 6. Delete User
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/users/${userId}`, { headers: this.getHeaders() });
+  }
+
+  // TAGS MODULE APIs
+  
+  // 1. Create Tag
+  createTag(tagData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/tags`, tagData, { headers: this.getHeaders() });
+  }
+
+  // 2. Get All Tags
+  getAllTags(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/tags`, { headers: this.getHeaders() });
+  }
+
+  // 3. Get Tags Count
+  getTagsCount(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/tags/count`, { headers: this.getHeaders() });
+  }
+
+  // 4. Get Tag by ID
+  getTagById(tagId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/tags/${tagId}`, { headers: this.getHeaders() });
+  }
+
+  // 5. Update Tag
+  updateTag(tagId: string, tagData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/tags/${tagId}`, tagData, { headers: this.getHeaders() });
+  }
+
+  // 6. Delete Tag
+  deleteTag(tagId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/tags/${tagId}`, { headers: this.getHeaders() });
+  }
+
+  // CONTENT TYPE MODULE APIs
+
+  // 1. Create Content Type
+  createContentType(contentTypeData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/content-types`, contentTypeData, { headers: this.getHeaders() });
+  }
+
+  // 2. Get All Content Types
+  getAllContentTypes(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/content-types`, { headers: this.getHeaders() });
+  }
+
+  // 3. Get Content Types Count
+  getContentTypesCount(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/content-types/count`, { headers: this.getHeaders() });
+  }
+
+  // 4. Get Content Types by Tag
+  getContentTypesByTag(tagName: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/content-types/tag/${tagName}`, { headers: this.getHeaders() });
+  }
+
+  // 5. Get Content Type by ID
+  getContentTypeById(contentTypeId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/content-types/${contentTypeId}`, { headers: this.getHeaders() });
+  }
+
+  // 6. Update Content Type
+  updateContentType(contentTypeId: string, contentTypeData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/content-types/${contentTypeId}`, contentTypeData, { headers: this.getHeaders() });
+  }
+
+  // 7. Delete Content Type
+  deleteContentType(contentTypeId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/content-types/${contentTypeId}`, { headers: this.getHeaders() });
+  }
+
+  // CONTENTS MODULE APIs
+
+  // 1. Create Content
+  createContent(contentData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/contents`, contentData, { headers: this.getHeaders() });
+  }
+
+  // 2. Get All Contents
+  getAllContents(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/contents`, { headers: this.getHeaders() });
+  }
+
+  // 3. Get Contents Count
+  getContentsCount(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/contents/count`, { headers: this.getHeaders() });
+  }
+
+  // 4. Get Contents by Content Type
+  getContentsByContentType(contentTypeId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/contents/content-type/${contentTypeId}`, { headers: this.getHeaders() });
+  }
+
+  // 5. Get Contents Count by Content Type
+  getContentsCountByContentType(contentTypeId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/contents/content-type/${contentTypeId}/count`, { headers: this.getHeaders() });
+  }
+
+  // 6. Get Content by ID
+  getContentById(contentId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/contents/${contentId}`, { headers: this.getHeaders() });
+  }
+
+  // 7. Update Content
+  updateContent(contentId: string, contentData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/contents/${contentId}`, contentData, { headers: this.getHeaders() });
+  }
+
+  // 8. Delete Content
+  deleteContent(contentId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/contents/${contentId}`, { headers: this.getHeaders() });
+  }
+
+  // UTILITY METHODS
+  
+  // Check if token exists
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  // Get stored token
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  // Store token
+  setToken(token: string): void {
+    localStorage.setItem('token', token);
+  }
+
+  // Remove token
+  removeToken(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userInfo');
+  }
+
+  // Store user info
+  setUserInfo(userInfo: any): void {
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  }
+
+  // Get user info
+  getUserInfo(): any {
+    const userInfo = localStorage.getItem('userInfo');
+    return userInfo ? JSON.parse(userInfo) : null;
+  }
+
+  // USER SERVICE HELPER METHODS (for handling userName/username mapping)
+  
+  // Get users with username mapping
+  getUsersWithMapping(): Observable<any> {
+    return this.getAllUsers().pipe(
+      map((response: any) => ({
+        ...response,
+        data: response.data.map((user: any) => ({
+          ...user,
+          username: user.userName || user.email || ''
+        }))
+      }))
+    );
+  }
+
+  // Get user by ID with username mapping
+  getUserByIdWithMapping(userId: string): Observable<any> {
+    return this.getUserById(userId).pipe(
+      map((response: any) => ({
+        ...response,
+        data: {
+          ...response.data,
+          username: response.data.userName || response.data.email || ''
+        }
+      }))
+    );
+  }
+
+  // Create user with userName mapping
+  createUserWithMapping(userData: any): Observable<any> {
+    const mappedUserData = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      userName: userData.username, // Map username to userName for API
+      email: userData.email,
+      password: userData.password,
+      role: userData.role
+    };
+    return this.createUser(mappedUserData);
+  }
+
+  // Update user with userName mapping
+  updateUserWithMapping(userId: string, userData: any): Observable<any> {
+    const mappedUserData = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      userName: userData.username, // Map username to userName for API
+      email: userData.email,
+      role: userData.role
+    };
+    return this.updateUser(userId, mappedUserData);
+  }
+
+  // Get users count
+  getUsersCountData(): Observable<number> {
+    return this.getUsersCount().pipe(
+      map((response: any) => response.data.count)
+    );
+  }
+
+  // CONTENT SERVICE HELPER METHODS
+
+  // Get all contents
+  getAllContentsData(): Observable<any[]> {
+    return this.getAllContents().pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get content by ID
+  getContentByIdData(contentId: string): Observable<any> {
+    return this.getContentById(contentId).pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get contents count
+  getContentsCountData(): Observable<number> {
+    return this.getContentsCount().pipe(
+      map((response: any) => response.data.count)
+    );
+  }
+
+  // Get contents by content type
+  getContentsByContentTypeData(contentTypeId: string): Observable<any[]> {
+    return this.getContentsByContentType(contentTypeId).pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get contents count by content type
+  getContentsCountByContentTypeData(contentTypeId: string): Observable<number> {
+    return this.getContentsCountByContentType(contentTypeId).pipe(
+      map((response: any) => response.data.count)
+    );
+  }
+
+  // TAG SERVICE HELPER METHODS
+
+  // Get all tags data
+  getAllTagsData(): Observable<any[]> {
+    return this.getAllTags().pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get tag by ID data
+  getTagByIdData(tagId: string): Observable<any> {
+    return this.getTagById(tagId).pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get tags count data
+  getTagsCountData(): Observable<number> {
+    return this.getTagsCount().pipe(
+      map((response: any) => response.data.count)
+    );
+  }
+
+  // CONTENT TYPE SERVICE HELPER METHODS
+
+  // Get all content types data
+  getAllContentTypesData(): Observable<any[]> {
+    return this.getAllContentTypes().pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get content type by ID data
+  getContentTypeByIdData(contentTypeId: string): Observable<any> {
+    return this.getContentTypeById(contentTypeId).pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get content types count data
+  getContentTypesCountData(): Observable<number> {
+    return this.getContentTypesCount().pipe(
+      map((response: any) => response.data.count)
+    );
+  }
+} 

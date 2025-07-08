@@ -3,6 +3,7 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-view-tag-page',
@@ -17,7 +18,8 @@ export class ViewTagPageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private apiService: ApiService
   ) {}
 
   ngOnInit() {
@@ -28,27 +30,16 @@ export class ViewTagPageComponent implements OnInit {
   }
 
   loadTag() {
-    const tagsList = JSON.parse(localStorage.getItem('tags') ?? '[]');
-    
-    // First try to find by ID
-    this.tag = tagsList.find((item: any) => item.id === this.tagId);
-    
-    // If not found by ID, try to find by tag name
-    if (!this.tag) {
-      this.tag = tagsList.find((item: any) => item.tagName === this.tagId);
-    }
-    
-    // If still not found, try to find by unique identifier (tag name + description)
-    if (!this.tag) {
-      this.tag = tagsList.find((item: any) => {
-        const uniqueId = `${item.tagName}-${item.description || ''}`;
-        return uniqueId === this.tagId;
-      });
-    }
-    
-    if (!this.tag) {
-      this.router.navigate(['/tag']);
-    }
+    this.apiService.getTagByIdData(this.tagId).subscribe({
+      next: (response) => {
+        console.log('Tag loaded:', response);
+        this.tag = response;
+      },
+      error: (error) => {
+        console.error('Error loading tag:', error);
+        this.router.navigate(['/tag']);
+      }
+    });
   }
 
   goBack() {
