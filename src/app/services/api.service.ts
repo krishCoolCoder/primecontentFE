@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://13.200.165.82:3000/api';
+  private baseUrl = 'https://api.primecontent.in/api';
 
   constructor(private http: HttpClient) {}
 
