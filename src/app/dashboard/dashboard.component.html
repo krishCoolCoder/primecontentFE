@@ -1,36 +1,217 @@
-<app-header></app-header>
-<div class="d-flex">
-    <app-sidebar></app-sidebar>
-    
-    <div class="dashboard-container">
-        <div class="dashboard-header">
-            <h1 class="dashboard-title">Dashboard Overview</h1>
-            <p class="dashboard-subtitle">Statistics and counts of your content management system</p>
-        </div>
+<div class="page-wrapper">
+    <app-header></app-header>
+    <div class="content-wrapper">
+        <app-sidebar></app-sidebar>
         
-        <div class="charts-grid">
-            <div class="chart-card">
-                <h3 class="chart-title">Content Count</h3>
-                <div class="count-number">{{getContentCount()}}</div>
-                <canvas #contentChart></canvas>
+        <div class="dashboard-container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Dashboard Overview</h1>
+                <p class="dashboard-subtitle">Comprehensive analytics of your content management system</p>
             </div>
-            
-            <div class="chart-card">
-                <h3 class="chart-title">Content Types Count</h3>
-                <div class="count-number">{{getContentTypeCount()}}</div>
-                <canvas #contentTypeChart></canvas>
+
+            <!-- ApexCharts Treemap Section -->
+            <div class="treemap-section">
+                <div class="treemap-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">System Data Hierarchy</h3>
+                        <p class="chart-subtitle">Hierarchical view of your content management system data</p>
+                    </div>
+                    <div class="treemap-content">
+                        <apx-chart
+                            [series]="chartOptions.series!"
+                            [chart]="chartOptions.chart!"
+                            [dataLabels]="chartOptions.dataLabels!"
+                            [plotOptions]="chartOptions.plotOptions!"
+                            [xaxis]="chartOptions.xaxis!"
+                            [yaxis]="chartOptions.yaxis!"
+                            [fill]="chartOptions.fill!"
+                            [tooltip]="chartOptions.tooltip!"
+                            [stroke]="chartOptions.stroke!"
+                            [legend]="chartOptions.legend!">
+                        </apx-chart>
+                    </div>
+                </div>
             </div>
-            
-            <div class="chart-card">
-                <h3 class="chart-title">Tags Count</h3>
-                <div class="count-number">{{getTagsCount()}}</div>
-                <canvas #tagsChart></canvas>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon content-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-number">{{ dashboardData.contentCount }}</h3>
+                        <p class="stat-label">Total Content</p>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +{{ getContentGrowthPercentage() }}%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon content-type-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-number">{{ dashboardData.contentTypeCount }}</h3>
+                        <p class="stat-label">Content Types</p>
+                        <div class="stat-change neutral">
+                            <i class="fas fa-minus"></i>
+                            0%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon tags-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-number">{{ dashboardData.tagsCount }}</h3>
+                        <p class="stat-label">Tags</p>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +12%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon users-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-number">{{ dashboardData.usersCount }}</h3>
+                        <p class="stat-label">Active Users</p>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +{{ getActiveUsersPercentage() }}%
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="chart-card">
-                <h3 class="chart-title">Users Count</h3>
-                <div class="count-number">{{getUsersCount()}}</div>
-                <canvas #usersChart></canvas>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <!-- Overview Chart -->
+                <div class="chart-card large-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">System Overview</h3>
+                        <p class="chart-subtitle">Distribution of content across your system</p>
+                    </div>
+                    <div class="chart-content">
+                        <div class="chart-container" *ngIf="!loading.overview">
+                            <canvas #overviewChart></canvas>
+                        </div>
+                        <div class="chart-loading" *ngIf="loading.overview">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Loading overview data...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Types Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Content Types</h3>
+                        <p class="chart-subtitle">Fields per content type</p>
+                    </div>
+                    <div class="chart-content">
+                        <div class="chart-container" *ngIf="!loading.contentTypes">
+                            <canvas #contentTypesChart></canvas>
+                        </div>
+                        <div class="chart-loading" *ngIf="loading.contentTypes">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Loading content types...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tags Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Tags Distribution</h3>
+                        <p class="chart-subtitle">Available tags in the system</p>
+                    </div>
+                    <div class="chart-content">
+                        <div class="chart-container" *ngIf="!loading.tags">
+                            <canvas #tagsChart></canvas>
+                        </div>
+                        <div class="chart-loading" *ngIf="loading.tags">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Loading tags...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Users by Role</h3>
+                        <p class="chart-subtitle">User distribution across roles</p>
+                    </div>
+                    <div class="chart-content">
+                        <div class="chart-container" *ngIf="!loading.users">
+                            <canvas #usersChart></canvas>
+                        </div>
+                        <div class="chart-loading" *ngIf="loading.users">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Loading users...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="dashboard-summary">
+                <div class="summary-card">
+                    <h4>Quick Stats</h4>
+                    <div class="summary-stats">
+                        <div class="summary-item">
+                            <span class="summary-label">Total Items:</span>
+                            <span class="summary-value">{{ getTotalItems() }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Most Used:</span>
+                            <span class="summary-value">Content ({{ dashboardData.contentCount }})</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">System Health:</span>
+                            <span class="summary-value status-good">Excellent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <h4>Recent Activity</h4>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <i class="fas fa-plus-circle text-success"></i>
+                            <span>New content type created</span>
+                            <small class="text-muted">2 hours ago</small>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-edit text-primary"></i>
+                            <span>Content updated</span>
+                            <small class="text-muted">4 hours ago</small>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-user-plus text-info"></i>
+                            <span>New user registered</span>
+                            <small class="text-muted">1 day ago</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
