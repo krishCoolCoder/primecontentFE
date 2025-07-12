@@ -53,6 +53,28 @@ export class EditContentPageComponent implements OnInit {
     });
   }
 
+  // Helper function to convert field values based on their type
+  private convertFieldValue(fieldValue: any, fieldType: string): any {
+    if (!fieldValue && fieldValue !== 0) return "";
+    
+    switch (fieldType.toLowerCase()) {
+      case 'number':
+        const numValue = Number(fieldValue);
+        return isNaN(numValue) ? 0 : numValue;
+      case 'boolean':
+        if (typeof fieldValue === 'string') {
+          return fieldValue.toLowerCase() === 'true';
+        }
+        return Boolean(fieldValue);
+      case 'count':
+        const countValue = Number(fieldValue);
+        return isNaN(countValue) ? 0 : countValue;
+      case 'string':
+      default:
+        return String(fieldValue);
+    }
+  }
+
   saveContent() {
     if (!this.editedContent || !this.editedContent._id) return;
 
@@ -61,10 +83,12 @@ export class EditContentPageComponent implements OnInit {
       tagName: this.editedContent.tagName,
       contentFields: this.editedContent.contentFields.map((field: any) => ({
         fieldName: field.fieldName,
-        fieldValue: field.fieldValue || "",
+        fieldValue: this.convertFieldValue(field.fieldValue, field.fieldType),
         fieldType: field.fieldType || "string"
       }))
     };
+
+    console.log("Content data with converted values:", contentData);
 
     this.apiService.updateContent(this.editedContent._id, contentData).subscribe({
       next: (response) => {

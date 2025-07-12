@@ -37,11 +37,31 @@
                         <div class="row" *ngFor="let field of editedContent.contentFields; let i = index">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">{{ field.fieldName }}:</label>
+                                    <label class="form-label fw-bold">{{ field.fieldName }} ({{ field.fieldType }}):</label>
+                                    
+                                    <!-- Dynamic input type based on field type -->
                                     <input 
+                                        *ngIf="field.fieldType?.toLowerCase() === 'string'"
                                         type="text" 
                                         class="form-control" 
+                                        [(ngModel)]="editedContent.contentFields[i].fieldValue"
+                                        placeholder="Enter text">
+                                    
+                                    <input 
+                                        *ngIf="field.fieldType?.toLowerCase() === 'number' || field.fieldType?.toLowerCase() === 'count'"
+                                        type="number" 
+                                        class="form-control" 
+                                        [(ngModel)]="editedContent.contentFields[i].fieldValue"
+                                        placeholder="Enter number">
+                                    
+                                    <select 
+                                        *ngIf="field.fieldType?.toLowerCase() === 'boolean'"
+                                        class="form-control" 
                                         [(ngModel)]="editedContent.contentFields[i].fieldValue">
+                                        <option value="">Select...</option>
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

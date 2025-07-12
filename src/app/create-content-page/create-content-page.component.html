@@ -31,8 +31,39 @@
                 <div class="mb-3" *ngFor="let item of contentFields; let i = index">
                     <label for="field_{{i}}" class="form-label">{{item.fieldName}}</label>
                     <div class="d-flex">
-                        <input (change)="getFieldValue($event, i)" type="text" placeholder="Enter value"
-                            class="form-control" id="field_{{i}}" aria-describedby="emailHelp">
+                        <!-- Dynamic input type based on field type -->
+                        <input 
+                            *ngIf="item.fieldType.toLowerCase() === 'string'"
+                            [(ngModel)]="item.fieldValue" 
+                            (ngModelChange)="getFieldValue({target: {value: $event}}, i)"
+                            type="text" 
+                            placeholder="Enter text"
+                            class="form-control" 
+                            id="field_{{i}}" 
+                            name="field_{{i}}">
+                        
+                        <input 
+                            *ngIf="item.fieldType.toLowerCase() === 'number' || item.fieldType.toLowerCase() === 'count'"
+                            [(ngModel)]="item.fieldValue" 
+                            (ngModelChange)="getFieldValue({target: {value: $event}}, i)"
+                            type="number" 
+                            placeholder="Enter number"
+                            class="form-control" 
+                            id="field_{{i}}" 
+                            name="field_{{i}}">
+                        
+                        <select 
+                            *ngIf="item.fieldType.toLowerCase() === 'boolean'"
+                            [(ngModel)]="item.fieldValue" 
+                            (ngModelChange)="getFieldValue({target: {value: $event}}, i)"
+                            class="form-control" 
+                            id="field_{{i}}" 
+                            name="field_{{i}}">
+                            <option value="">Select...</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                        
                         <select class="form-select w-25 ms-2" disabled>
                             <option>{{item.fieldType}}</option>
                         </select>
