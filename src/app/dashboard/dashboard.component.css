@@ -41,6 +41,26 @@
   margin-bottom: 0;
 }
 
+/* Common Card Styles */
+.stat-card, .chart-card, .summary-card, .treemap-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover, .chart-card:hover, .treemap-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
 /* Stats Grid */
 .stats-grid {
   display: grid;
@@ -50,20 +70,9 @@
 }
 
 .stat-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   display: flex;
   align-items: center;
   gap: 1rem;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255,255,255,0.2);
-}
-
-.stat-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
 .stat-icon {
@@ -77,25 +86,12 @@
   color: white;
 }
 
-.content-icon {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
-}
+.content-icon { background: linear-gradient(135deg, #4CAF50, #45a049); }
+.content-type-icon { background: linear-gradient(135deg, #2196F3, #1976D2); }
+.tags-icon { background: linear-gradient(135deg, #FF9800, #F57C00); }
+.users-icon { background: linear-gradient(135deg, #9C27B0, #7B1FA2); }
 
-.content-type-icon {
-  background: linear-gradient(135deg, #2196F3, #1976D2);
-}
-
-.tags-icon {
-  background: linear-gradient(135deg, #FF9800, #F57C00);
-}
-
-.users-icon {
-  background: linear-gradient(135deg, #9C27B0, #7B1FA2);
-}
-
-.stat-info {
-  flex: 1;
-}
+.stat-info { flex: 1; }
 
 .stat-number {
   font-size: 2rem;
@@ -118,16 +114,33 @@
   gap: 0.25rem;
 }
 
-.stat-change.positive {
-  color: #27ae60;
+.stat-change.positive { color: #27ae60; }
+.stat-change.negative { color: #e74c3c; }
+.stat-change.neutral { color: #95a5a6; }
+
+/* Treemap Section */
+.treemap-section { margin-bottom: 2rem; }
+
+.treemap-card { padding: 1rem; }
+
+.treemap-content {
+  position: relative;
+  min-height: 250px;
 }
 
-.stat-change.negative {
-  color: #e74c3c;
+.treemap-card .chart-header { margin-bottom: 1rem; text-align: center; }
+
+.treemap-card .chart-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
 }
 
-.stat-change.neutral {
-  color: #95a5a6;
+.treemap-card .chart-subtitle {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-bottom: 0;
 }
 
 /* Charts Grid */
@@ -138,29 +151,7 @@
   margin-bottom: 2rem;
 }
 
-.chart-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255,255,255,0.2);
-}
-
-.chart-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
-
-.chart-card.large-card {
-  grid-column: span 2;
-}
-
-@media (max-width: 1200px) {
-  .chart-card.large-card {
-    grid-column: span 1;
-  }
-}
+.chart-card.large-card { grid-column: span 2; }
 
 .chart-header {
   margin-bottom: 1.5rem;
@@ -185,10 +176,7 @@
   height: 300px;
 }
 
-.chart-container {
-  height: 100%;
-  position: relative;
-}
+.chart-container { height: 100%; position: relative; }
 
 .chart-loading {
   height: 100%;
@@ -198,12 +186,10 @@
   justify-content: center;
   gap: 1rem;
   color: #7f8c8d;
+  animation: pulse 2s infinite;
 }
 
-.chart-loading p {
-  margin: 0;
-  font-size: 0.9rem;
-}
+.chart-loading p { margin: 0; font-size: 0.9rem; }
 
 /* Dashboard Summary */
 .dashboard-summary {
@@ -211,56 +197,6 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
-}
-
-/* Treemap Section */
-.treemap-section {
-  margin-bottom: 2rem;
-}
-
-.treemap-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  transition: all 0.3s ease;
-}
-
-.treemap-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-}
-
-.treemap-content {
-  position: relative;
-  min-height: 250px;
-}
-
-.treemap-card .chart-header {
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.treemap-card .chart-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin-bottom: 0.25rem;
-}
-
-.treemap-card .chart-subtitle {
-  font-size: 0.85rem;
-  color: #7f8c8d;
-  margin-bottom: 0;
-}
-
-.summary-card {
-  background: white;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
 }
 
 .summary-card h4 {
@@ -284,23 +220,11 @@
   border-bottom: 1px solid #ecf0f1;
 }
 
-.summary-item:last-child {
-  border-bottom: none;
-}
+.summary-item:last-child { border-bottom: none; }
 
-.summary-label {
-  color: #7f8c8d;
-  font-size: 0.9rem;
-}
-
-.summary-value {
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.summary-value.status-good {
-  color: #27ae60;
-}
+.summary-label { color: #7f8c8d; font-size: 0.9rem; }
+.summary-value { font-weight: 600; color: #2c3e50; }
+.summary-value.status-good { color: #27ae60; }
 
 .activity-list {
   display: flex;
@@ -318,122 +242,43 @@
   transition: all 0.2s ease;
 }
 
-.activity-item:hover {
-  background: #e9ecef;
-}
-
-.activity-item i {
-  width: 20px;
-  text-align: center;
-}
-
-.activity-item span {
-  flex: 1;
-  color: #2c3e50;
-  font-size: 0.9rem;
-}
-
-.activity-item small {
-  font-size: 0.8rem;
-}
+.activity-item:hover { background: #e9ecef; }
+.activity-item i { width: 20px; text-align: center; }
+.activity-item span { flex: 1; color: #2c3e50; font-size: 0.9rem; }
+.activity-item small { font-size: 0.8rem; }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .chart-card.large-card { grid-column: span 1; }
+}
+
 @media (max-width: 768px) {
-  .dashboard-container {
-    padding: 1rem;
-  }
-  
-  .dashboard-title {
-    font-size: 2rem;
-  }
-  
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .charts-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .chart-content {
-    height: 250px;
-  }
-  
-  .stat-card {
-    padding: 1rem;
-  }
-  
-  .stat-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 1.25rem;
-  }
-  
-  .stat-number {
-    font-size: 1.5rem;
-  }
-
-  .treemap-content {
-    min-height: 200px;
-  }
-
-  .treemap-card {
-    padding: 0.75rem;
-  }
+  .dashboard-container { padding: 1rem; }
+  .dashboard-title { font-size: 2rem; }
+  .stats-grid, .charts-grid { grid-template-columns: 1fr; }
+  .chart-content { height: 250px; }
+  .stat-card { padding: 1rem; }
+  .stat-icon { width: 50px; height: 50px; font-size: 1.25rem; }
+  .stat-number { font-size: 1.5rem; }
+  .treemap-content { min-height: 200px; }
+  .treemap-card { padding: 0.75rem; }
 }
 
 @media (max-width: 480px) {
-  .dashboard-container {
-    padding: 0.75rem;
-  }
-  
-  .dashboard-title {
-    font-size: 1.75rem;
-  }
-  
-  .chart-content {
-    height: 200px;
-  }
-  
-  .stat-card {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.75rem;
-  }
+  .dashboard-container { padding: 0.75rem; }
+  .dashboard-title { font-size: 1.75rem; }
+  .chart-content { height: 200px; }
+  .stat-card { flex-direction: column; text-align: center; gap: 0.75rem; }
 }
 
-/* Animation for loading states */
+/* Animations */
 @keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.chart-loading {
-  animation: pulse 2s infinite;
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 /* Custom scrollbar */
-.dashboard-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.dashboard-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-
-.dashboard-container::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-.dashboard-container::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1;
-}
+.dashboard-container::-webkit-scrollbar { width: 8px; }
+.dashboard-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+.dashboard-container::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+.dashboard-container::-webkit-scrollbar-thumb:hover { background: #a1a1a1; }
