@@ -1,8 +1,14 @@
 .header {
     border-bottom: 2px solid #AFAFAF;
+    height: 60px;
+    display: flex;
+    align-items: center;
 }
 .primecontent{
-    margin-top:10px;
+    /* margin-top:10px; */
+}
+p {
+    margin-bottom: 0;
 }
 .userName{
     margin-top: 10px;

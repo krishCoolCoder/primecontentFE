@@ -7,6 +7,7 @@ ul {
 
 ul:first-child {
     flex: 1;
+    overflow-y: auto;
 }
 
 ul.signout {
@@ -14,23 +15,28 @@ ul.signout {
     margin-top: auto;
     padding-bottom: 1rem;
 }
+
 li {
     z-index: -2;
     border-bottom: 2px solid #AFAFAF;
-    padding : 5px;
+    padding: 5px;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
+
 li:hover {
     background-color: #AFAFAF;
 }
+
 li.active {
     background-color: black;
     color: white;
 }
+
 li.active:hover {
     background-color: black;
 }
+
 .subHeaderContainer {
     width: 140px;
     border-right: 2px solid #AFAFAF;
@@ -38,23 +44,28 @@ li.active:hover {
     display: flex;
     flex-direction: column;
     position: relative;
+    min-height: 100%;
 }
+
 .signout{
     width: 140px;
     padding-bottom: 0px !important;
 }
+
 .signout li {
     border-top: 2px solid #AFAFAF;
     border-bottom: none;
 }
+
 .signout li:hover {
-    
     background-color: #AFAFAF;
 }
+
 .signout li.active {
     background-color: black;
     color: white;
 }
+
 .signout li.active:hover {
     background-color: black;
 }

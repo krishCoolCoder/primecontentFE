@@ -1,1 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Global Layout Styles for Consistent Sidebar - Only for pages with sidebar */
+/* Target pages that have the specific layout structure with app-header + .d-flex + app-sidebar */
+app-header + .d-flex {
+  height: calc(100vh - 60px); /* Adjust based on header height */
+  overflow: hidden;
+}
+
+/* Also target the page-wrapper structure from dashboard */
+.page-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Global sidebar container styles */
+.subHeaderContainer {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+}
+
+/* Main content area styles for pages with sidebar */
+app-sidebar + .container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem;
+  height: 100%;
+}
+
+/* Ensure header has consistent height */
+app-header .header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
