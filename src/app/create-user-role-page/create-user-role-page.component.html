@@ -3,32 +3,89 @@
     <app-sidebar></app-sidebar>
     <div class="container">
         <div class="userCreationForm mt-3 d-flex justify-content-center align-items-center">
-        <form class="w-50">
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">User Role Name</label>
-                <div class="d-flex">
-                    <input type="text" placeholder="User First Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <form class="w-50" (ngSubmit)="onSubmit()" #userRoleForm="ngForm">
+                <h2 class="mb-4">{{ getPageTitle() }}</h2>
+                
+                <div class="mb-3">
+                    <label for="roleName" class="form-label">User Role Name *</label>
+                    <div class="d-flex">
+                        <input 
+                            type="text" 
+                            placeholder="Enter role name" 
+                            class="form-control" 
+                            id="roleName"
+                            name="roleName"
+                            [(ngModel)]="userRole.roleName"
+                            [readonly]="isViewMode"
+                            required>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Tag</label>
-                <div class="d-flex">
-                    <input type="text" placeholder="User Last Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+
+                <div class="mb-3">
+                    <label for="tags" class="form-label">Tag (Optional)</label>
+                    <div class="d-flex">
+                        <select 
+                            id="tags" 
+                            class="form-select" 
+                            name="tags"
+                            [(ngModel)]="userRole.tags"
+                            [disabled]="isViewMode">
+                            <option value="">Select a tag (optional)</option>
+                            <option *ngFor="let tag of availableTags" [value]="tag._id">
+                                {{ tag.tagName }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Inherit Existing Role</label>
-                    <select id="exampleInputEmail1" class="form-select w-50">
-                        <option value="" selected>Select the user role type</option>
-                        <option>SuperAdmin</option>
-                      <option>Admin</option>
-                      <option>User</option>
-                      <option>Annonymous</option>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input 
+                            class="form-check-input" 
+                            type="checkbox" 
+                            id="isInherited"
+                            name="isInherited"
+                            [(ngModel)]="userRole.isInherited"
+                            [disabled]="isViewMode">
+                        <label class="form-check-label" for="isInherited">
+                            Inherit from existing role
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3" *ngIf="userRole.isInherited">
+                    <label for="inHeritedRoleRef" class="form-label">Inherit from Role</label>
+                    <select 
+                        id="inHeritedRoleRef" 
+                        class="form-select" 
+                        name="inHeritedRoleRef"
+                        [(ngModel)]="userRole.inHeritedRoleRef"
+                        [disabled]="isViewMode">
+                        <option value="">Select role to inherit from</option>
+                        <option *ngFor="let role of availableUserRoles" [value]="role._id">
+                            {{ role.roleName }}
+                        </option>
                     </select>
-            </div>
-            <button type="submit" class="btn btn-primary me-4">Create Role</button>
-            <button type="submit" class="btn btn-primary" (click)="redirectToUserRolePage()">Cancel</button>
-        </form>
-    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary" 
+                        [disabled]="!userRoleForm.form.valid || loading"
+                        *ngIf="!isViewMode">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                        {{ loading ? (isEditMode ? 'Updating...' : 'Creating...') : getSubmitButtonText() }}
+                    </button>
+                    <button 
+                        type="button" 
+                        class="btn btn-secondary" 
+                        (click)="redirectToUserRolePage()"
+                        [disabled]="loading">
+                        {{ isViewMode ? 'Back' : 'Cancel' }}
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

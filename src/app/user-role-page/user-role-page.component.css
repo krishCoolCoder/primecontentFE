@@ -14,13 +14,15 @@
     padding-top: 15px;
     height: 87vh;
     width: 99.5%;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: visible; /* Allow horizontal overflow for dropdowns */
 }
 
 .listItemView {
     margin-top: 1%;
     height: 86vh; 
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: visible; /* Allow horizontal overflow for dropdowns */
 }
 
 .col {
@@ -31,28 +33,33 @@
 .item {
     background-color: #D9D9D9;
     padding: 10px;
+    padding-right: 50px; /* Extra padding on right for dropdown */
     border-radius: 10px;
     margin-bottom: 10px;
     position: relative;
     min-height: 120px;
     transition: transform 0.2s ease-in-out;
+    overflow: visible; /* Allow dropdown to overflow */
 }
 
 .item:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 10; /* Ensure hovered item is above others */
 }
 
 .item .title {
     font-weight: bold;
     margin-bottom: 8px;
     color: #333;
+    margin-right: 0; /* Remove extra padding since item has padding-right */
 }
 
 .item .description {
     color: #666;
-    margin-bottom: 8px;
-    font-size: 0.9em;
+    font-size: 14px;
+    margin-bottom: 0;
+    margin-right: 0; /* Remove extra padding since item has padding-right */
 }
 
 /* button style */
@@ -84,36 +91,118 @@ button {
     display: none;
 }
 
-.options{
+.dropdown {
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 15px;
+    top: 0px; /* Changed from 15px to 5px */
+    z-index: 100;
+}
+
+.options{
+    position: relative;
     cursor: pointer;
     font-size: 18px;
     font-weight: bold;
     color: #666;
     transition: color 0.2s ease;
-    z-index: 20;
+    z-index: 30;
+    padding: 5px;
+    border-radius: 3px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .options:hover {
     color: #333;
+    background-color: rgba(0,0,0,0.1);
 }
 
 .dropdown-menu {
-    min-width: 100px;
+    min-width: 120px;
     position: absolute;
     right: 0;
     top: 100%;
-    z-index: 1000;
+    z-index: 9999 !important; /* Very high z-index */
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    overflow: visible;
+    transform: translateY(0);
 }
 
 .dropdown-item {
     cursor: pointer;
     padding: 8px 12px;
     transition: background-color 0.2s ease;
+    color: #212529;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+    border: 0;
+    width: 100%;
+    text-align: left;
 }
 
 .dropdown-item:hover {
     background-color: #f8f9fa;
+    color: #16181b;
+}
+
+.dropdown-item:active {
+    background-color: #e9ecef;
+}
+
+.item .dropdown {
+    position: absolute !important;
+    right: 15px !important;
+    top: 5px !important; /* Changed from 15px to 5px */
+    z-index: 100 !important;
+    left: auto !important;
+}
+
+.item .dropdown .options{
+    position: relative;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: #666;
+    transition: color 0.2s ease;
+    z-index: 30;
+    padding: 5px;
+    border-radius: 3px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Override any Bootstrap or other positioning conflicts */
+.item .dropdown-toggle {
+    position: absolute !important;
+    right: 15px !important;
+    top: 5px !important; /* Changed from 15px to 5px */
+    left: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+}
+
+/* Ensure the dropdown menu appears correctly */
+.item .dropdown-menu {
+    position: absolute !important;
+    right: 0 !important;
+    left: auto !important;
+    top: 100% !important;
 }

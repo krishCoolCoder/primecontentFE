@@ -348,4 +348,64 @@ export class ApiService {
       map((response: any) => response.data.count)
     );
   }
+
+  // USER ROLE MODULE APIs
+
+  // 1. Create User Role
+  createUserRole(userRoleData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/userRole`, userRoleData, { headers: this.getHeaders() });
+  }
+
+  // 2. Get All User Roles
+  getAllUserRoles(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/userRole`, { headers: this.getHeaders() });
+  }
+
+  // 3. Get User Roles Count
+  getUserRolesCount(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/userRole/count`, { headers: this.getHeaders() });
+  }
+
+  // 4. Get User Roles by Tag
+  getUserRolesByTag(tagId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/userRole/tag/${tagId}`, { headers: this.getHeaders() });
+  }
+
+  // 5. Get User Role by ID
+  getUserRoleById(userRoleId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/userRole/${userRoleId}`, { headers: this.getHeaders() });
+  }
+
+  // 6. Update User Role
+  updateUserRole(userRoleId: string, userRoleData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/userRole/${userRoleId}`, userRoleData, { headers: this.getHeaders() });
+  }
+
+  // 7. Delete User Role
+  deleteUserRole(userRoleId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/userRole/${userRoleId}`, { headers: this.getHeaders() });
+  }
+
+  // USER ROLE SERVICE HELPER METHODS
+
+  // Get all user roles data
+  getAllUserRolesData(): Observable<any[]> {
+    return this.getAllUserRoles().pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get user role by ID data
+  getUserRoleByIdData(userRoleId: string): Observable<any> {
+    return this.getUserRoleById(userRoleId).pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get user roles count data
+  getUserRolesCountData(): Observable<any> {
+    return this.getUserRolesCount().pipe(
+      map((response: any) => response.data)
+    );
+  }
 } 

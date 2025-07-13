@@ -1,16 +1,8 @@
 <app-header></app-header>
 <div class="d-flex">
     <app-sidebar></app-sidebar>
-    <!-- <app-create-content-model></app-create-content-model> -->
     <div class="container">
         <div class="contentContainer d-flex justify-content-between align-items-center">
-            <!-- <button 
-            type="button createContent" 
-            class="btn btn-primary" 
-            data-bs-toggle="modal" 
-            data-bs-target="#createContentModelSummon"
-            (click)="redirectToCreateContent()"
-            >Create content</button> -->
             <button 
             type="button createContent" 
             class="btn btn-primary" 
@@ -29,18 +21,27 @@
                 <div class="listView" (click)="setListView()">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="29" height="29" rx="5" fill="#D9D9D9" class="listViewBg" />
-                        <rect x="6" y="5" width="17" height="7" rx="2" fill="#FBFBFB" />
-                        <rect x="6" y="17" width="17" height="7" rx="2" fill="#FBFBFB" />
+                        <rect x="6" y="7" width="17" height="3" rx="1.5" fill="#FBFBFB" />
+                        <rect x="6" y="13" width="17" height="3" rx="1.5" fill="#FBFBFB" />
+                        <rect x="6" y="19" width="17" height="3" rx="1.5" fill="#FBFBFB" />
                     </svg>
                 </div>
             </div>
             <div class="contentFilter">
-                <button type="button createContent" class="btn btn-primary" (click)="openFilter()">User Role filter</button>
+                <button type="button createContent" class="btn btn-primary" (click)="openFilter()">User role filter</button>
             </div>
         </div>
         
+        <!-- Loading State -->
+        <div class="text-center mt-4" *ngIf="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading user roles...</p>
+        </div>
+
         <!-- List View -->
-        <div class="listItemView" *ngIf="listView; else gridViewTemplate">
+        <div class="listItemView" *ngIf="listView && !loading">
             <div class="d-flex justify-content-center align-items-center flex-column pt-2">
                 <div class="w-50" *ngFor="let role of userRoles">
                     <div class="item">
@@ -49,21 +50,24 @@
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <div class="dropdown-item">View</div>
+                                    <div class="dropdown-item" (click)="viewUserRole(role)">View</div>
                                 </li>
                                 <li>
-                                    <div class="dropdown-item">Edit</div>
+                                    <div class="dropdown-item" (click)="editUserRole(role)">Edit</div>
                                 </li>
                                 <li>
-                                    <div class="dropdown-item">Delete</div>
+                                    <div class="dropdown-item" (click)="deleteUserRole(role)">Delete</div>
                                 </li>
                             </ul>
                         </div>
                         <p class="title">
-                            {{role.roleName}}
+                            {{ role.roleName }}
                         </p>
                         <p class="description">
-                            {{role.description}}
+                            <span *ngIf="role.isInherited">• Inherited Role</span>
+                            <span *ngIf="!role.isInherited">• Standard Role</span>
+                            <br>
+                            <small class="text-muted">Created: {{ role.createdAt | date:'short' }}</small>
                         </p>
                     </div>
                 </div>
@@ -74,40 +78,41 @@
         </div>
 
         <!-- Grid View -->
-        <ng-template #gridViewTemplate>
-            <div class="container viewContainer">
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-                    <div class="col mb-3" *ngFor="let role of userRoles">
-                        <div class="item">
-                            <div class="dropdown">
-                                <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">...</div>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="dropdown-item">View</div>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-item">Edit</div>
-                                    </li>
-                                    <li>
-                                        <div class="dropdown-item">Delete</div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <p class="title">
-                                {{role.roleName}}
-                            </p>
-                            <p class="description">
-                                {{role.description}}
-                            </p>
+        <div class="container viewContainer" *ngIf="gridView && !loading">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+                <div class="col mb-3" *ngFor="let role of userRoles">
+                    <div class="item">
+                        <div class="dropdown">
+                            <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">...</div>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <div class="dropdown-item" (click)="viewUserRole(role)">View</div>
+                                </li>
+                                <li>
+                                    <div class="dropdown-item" (click)="editUserRole(role)">Edit</div>
+                                </li>
+                                <li>
+                                    <div class="dropdown-item" (click)="deleteUserRole(role)">Delete</div>
+                                </li>
+                            </ul>
                         </div>
+                        <p class="title">
+                            {{ role.roleName }}
+                        </p>
+                        <p class="description">
+                            <span *ngIf="role.isInherited">• Inherited Role</span>
+                            <span *ngIf="!role.isInherited">• Standard Role</span>
+                            <br>
+                            <small class="text-muted">Created: {{ role.createdAt | date:'short' }}</small>
+                        </p>
                     </div>
                 </div>
-                <div class="text-center mt-4" *ngIf="userRoles.length === 0">
-                    <p class="text-muted">No user roles found. Create your first user role!</p>
-                </div>
             </div>
-        </ng-template>
+            <div class="text-center mt-4" *ngIf="userRoles.length === 0">
+                <p class="text-muted">No user roles found. Create your first user role!</p>
+            </div>
+        </div>
     </div>
 </div>
 

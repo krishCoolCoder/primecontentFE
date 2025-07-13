@@ -153,6 +153,16 @@ export const routes: Routes = [
         canActivate : [authGuard]
     },
     {
+        path : "viewUserRole/:id",
+        component : CreateUserRolePageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "editUserRole/:id",
+        component : CreateUserRolePageComponent,
+        canActivate : [authGuard]
+    },
+    {
         path : "settings",
         component : DashboardComponent,
         canActivate : [authGuard]

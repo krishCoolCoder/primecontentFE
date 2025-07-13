@@ -37,14 +37,14 @@ export class EditContentTypePageComponent implements OnInit {
 
   loadContentType() {
     this.apiService.getContentTypeByIdData(this.contentTypeId).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         console.log('Content type loaded:', response);
         this.contentType = {
           contentTypeName: response.contentTypeName,
           contentTypeList: response.contentTypeList || [{ fieldName: '', fieldType: 'String' }]
         };
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error loading content type:', error);
         this.router.navigate(['/contentType']);
       }
