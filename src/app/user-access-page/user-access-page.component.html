@@ -1,94 +1,99 @@
 <app-header></app-header>
 <div class="d-flex">
     <app-sidebar></app-sidebar>
-    <!-- <app-create-content-model></app-create-content-model> -->
-    <div class="container">
-        <table class="table">
-    <thead>
-      <tr>
-        <th scope="col" class="roles">#</th>
-        <th scope="col" class="roles">Role Name</th>
-        <th scope="col">Read Content Access</th>
-        <th scope="col">Edit Content Access</th>
-        <th scope="col">Delete Content Access</th>
-        <th scope="col">Read Content Type Access</th>
-        <th scope="col">Edit Content Type Access</th>
-        <th scope="col">Delete Content Type Access</th>
-        <th scope="col">Read Tag Access</th>
-        <th scope="col">Edit Tag Access</th>
-        <th scope="col">Delete Tag Access</th>
-        <th scope="col">Read Collection Access</th>
-        <th scope="col">Edit Collection Access</th>
-        <th scope="col">Delete Collection Access</th>
-        <th scope="col">Read User Access</th>
-        <th scope="col">Edit User Access</th>
-        <th scope="col">Delete User Access</th>
-        <th scope="col">Read User Role Access</th>
-        <th scope="col">Edit User Role Access</th>
-        <th scope="col">Delete User Role Access</th>
-      </tr>
-    </thead>
-    <tbody *ngFor="let field of userRoles, index as i" >
-      <tr >
-        <th scope="row" class="roles">{{i+1}}</th>
-        <td class="roles">{{ field.roleName || 'Unnamed Field' }}</td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-        <td class="text-center align-middle">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-        </td>
-      </tr>
-      
-    </tbody>
-  </table>
-  </div>
+    <div class="container-fluid">
+        <div class="page-header">
+            <h2>User Access Management</h2>
+            <p class="text-muted">Manage permissions for different user roles</p>
+        </div>
+
+        <!-- Loading State -->
+        <div class="text-center mt-4" *ngIf="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading user roles...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="alert alert-danger" *ngIf="error && !loading">
+            {{ error }}
+            <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadUserRoles()">
+                Retry
+            </button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons mb-3" *ngIf="!loading && !error">
+            <button class="btn btn-primary me-2" (click)="savePermissions()">
+                Save Changes
+            </button>
+            <button class="btn btn-outline-secondary" (click)="resetPermissions()">
+                Reset to Default
+            </button>
+        </div>
+
+        <!-- Permissions Table -->
+        <div class="table-responsive" *ngIf="!loading && !error">
+            <table class="table table-bordered permissions-table">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="role-column sticky-column">#</th>
+                        <th class="role-column sticky-column">Role Name</th>
+                        <ng-container *ngFor="let category of permissionCategories">
+                            <th class="category-header" [attr.colspan]="category.permissions.length">
+                                {{ category.name }}
+                            </th>
+                        </ng-container>
+                    </tr>
+                    <tr class="sub-header">
+                        <th class="sticky-column"></th>
+                        <th class="sticky-column"></th>
+                        <ng-container *ngFor="let category of permissionCategories">
+                            <th *ngFor="let permission of category.permissions" class="permission-header">
+                                {{ permission | titlecase }}
+                            </th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let role of userRoles; let i = index" class="role-row">
+                        <td class="sticky-column role-index">{{ i + 1 }}</td>
+                        <td class="sticky-column role-name">
+                            <div class="role-info">
+                                <strong>{{ role.roleName }}</strong>
+                                <small class="text-muted d-block" *ngIf="role.isInherited">
+                                    Inherited Role
+                                </small>
+                            </div>
+                        </td>
+                        <ng-container *ngFor="let category of permissionCategories">
+                            <td *ngFor="let permission of category.permissions" class="permission-cell">
+                                <div class="form-check d-flex justify-content-center">
+                                    <input 
+                                        class="form-check-input permission-checkbox" 
+                                        type="checkbox" 
+                                        [id]="'permission-' + (role._id || 'role-' + i) + '-' + category.name + '-' + permission"
+                                        (change)="onPermissionChange(role._id || 'role-' + i, category.name, permission, $event)"
+                                        [checked]="false">
+                                </div>
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div class="text-center mt-5" *ngIf="!loading && !error && userRoles.length === 0">
+            <div class="empty-state">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h4>No User Roles Found</h4>
+                <p class="text-muted">Create user roles first to manage their permissions.</p>
+                <a routerLink="/userRole" class="btn btn-primary">
+                    Go to User Roles
+                </a>
+            </div>
+        </div>
+    </div>
 </div>

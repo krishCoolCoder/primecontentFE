@@ -51,12 +51,19 @@ export class UserRolePageComponent implements OnInit {
     this.router.navigate(['/createUserRole']);
   }
 
-  viewUserRole(userRole: UserRole) {
-    this.router.navigate(['/viewUserRole', userRole._id]);
+  viewUserRole(role: UserRole) {
+    this.router.navigate(['/viewUserRole', role._id]);
   }
 
-  editUserRole(userRole: UserRole) {
-    this.router.navigate(['/editUserRole', userRole._id]);
+  createUserRole(role: UserRole) {
+    // Navigate to create page, potentially with the current role as a template or reference
+    this.router.navigate(['/createUserRole'], { 
+      queryParams: { template: role._id } 
+    });
+  }
+
+  editUserRole(role: UserRole) {
+    this.router.navigate(['/editUserRole', role._id]);
   }
 
   deleteUserRole(userRole: UserRole) {
