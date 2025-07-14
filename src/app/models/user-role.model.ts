@@ -1,17 +1,51 @@
 export interface UserRole {
   _id?: string;
   roleName: string;
-  tags?: string | TagInfo;
+  tags?: TagInfo | string;
   isInherited?: boolean;
   inHeritedRoleRef?: string;
-  createdAt?: Date;
-  createdBy?: string;
-  updatedAt?: Date;
-  updatedBy?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface TagInfo {
   _id: string;
   tagName: string;
-  description: string;
+}
+
+export interface PermissionSet {
+  canRead: boolean;
+  canCreate: boolean;
+  canUpdate: boolean;
+  canDelete: boolean;
+}
+
+export interface UserAccess {
+  _id?: string;
+  roleId: {
+    _id: string;
+    roleName: string;
+  };
+  content: PermissionSet;
+  contentType: PermissionSet;
+  tag: PermissionSet;
+  collections: PermissionSet;
+  user: PermissionSet;
+  userRole: PermissionSet;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface UserAccessResponse {
+  data: UserAccess[];
+  message: string;
+}
+
+export interface UserAccessUpdateRequest {
+  content?: PermissionSet;
+  contentType?: PermissionSet;
+  tag?: PermissionSet;
+  collections?: PermissionSet;
+  user?: PermissionSet;
+  userRole?: PermissionSet;
 } 

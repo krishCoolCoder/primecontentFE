@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { UserAccess, UserAccessResponse, UserAccessUpdateRequest } from '../models/user-role.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,27 @@ export class ApiService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
+  }
+
+  // USER ACCESS APIs
+  getAllUserAccess(): Observable<UserAccessResponse> {
+    return this.http.get<UserAccessResponse>(`${this.baseUrl}/userAccess`, { headers: this.getHeaders() });
+  }
+
+  getUserAccessCount(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/userAccess/count`, { headers: this.getHeaders() });
+  }
+
+  getUserAccessByRole(roleId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/userAccess/role/${roleId}`, { headers: this.getHeaders() });
+  }
+
+  getUserAccessById(userAccessId: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/userAccess/${userAccessId}`, { headers: this.getHeaders() });
+  }
+
+  updateUserAccess(userAccessId: string, permissions: UserAccessUpdateRequest): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/userAccess/${userAccessId}`, permissions, { headers: this.getHeaders() });
   }
 
   // USER AUTHENTICATION APIs

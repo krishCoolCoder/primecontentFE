@@ -18,19 +18,23 @@
         <!-- Error State -->
         <div class="alert alert-danger" *ngIf="error && !loading">
             {{ error }}
-            <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadUserRoles()">
+            <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadUserAccess()">
                 Retry
             </button>
         </div>
 
         <!-- Action Buttons -->
         <div class="action-buttons mb-3" *ngIf="!loading && !error">
-            <button class="btn btn-primary me-2" (click)="savePermissions()">
-                Save Changes
+            <button class="btn btn-primary me-2" (click)="savePermissions()" [disabled]="saving || !hasPendingChanges()">
+                <span *ngIf="saving" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                {{ saving ? 'Saving...' : 'Save Changes' }}
             </button>
-            <button class="btn btn-outline-secondary" (click)="resetPermissions()">
+            <button class="btn btn-outline-secondary" (click)="resetPermissions()" [disabled]="saving || !hasPendingChanges()">
                 Reset to Default
             </button>
+            <small class="text-muted ms-3" *ngIf="hasPendingChanges()">
+                You have unsaved changes
+            </small>
         </div>
 
         <!-- Permissions Table -->
@@ -51,19 +55,19 @@
                         <th class="sticky-column"></th>
                         <ng-container *ngFor="let category of permissionCategories">
                             <th *ngFor="let permission of category.permissions" class="permission-header">
-                                {{ permission | titlecase }}
+                                {{ permission.replace('can', '') | titlecase }}
                             </th>
                         </ng-container>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let role of userRoles; let i = index" class="role-row">
+                    <tr *ngFor="let userAccess of userAccessList; let i = index" class="role-row">
                         <td class="sticky-column role-index">{{ i + 1 }}</td>
                         <td class="sticky-column role-name">
                             <div class="role-info">
-                                <strong>{{ role.roleName }}</strong>
-                                <small class="text-muted d-block" *ngIf="role.isInherited">
-                                    Inherited Role
+                                <strong>{{ userAccess.roleId.roleName }}</strong>
+                                <small class="text-muted d-block">
+                                    ID: {{ userAccess.roleId._id }}
                                 </small>
                             </div>
                         </td>
@@ -73,9 +77,10 @@
                                     <input 
                                         class="form-check-input permission-checkbox" 
                                         type="checkbox" 
-                                        [id]="'permission-' + (role._id || 'role-' + i) + '-' + category.name + '-' + permission"
-                                        (change)="onPermissionChange(role._id || 'role-' + i, category.name, permission, $event)"
-                                        [checked]="false">
+                                        [id]="'permission-' + userAccess._id + '-' + category.key + '-' + permission"
+                                        [checked]="getPermissionValue(userAccess, category.key, permission)"
+                                        (change)="onPermissionChange(userAccess, category.key, permission, $event)"
+                                        [disabled]="saving">
                                 </div>
                             </td>
                         </ng-container>
@@ -85,11 +90,11 @@
         </div>
 
         <!-- Empty State -->
-        <div class="text-center mt-5" *ngIf="!loading && !error && userRoles.length === 0">
+        <div class="text-center mt-5" *ngIf="!loading && !error && userAccessList.length === 0">
             <div class="empty-state">
                 <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                <h4>No User Roles Found</h4>
-                <p class="text-muted">Create user roles first to manage their permissions.</p>
+                <h4>No User Access Records Found</h4>
+                <p class="text-muted">No user access permissions have been configured yet.</p>
                 <a routerLink="/userRole" class="btn btn-primary">
                     Go to User Roles
                 </a>
