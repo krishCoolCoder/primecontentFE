@@ -2,92 +2,226 @@
 <div class="d-flex">
   <app-sidebar></app-sidebar>
   <div class="container">
-    <form>
-      <div class="mb-1">
-        <label for="exampleInputEmail1" class="form-label mt-3">Content Collection</label>
-        <!-- <input type="text" placeholder="Enter tag name here..." class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"> -->
+    <div class="page-header">
+      <h2>Create Content Collection</h2>
+      <p class="text-muted">Create a new content collection with filters and API endpoints</p>
+    </div>
+
+    <!-- Loading State -->
+    <div class="text-center mt-4" *ngIf="loading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
       </div>
-      <!-- <div class="" *ngFor="let item of tagList; index as i"> -->
-      <div class="mb-3 d-flex">
-        <div class="flex-grow-1">
-          <!-- <label for="exampleInputEmail1" class="form-label">Content Field Name</label> -->
-          <input type="text" name="collectionName" [(ngModel)]="collectionName"
-            (ngModelChange)="onCollectionNameChange($event)" placeholder="Content Collection Name" class="form-control"
-            id="exampleInputEmail1" aria-describedby="emailHelp">
-          <p class="mt-2">API route : https://api.primecontent.in/collection/{{collectionName}}</p>
+      <p class="mt-2">Loading content types...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="alert alert-danger" *ngIf="error && !loading">
+      {{ error }}
+      <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadContentTypes()">
+        Retry
+      </button>
+    </div>
+
+    <!-- Main Form -->
+    <form *ngIf="!loading && !error" class="collection-form">
+      
+      <!-- Collection Name Section -->
+      <div class="form-section">
+        <h5>Collection Details</h5>
+        <div class="mb-3">
+          <label for="collectionName" class="form-label">Collection Name</label>
+          <input 
+            type="text" 
+            name="collectionName" 
+            [(ngModel)]="collectionName"
+            (ngModelChange)="onCollectionNameChange($event)" 
+            placeholder="Enter collection name" 
+            class="form-control"
+            id="collectionName"
+            required>
         </div>
-        <!-- <div class="flex-grow-2 me-2 ms-2">
-                    <select id="exampleInputEmail1" class="form-select w-15"
-                    name="fieldType{{ i }}"
-                    [(ngModel)]="item.tagName"
-                    >
-                      <option>String</option>
-                      <option>Number</option>
-                      <option>Boolean</option>
-                      <option>Count</option>
-                      <option>Comment</option>
-                      <option>Like</option>
-                      <option>Dislike</option>
-                      <option>Content Type Reference</option>
-                    </select>
-                </div> -->
-      </div>
-      <label for="exampleInputEmail1" class="form-label">Content Type</label>
-      <select id="exampleInputEmail1" class="form-select w-25 mb-3" 
-      [(ngModel)]="selectedContentType" name="testing"
-      *ngFor="let item of contentTypeList"
-        (change)="renderContentTypeFields($event)">
-        <option value="" selected>Select the content type</option>
-        <option >{{item.contentTypeName}}</option>
-      </select>
 
-      <table class="table" *ngIf="contentTypeFields.length > 0">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Field Name</th>
-            <th scope="col">Field Type</th>
-            <th scope="col">Visibility</th>
-            <th scope="col">Populate</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let field of contentTypeFields, index as i">
-          <tr>
-            <th scope="row">{{i+1}}</th>
-            <td>{{ field.fieldName || 'Unnamed Field' }}</td>
-            <td>{{ field.fieldType || 'Unnamed Field' }}</td>
-            <td>
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-            </td>
-            <td>
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-            </td>
-          </tr>
-
-        </tbody>
-      </table>
-      <div class=" d-flex flex-column" *ngIf="filterFields.length > 0 && isContentTypeSelected == true">
-        <div class="d-flex" *ngFor="let item of this.filterFields, index as i">
-          <div class="me-2">
-            <label for="exampleInputEmail1" class="form-label">Filter</label>
-            <select id="exampleInputEmail1" class="form-select w-100 mb-3 me-2" [(ngModel)]="selectedContentType"
-              name="testing" (change)="onFilterFieldNameChange($event, i)">
-              <option value="Blog" *ngFor="let field of contentTypeFields, index as i">{{field.fieldName}}</option>
-
-            </select>
-          </div>
-          <div class="">
-            <label for="exampleInputEmail1" class="form-label">filter property name</label>
-            <input type="text" name="collectionName" 
-              (change)="onFilterValueChange($event, i)" placeholder="Filter Name" class="form-control"
-              id="exampleInputEmail1" aria-describedby="emailHelp">
+        <!-- API URL Preview -->
+        <div class="api-preview mb-3" *ngIf="collectionName">
+          <label class="form-label">API Endpoint</label>
+          <div class="api-url">
+            <code>{{ generateApiUrl() }}</code>
+            <button type="button" class="btn btn-sm btn-outline-secondary ms-2" 
+                    (click)="copyToClipboard(generateApiUrl())">
+              Copy
+            </button>
           </div>
         </div>
       </div>
 
-      <button class="btn btn-primary me-3" (click)="addfield()" *ngIf="isContentTypeSelected">Add filter</button>
-      <button class="btn btn-primary me-3" (click)="removeFilters()" *ngIf="isContentTypeSelected">Clear filter</button>
-      <button class="btn btn-primary" (click)="createCollection()">Create Collection</button>
+      <!-- Content Type Selection -->
+      <div class="form-section">
+        <h5>Content Type</h5>
+        <div class="mb-3">
+          <label for="contentType" class="form-label">Select Content Type</label>
+          <select 
+            id="contentType" 
+            class="form-select" 
+            [(ngModel)]="selectedContentType" 
+            name="contentType"
+            (change)="onContentTypeChange($event)"
+            required>
+            <option value="">Select a content type</option>
+            <option *ngFor="let contentType of contentTypeList" 
+                    [value]="contentType.contentTypeName">
+              {{ contentType.contentTypeName }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Content Type Fields Preview -->
+      <div class="form-section" *ngIf="contentTypeFields.length > 0">
+        <h5>Content Type Fields</h5>
+        <div class="table-responsive">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Field Name</th>
+                <th>Field Type</th>
+                <th>Visibility</th>
+                <th>Populate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let field of contentTypeFields; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ field.fieldName || 'Unnamed Field' }}</td>
+                <td>
+                  <span class="badge bg-secondary">{{ field.fieldType || 'Unknown' }}</span>
+                </td>
+                <td>
+                  <input class="form-check-input" type="checkbox" checked>
+                </td>
+                <td>
+                  <input class="form-check-input" type="checkbox">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Filters Section -->
+      <div class="form-section" *ngIf="isContentTypeSelected">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5>Filters</h5>
+          <button type="button" class="btn btn-primary btn-sm" (click)="addFilter()">
+            <i class="fas fa-plus me-1"></i>Add Filter
+          </button>
+        </div>
+
+        <!-- Filter Items -->
+        <div class="filters-container" *ngIf="filterFields.length > 0">
+          <div class="filter-item" *ngFor="let filter of filterFields; let i = index">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label">Field</label>
+                <select 
+                  class="form-select form-select-sm" 
+                  [(ngModel)]="filter.fieldName"
+                  [name]="'filterField' + i"
+                  (change)="onFilterFieldChange($event, i)"
+                  required>
+                  <option value="">Select field</option>
+                  <option *ngFor="let field of contentTypeFields" 
+                          [value]="field.fieldName">
+                    {{ field.fieldName }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Filter Name</label>
+                <input 
+                  type="text" 
+                  class="form-control form-control-sm" 
+                  [(ngModel)]="filter.filterValue"
+                  [name]="'filterValue' + i"
+                  (input)="onFilterValueChange($event, i)"
+                  placeholder="Enter filter name"
+                  [class.is-invalid]="!isFilterNameUnique(filter.filterValue, i) && filter.filterValue"
+                  required>
+                <div class="invalid-feedback" *ngIf="!isFilterNameUnique(filter.filterValue, i) && filter.filterValue">
+                  Filter name must be unique
+                </div>
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Mandatory</label>
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    [(ngModel)]="filter.isMandatory"
+                    [name]="'mandatory' + i"
+                    (change)="onMandatoryChange($event, i)"
+                    [id]="'mandatory' + i">
+                  <label class="form-check-label" [for]="'mandatory' + i">
+                    Required
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-danger btn-sm d-block" 
+                  (click)="removeFilter(i)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- No Filters Message -->
+        <div class="text-center text-muted py-3" *ngIf="filterFields.length === 0">
+          <i class="fas fa-filter fa-2x mb-2"></i>
+          <p>No filters added yet. Click "Add Filter" to create your first filter.</p>
+        </div>
+
+        <!-- Clear All Filters -->
+        <div class="text-center mt-3" *ngIf="filterFields.length > 0">
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="clearAllFilters()">
+            Clear All Filters
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn btn-primary" 
+          (click)="createCollection()"
+          [disabled]="!canCreateCollection() || hasDuplicateFilterNames()">
+          Create Collection
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-outline-secondary ms-2" 
+          (click)="router.navigate(['/collection'])">
+          Cancel
+        </button>
+      </div>
+
+      <!-- Validation Messages -->
+      <div class="validation-messages mt-3" *ngIf="!canCreateCollection() || hasDuplicateFilterNames()">
+        <div class="alert alert-warning">
+          <ul class="mb-0">
+            <li *ngIf="!collectionName">Collection name is required</li>
+            <li *ngIf="!selectedContentType">Content type selection is required</li>
+            <li *ngIf="hasDuplicateFilterNames()">Filter names must be unique</li>
+            <li *ngIf="hasIncompleteFilters()">All filters must have a filter name</li>
+          </ul>
+        </div>
+      </div>
     </form>
   </div>
 </div>
