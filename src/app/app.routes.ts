@@ -18,6 +18,7 @@ import { ViewTagPageComponent } from './view-tag-page/view-tag-page.component';
 import { EditTagPageComponent } from './edit-tag-page/edit-tag-page.component';
 import { CollectionPageComponent } from './collection-page/collection-page.component';
 import { CreateCollectionPageComponent } from './create-collection-page/create-collection-page.component';
+import { EditCollectionPageComponent } from './edit-collection-page/edit-collection-page.component';
 import { UsersPageComponent } from './users-page/users-page.component';
 import { CreateUserPageComponent } from './create-user-page/create-user-page.component';
 import { UserAccessPageComponent } from './user-access-page/user-access-page.component';
@@ -25,6 +26,7 @@ import { UserRolePageComponent } from './user-role-page/user-role-page.component
 import { CreateUserRolePageComponent } from './create-user-role-page/create-user-role-page.component';
 import { ViewContentTypePageComponent } from './view-content-type-page/view-content-type-page.component';
 import { EditContentTypePageComponent } from './edit-content-type-page/edit-content-type-page.component';
+import { ViewCollectionPageComponent } from './view-collection-page/view-collection-page.component';
 
 export const routes: Routes = [
     {
@@ -120,6 +122,16 @@ export const routes: Routes = [
     {
         path : "createCollection",
         component : CreateCollectionPageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "editCollection/:id",
+        component : EditCollectionPageComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "viewCollection/:id",
+        component : ViewCollectionPageComponent,
         canActivate : [authGuard]
     },
     {

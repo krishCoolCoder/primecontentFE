@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, NgFor } from '@angular/common';
-import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
-import { FilterField, CollectionCreateRequest } from '../models/collection.model';
+import { FilterField, Collection, CollectionUpdateRequest } from '../models/collection.model';
 
 interface ContentTypeField {
   fieldName: string;
@@ -20,66 +20,125 @@ interface ContentType {
 }
 
 @Component({
-  selector: 'app-create-collection-page',
+  selector: 'app-edit-collection-page',
   standalone: true,
   imports: [HeaderComponent, SidebarComponent, FormsModule, CommonModule, NgFor],
-  templateUrl: './create-collection-page.component.html',
-  styleUrl: './create-collection-page.component.css'
+  templateUrl: './edit-collection-page.component.html',
+  styleUrl: './edit-collection-page.component.css'
 })
-export class CreateCollectionPageComponent implements OnInit {
-  collectionName: string = "";
-  selectedContentType: string = "";
-  selectedContentTypeId: string = "";
+export class EditCollectionPageComponent implements OnInit {
+  collectionId: string = '';
+  collectionName: string = '';
+  selectedContentType: string = '';
+  selectedContentTypeId: string = '';
   contentTypeFields: ContentTypeField[] = [];
   filterFields: FilterField[] = [];
   isContentTypeSelected: boolean = false;
   contentTypeList: ContentType[] = [];
   loading: boolean = false;
   error: string | null = null;
+  originalCollection: Collection | null = null;
+  contentTypesLoaded: boolean = false;
+  collectionLoaded: boolean = false;
 
   constructor(
-    public router: Router,
+    private route: ActivatedRoute,
+    private router: Router,
     private apiService: ApiService
   ) {}
 
-  // Copy text to clipboard
-  copyToClipboard(text: string) {
-    navigator.clipboard.writeText(text).then(() => {
-      console.log('API URL copied to clipboard');
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.collectionId = params['id'];
+      if (this.collectionId) {
+        this.loadContentTypes();
+      }
     });
   }
 
-  // Check for incomplete filters
-  hasIncompleteFilters(): boolean {
-    return this.filterFields.some(filter => filter.fieldName && !filter.filterName);
-  }
-
-  ngOnInit() {
-    this.loadContentTypes();
+  // Convert spaces to hyphens in collection name (same as create page)
+  onCollectionNameChange(input: string) {
+    this.collectionName = input.replace(/\s+/g, "-");
   }
 
   loadContentTypes() {
-    this.loading = true;
-    this.error = null;
-    
     this.apiService.getAllContentTypesData().subscribe({
       next: (contentTypes) => {
         this.contentTypeList = contentTypes;
-        this.loading = false;
+        this.contentTypesLoaded = true;
         console.log("Content types loaded:", this.contentTypeList);
+        
+        // Load collection data after content types are loaded
+        this.loadCollection();
       },
       error: (error) => {
         console.error('Error loading content types:', error);
         this.error = 'Failed to load content types. Please try again.';
+      }
+    });
+  }
+
+  loadCollection() {
+    if (!this.contentTypesLoaded) {
+      return; // Wait for content types to load first
+    }
+    
+    this.loading = true;
+    this.error = null;
+    
+    this.apiService.getCollectionByIdData(this.collectionId).subscribe({
+      next: (collection) => {
+        this.originalCollection = collection;
+        this.collectionName = collection.collectionName;
+        
+        // Handle contentTypeId which can be string or object
+        if (typeof collection.contentTypeId === 'object' && collection.contentTypeId !== null) {
+          this.selectedContentType = collection.contentTypeId.contentTypeName;
+          this.selectedContentTypeId = collection.contentTypeId._id;
+        } else {
+          this.selectedContentTypeId = collection.contentTypeId as string;
+          // Find the content type name from the loaded list
+          const contentType = this.contentTypeList.find(ct => ct._id === this.selectedContentTypeId);
+          this.selectedContentType = contentType ? contentType.contentTypeName : '';
+        }
+        
+        this.filterFields = [...collection.filters];
+        this.collectionLoaded = true;
+        
+        // Now populate content type fields since both content types and collection are loaded
+        this.populateContentTypeFields();
+        
+        this.loading = false;
+        console.log("Collection loaded and content type fields populated:", {
+          selectedContentType: this.selectedContentType,
+          selectedContentTypeId: this.selectedContentTypeId,
+          contentTypeFields: this.contentTypeFields
+        });
+      },
+      error: (error) => {
+        console.error('Error loading collection:', error);
+        this.error = 'Failed to load collection. Please try again.';
         this.loading = false;
       }
     });
   }
 
-  onCollectionNameChange(input: string) {
-    this.collectionName = input.replace(/\s+/g, "-");
+  // Populate content type fields after both content types and collection are loaded
+  populateContentTypeFields() {
+    if (this.selectedContentTypeId && this.contentTypeList.length > 0) {
+      const selectedType = this.contentTypeList.find(
+        (type) => type._id === this.selectedContentTypeId
+      );
+      
+      if (selectedType) {
+        this.contentTypeFields = selectedType.contentTypeList || [];
+        this.isContentTypeSelected = true;
+        console.log("Content type fields populated:", this.contentTypeFields);
+      } else {
+        console.warn("Selected content type not found in content types list");
+        this.resetContentTypeSelection();
+      }
+    }
   }
 
   onContentTypeChange(event: any) {
@@ -97,7 +156,7 @@ export class CreateCollectionPageComponent implements OnInit {
         this.isContentTypeSelected = true;
         // Clear existing filters when content type changes
         this.filterFields = [];
-        console.log("Selected content type fields:", this.contentTypeFields);
+        console.log("Content type changed, fields updated:", this.contentTypeFields);
       }
     } else {
       this.resetContentTypeSelection();
@@ -105,8 +164,8 @@ export class CreateCollectionPageComponent implements OnInit {
   }
 
   resetContentTypeSelection() {
-    this.selectedContentType = "";
-    this.selectedContentTypeId = "";
+    this.selectedContentType = '';
+    this.selectedContentTypeId = '';
     this.contentTypeFields = [];
     this.filterFields = [];
     this.isContentTypeSelected = false;
@@ -122,10 +181,6 @@ export class CreateCollectionPageComponent implements OnInit {
 
   removeFilter(index: number) {
     this.filterFields.splice(index, 1);
-  }
-
-  clearAllFilters() {
-    this.filterFields = [];
   }
 
   onFilterFieldChange(event: any, index: number) {
@@ -163,7 +218,15 @@ export class CreateCollectionPageComponent implements OnInit {
     );
   }
 
-  // Generate API URL with filters
+  // Copy text to clipboard
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('API URL copied to clipboard');
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  }
+
   generateApiUrl(): string {
     let baseUrl = `https://api.primecontent.in/collection/${this.collectionName}/contents`;
     
@@ -181,35 +244,23 @@ export class CreateCollectionPageComponent implements OnInit {
     return baseUrl;
   }
 
-  // Validate form before creation
-  canCreateCollection(): boolean {
-    console.log('Validation check:', {
-      collectionName: this.collectionName,
-      selectedContentType: this.selectedContentType,
-      filterFields: this.filterFields
-    });
-    
+  canUpdateCollection(): boolean {
     if (!this.collectionName || !this.selectedContentType) {
-      console.log('Missing collection name or content type');
       return false;
     }
     
-    // Only validate filters if they exist
-    // Allow collections without filters
+    // Allow collections without filters or with complete filters
     if (this.filterFields.length > 0) {
       for (const filter of this.filterFields) {
         if (!filter.fieldName || !filter.filterName) {
-          console.log('Incomplete filter found:', filter);
           return false;
         }
       }
     }
     
-    console.log('Validation passed');
     return true;
   }
 
-  // Check for duplicate filter names
   hasDuplicateFilterNames(): boolean {
     if (this.filterFields.length === 0) {
       return false; // No filters means no duplicates
@@ -226,46 +277,37 @@ export class CreateCollectionPageComponent implements OnInit {
     return hasDuplicates;
   }
 
-  createCollection() {
-    console.log('createCollection method called');
-    console.log('Current form state:', {
-      collectionName: this.collectionName,
-      selectedContentType: this.selectedContentType,
-      selectedContentTypeId: this.selectedContentTypeId,
-      filterFields: this.filterFields
-    });
-    
-    if (!this.canCreateCollection()) {
-      console.log('Validation failed, showing alert');
+  updateCollection() {
+    if (!this.canUpdateCollection()) {
       alert('Please fill in all required fields.');
       return;
     }
     
     if (this.hasDuplicateFilterNames()) {
-      console.log('Duplicate filter names found, showing alert');
       alert('Filter names must be unique.');
       return;
     }
     
-    console.log('Creating collection data...');
-    const collectionData: CollectionCreateRequest = {
+    const updateData: CollectionUpdateRequest = {
       collectionName: this.collectionName,
       api: this.generateApiUrl(),
       contentTypeId: this.selectedContentTypeId,
       filters: this.filterFields
     };
     
-    console.log('Collection data to be sent:', collectionData);
-    
-    this.apiService.createCollection(collectionData).subscribe({
+    this.apiService.updateCollection(this.collectionId, updateData).subscribe({
       next: (response) => {
-        console.log("Collection created successfully:", response);
-        this.router.navigate(["/collection"]);
+        console.log('Collection updated:', response);
+        this.router.navigate(['/collection']);
       },
       error: (error) => {
-        console.error('Error creating collection:', error);
-        this.error = 'Failed to create collection. Please try again.';
+        console.error('Error updating collection:', error);
+        this.error = 'Failed to update collection. Please try again.';
       }
     });
   }
-}
+
+  cancel() {
+    this.router.navigate(['/collection']);
+  }
+} 

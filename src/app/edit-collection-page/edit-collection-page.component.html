@@ -3,8 +3,8 @@
   <app-sidebar></app-sidebar>
   <div class="container">
     <div class="page-header">
-      <h2>Create Content Collection</h2>
-      <p class="text-muted">Create a new content collection with filters and API endpoints</p>
+      <h2>Edit Content Collection</h2>
+      <p class="text-muted">Edit the content collection details and filters</p>
     </div>
 
     <!-- Loading State -->
@@ -12,13 +12,13 @@
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <p class="mt-2">Loading content types...</p>
+      <p class="mt-2">Loading collection data...</p>
     </div>
 
     <!-- Error State -->
     <div class="alert alert-danger" *ngIf="error && !loading">
       {{ error }}
-      <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadContentTypes()">
+      <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadCollection()">
         Retry
       </button>
     </div>
@@ -35,7 +35,7 @@
             type="text" 
             name="collectionName" 
             [(ngModel)]="collectionName"
-            (ngModelChange)="onCollectionNameChange($event)" 
+            (ngModelChange)="onCollectionNameChange($event)"
             placeholder="Enter collection name" 
             class="form-control"
             id="collectionName"
@@ -77,7 +77,7 @@
       </div>
 
       <!-- Content Type Fields Preview -->
-      <div class="form-section" *ngIf="contentTypeFields.length > 0">
+      <div class="form-section" *ngIf="isContentTypeSelected && contentTypeFields.length > 0">
         <h5>Content Type Fields</h5>
         <div class="table-responsive">
           <table class="table table-sm">
@@ -141,7 +141,7 @@
                 <label class="form-label">Filter Name</label>
                 <input 
                   type="text" 
-                  class="form-control" 
+                  class="form-control form-control-sm" 
                   [(ngModel)]="filter.filterName"
                   name="filterName_{{i}}"
                   placeholder="Enter filter name"
@@ -181,13 +181,6 @@
           <i class="fas fa-filter fa-2x mb-2"></i>
           <p>No filters added yet. Click "Add Filter" to create your first filter.</p>
         </div>
-
-        <!-- Clear All Filters -->
-        <div class="text-center mt-3" *ngIf="filterFields.length > 0">
-          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="clearAllFilters()">
-            Clear All Filters
-          </button>
-        </div>
       </div>
 
       <!-- Action Buttons -->
@@ -195,29 +188,29 @@
         <button 
           type="button" 
           class="btn btn-primary" 
-          (click)="createCollection()"
-          [disabled]="!canCreateCollection() || hasDuplicateFilterNames()">
-          Create Collection
+          (click)="updateCollection()"
+          [disabled]="!canUpdateCollection() || hasDuplicateFilterNames()">
+          Update Collection
         </button>
         <button 
           type="button" 
           class="btn btn-outline-secondary ms-2" 
-          (click)="router.navigate(['/collection'])">
+          (click)="cancel()">
           Cancel
         </button>
       </div>
 
       <!-- Validation Messages -->
-      <div class="validation-messages mt-3" *ngIf="!canCreateCollection() || hasDuplicateFilterNames()">
+      <div class="validation-messages mt-3" *ngIf="!canUpdateCollection() || hasDuplicateFilterNames()">
         <div class="alert alert-warning">
           <ul class="mb-0">
             <li *ngIf="!collectionName">Collection name is required</li>
             <li *ngIf="!selectedContentType">Content type selection is required</li>
             <li *ngIf="hasDuplicateFilterNames()">Filter names must be unique</li>
-            <li *ngIf="hasIncompleteFilters()">All filters must have a filter name</li>
+            <li *ngIf="filterFields.length > 0 && !canUpdateCollection()">All filters must have complete field and filter names</li>
           </ul>
         </div>
       </div>
     </form>
   </div>
-</div>
+</div> 

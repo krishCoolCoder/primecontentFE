@@ -4,28 +4,53 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { NgFor, CommonModule } from '@angular/common';
 import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
+import { DeleteConfirmationModalComponent } from '../modals/delete-confirmation-modal/delete-confirmation-modal.component';
+import { ApiService } from '../services/api.service';
+import { Collection } from '../models/collection.model';
 
 @Component({
   selector: 'app-collection-page',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule, FilterModalComponent],
+  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule, FilterModalComponent, DeleteConfirmationModalComponent],
   templateUrl: './collection-page.component.html',
   styleUrl: './collection-page.component.css'
 })
 export class CollectionPageComponent implements OnInit {
-  collectionList: any[] = [];
+  collectionList: Collection[] = [];
   isFilterOpen: boolean = false;
   listView: boolean = true;
   gridView: boolean = false;
+  loading: boolean = false;
+  error: string | null = null;
+  
+  // Delete confirmation modal state
+  selectedCollection: Collection | null = null;
+  showDeleteModal: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private apiService: ApiService
+  ) {}
 
   ngOnInit() {
     this.loadCollections();
   }
 
   loadCollections() {
-    this.collectionList = JSON.parse(localStorage.getItem('collections') ?? '[]');
+    this.loading = true;
+    this.error = null;
+    
+    this.apiService.getAllCollectionsData().subscribe({
+      next: (collections) => {
+        this.collectionList = collections;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading collections:', error);
+        this.error = 'Failed to load collections. Please try again.';
+        this.loading = false;
+      }
+    });
   }
 
   redirectToCreateCollection() {
@@ -48,5 +73,66 @@ export class CollectionPageComponent implements OnInit {
 
   closeFilter() {
     this.isFilterOpen = false;
+  }
+
+  // View collection details
+  viewCollection(collection: Collection) {
+    if (collection._id) {
+      // Navigate to view collection page with collection ID
+      this.router.navigate(['/viewCollection', collection._id]);
+    }
+  }
+
+  // Edit collection
+  editCollection(collection: Collection) {
+    if (collection._id) {
+      // Navigate to edit page with collection ID
+      this.router.navigate(['/editCollection', collection._id]);
+    }
+  }
+
+  // Show delete confirmation modal
+  confirmDeleteCollection(collection: Collection) {
+    this.selectedCollection = collection;
+    this.showDeleteModal = true;
+  }
+
+  // Delete collection
+  deleteCollection() {
+    if (this.selectedCollection && this.selectedCollection._id) {
+      this.apiService.deleteCollection(this.selectedCollection._id).subscribe({
+        next: (response) => {
+          console.log('Collection deleted:', response);
+          this.loadCollections(); // Refresh the list
+          this.cancelDelete();
+        },
+        error: (error) => {
+          console.error('Error deleting collection:', error);
+          this.error = 'Failed to delete collection. Please try again.';
+        }
+      });
+    }
+  }
+
+  // Cancel delete
+  cancelDelete() {
+    this.selectedCollection = null;
+    this.showDeleteModal = false;
+  }
+
+  // Helper method to get content type name
+  getContentTypeName(collection: Collection): string {
+    if (typeof collection.contentTypeId === 'object' && collection.contentTypeId !== null) {
+      return collection.contentTypeId.contentTypeName;
+    }
+    return collection.contentType || 'Unknown';
+  }
+
+  // Helper method to get content type ID
+  getContentTypeId(collection: Collection): string {
+    if (typeof collection.contentTypeId === 'object' && collection.contentTypeId !== null) {
+      return collection.contentTypeId._id;
+    }
+    return collection.contentTypeId as string;
   }
 }

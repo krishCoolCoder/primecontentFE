@@ -1,20 +1,12 @@
 <app-header></app-header>
 <div class="d-flex">
     <app-sidebar></app-sidebar>
-    <!-- <app-create-content-model></app-create-content-model> -->
     <div class="container">
         <div class="contentContainer d-flex justify-content-between align-items-center">
-            <!-- <button 
-            type="button createContent" 
-            class="btn btn-primary" 
-            data-bs-toggle="modal" 
-            data-bs-target="#createContentModelSummon"
-            (click)="redirectToCreateContent()"
-            >Create content</button> -->
             <button 
-            type="button createContent" 
-            class="btn btn-primary" 
-            (click)="redirectToCreateCollection()"
+                type="button createContent" 
+                class="btn btn-primary" 
+                (click)="redirectToCreateCollection()"
             >Create collection</button>
             <div class="viewOptions d-flex justify-content-center align-items-center">
                 <div class="gridView me-2" (click)="setGridView()">
@@ -28,19 +20,39 @@
                 </div>
                 <div class="listView" (click)="setListView()">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="29" height="29" rx="5" fill="#D9D9D9" class="listViewBg" />
-                        <rect x="6" y="5" width="17" height="7" rx="2" fill="#FBFBFB" />
-                        <rect x="6" y="17" width="17" height="7" rx="2" fill="#FBFBFB" />
+                        <rect width="29" height="29" rx="5" fill="#D9D9D9" class="listViewBg"/>
+                        <rect x="6" y="8" width="17" height="2" rx="1" fill="#FBFBFB"/>
+                        <rect x="6" y="13" width="17" height="2" rx="1" fill="#FBFBFB"/>
+                        <rect x="6" y="18" width="17" height="2" rx="1" fill="#FBFBFB"/>
+                    </svg>
+                </div>
+                <div class="filter ms-2" (click)="openFilter()">
+                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="29" height="29" rx="5" fill="#D9D9D9"/>
+                        <path d="M8 10.5H21M10.5 14.5H18.5M12.5 18.5H16.5" stroke="#FBFBFB" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                 </div>
             </div>
-            <div class="contentFilter">
-                <button type="button createContent" class="btn btn-primary" (click)="openFilter()">Content filter</button>
-            </div>
         </div>
-        
+
+        <!-- Loading State -->
+        <div class="text-center mt-4" *ngIf="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading collections...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="alert alert-danger mt-4" *ngIf="error && !loading">
+            {{ error }}
+            <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadCollections()">
+                Retry
+            </button>
+        </div>
+
         <!-- List View -->
-        <div class="listItemView" *ngIf="listView; else gridViewTemplate">
+        <div class="container viewContainer" *ngIf="listView && !loading && !error">
             <div class="d-flex justify-content-center align-items-center flex-column pt-2">
                 <div class="w-50" *ngFor="let item of collectionList">
                     <div class="item">
@@ -49,13 +61,13 @@
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <div class="View" class="dropdown-item">View</div>
+                                    <div class="dropdown-item" (click)="viewCollection(item)">View</div>
                                 </li>
                                 <li>
-                                    <div class="Edit" class="dropdown-item">Edit</div>
+                                    <div class="dropdown-item" (click)="editCollection(item)">Edit</div>
                                 </li>
                                 <li>
-                                    <div class="Delete" class="dropdown-item">Delete</div>
+                                    <div class="dropdown-item text-danger" (click)="confirmDeleteCollection(item)">Delete</div>
                                 </li>
                             </ul>
                         </div>
@@ -63,7 +75,7 @@
                             Collection Name : {{item.collectionName}}
                         </p>
                         <p class="description">
-                            Collection Type : {{item.contentType}}
+                            Collection Type : {{getContentTypeName(item)}}
                         </p>
                         <p class="description">
                             API : {{item.api}}
@@ -71,7 +83,7 @@
                         <div class="description">
                             filters : 
                             <ul class="description" *ngFor="let filterItem of item.filters">
-                                {{filterItem.fieldName}} : {{filterItem.filterValue}}
+                                {{filterItem.fieldName}} : {{filterItem.filterName}}
                             </ul>
                         </div>
                     </div>
@@ -83,49 +95,47 @@
         </div>
 
         <!-- Grid View -->
-        <ng-template #gridViewTemplate>
-            <div class="container viewContainer">
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-                    <div class="col mb-3" *ngFor="let item of collectionList">
-                        <div class="item">
-                            <div class="dropdown">
-                                <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">...</div>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="View" class="dropdown-item">View</div>
-                                    </li>
-                                    <li>
-                                        <div class="Edit" class="dropdown-item">Edit</div>
-                                    </li>
-                                    <li>
-                                        <div class="Delete" class="dropdown-item">Delete</div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <p class="title">
-                                Collection Name : {{item.collectionName}}
-                            </p>
-                            <p class="description">
-                                Collection Type : {{item.contentType}}
-                            </p>
-                            <p class="description">
-                                API : {{item.api}}
-                            </p>
-                            <div class="description">
-                                filters : 
-                                <ul class="description" *ngFor="let filterItem of item.filters">
-                                    {{filterItem.fieldName}} : {{filterItem.filterValue}}
-                                </ul>
-                            </div>
+        <div class="container viewContainer" *ngIf="gridView && !loading && !error">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+                <div class="col mb-3" *ngFor="let item of collectionList">
+                    <div class="item">
+                        <div class="dropdown">
+                            <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">...</div>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <div class="dropdown-item" (click)="viewCollection(item)">View</div>
+                                </li>
+                                <li>
+                                    <div class="dropdown-item" (click)="editCollection(item)">Edit</div>
+                                </li>
+                                <li>
+                                    <div class="dropdown-item text-danger" (click)="confirmDeleteCollection(item)">Delete</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <p class="title">
+                            Collection Name : {{item.collectionName}}
+                        </p>
+                        <p class="description">
+                            Collection Type : {{getContentTypeName(item)}}
+                        </p>
+                        <p class="description">
+                            API : {{item.api}}
+                        </p>
+                        <div class="description">
+                            filters : 
+                            <ul class="description" *ngFor="let filterItem of item.filters">
+                                {{filterItem.fieldName}} : {{filterItem.filterName}}
+                            </ul>
                         </div>
                     </div>
                 </div>
-                <div class="text-center mt-4" *ngIf="collectionList.length === 0">
-                    <p class="text-muted">No collections found. Create your first collection!</p>
-                </div>
             </div>
-        </ng-template>
+            <div class="text-center mt-4" *ngIf="collectionList.length === 0">
+                <p class="text-muted">No collections found. Create your first collection!</p>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -134,3 +144,25 @@
     [isOpen]="isFilterOpen"
     (closeFilter)="closeFilter()">
 </app-filter-modal>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteCollectionModal" tabindex="-1" aria-labelledby="deleteCollectionModalLabel" aria-hidden="true" [class.show]="showDeleteModal" [style.display]="showDeleteModal ? 'block' : 'none'">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCollectionModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close" (click)="cancelDelete()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this collection?</p>
+                <p class="fw-bold text-danger">{{ selectedCollection?.collectionName }}</p>
+                <p class="text-muted">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="deleteCollection()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade" [class.show]="showDeleteModal" *ngIf="showDeleteModal"></div>
