@@ -122,3 +122,184 @@ button {
 .dropdown-item:hover {
     background-color: #f8f9fa;
 }
+.url-copy-buttons button{
+    background-color: rgb(79, 79, 79);
+    color: white;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.url-copy-buttons button:hover {
+    background-color: #000000;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.url-copy-buttons button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.1s ease;
+}
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .viewContainer {
+        padding-right: 10px;
+        padding-left: 10px;
+        width: 100%;
+    }
+    
+    .contentContainer {
+        margin-top: 5px;
+    }
+    
+    /* Make items full width on mobile instead of w-50 */
+    .w-50 {
+        width: 100% !important;
+    }
+    
+    .item {
+        margin-bottom: 15px;
+        padding: 15px;
+        min-height: 100px;
+    }
+    
+    .item .title {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .item .description {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        line-height: 1.4;
+    }
+    
+    /* Grid view adjustments for mobile */
+    .row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4 > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+    
+    .col {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+    
+    .options {
+        right: 8px;
+        top: 8px;
+        font-size: 16px;
+    }
+    
+    /* URL section mobile adjustments */
+    .url-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+    
+    .url-label {
+        font-size: 0.8rem;
+    }
+    
+    .url-text {
+        font-size: 0.75rem;
+        margin-right: 0;
+        width: 100%;
+        word-break: break-all;
+    }
+    
+    .url-copy-buttons {
+        position: absolute;
+        bottom: 3px;
+        right: 8px;
+        gap: 6px;
+        padding: 3px;
+        opacity: 0.8;
+        visibility: visible;
+        /* margin-top: 50px; */
+    }
+    
+    .item:hover .url-copy-buttons {
+        opacity: 1;
+    }
+    
+    .btn-copy {
+        min-width: 42px;
+        height: 20px;
+        padding: 2px 4px;
+        font-size: 7px;
+        gap: 2px;
+    }
+    
+    .btn-copy i {
+        font-size: 7px;
+    }
+    
+    .btn-copy .btn-text {
+        font-size: 7px;
+    }
+}
+
+@media (max-width: 480px) {
+    .viewContainer {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+    
+    .item {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .item .title {
+        font-size: 0.9rem;
+    }
+    
+    .item .description {
+        font-size: 0.8rem;
+    }
+    
+    .options {
+        right: 5px;
+        top: 5px;
+        font-size: 14px;
+    }
+    
+    /* URL section smaller mobile adjustments */
+    .url-label {
+        font-size: 0.75rem;
+    }
+    
+    .url-text {
+        font-size: 0.7rem;
+        margin-right: 0;
+    }
+    
+    .url-copy-buttons {
+        position: absolute;
+        bottom: 2px;
+        right: 6px;
+        gap: 4px;
+        padding: 2px;
+    }
+    
+    .btn-copy {
+        min-width: 38px;
+        height: 18px;
+        padding: 1px 3px;
+        font-size: 6px;
+        gap: 1px;
+    }
+    
+    .btn-copy i {
+        font-size: 6px;
+    }
+    
+    .btn-copy .btn-text {
+        font-size: 6px;
+    }
+}

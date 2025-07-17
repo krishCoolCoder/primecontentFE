@@ -98,4 +98,36 @@ export class ContentTypePageComponent implements OnInit {
   onCancelDelete() {
     this.selectedContentType = null;
   }
+
+  // Generate URL for content type
+  generateContentTypeUrl(contentType: any): string {
+    return `http://api.primecontent.in/api/content-types/list/${contentType.contentTypeName}`;
+  }
+
+  // Copy URL to clipboard
+  copyUrl(contentType: any) {
+    const url = this.generateContentTypeUrl(contentType);
+    navigator.clipboard.writeText(url).then(() => {
+      console.log('URL copied to clipboard');
+      // You can add a toast notification here if needed
+    }).catch(err => {
+      console.error('Failed to copy URL: ', err);
+    });
+  }
+
+  // Copy cURL command to clipboard
+  copyCurl(contentType: any) {
+    const url = this.generateContentTypeUrl(contentType);
+    const token = localStorage.getItem('token');
+    const curlCommand = `curl -X GET "${url}" \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer ${token || 'YOUR_TOKEN_HERE'}"`;
+    
+    navigator.clipboard.writeText(curlCommand).then(() => {
+      console.log('cURL command copied to clipboard');
+      // You can add a toast notification here if needed
+    }).catch(err => {
+      console.error('Failed to copy cURL command: ', err);
+    });
+  }
 }

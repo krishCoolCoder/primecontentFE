@@ -70,7 +70,35 @@
                             {{childItem.fieldName}} : {{childItem.fieldType}}
                             <!-- {{item.fieldType}} -->
                         </p>
-                    </div>
+                        </div>
+                        
+                        <!-- URL Display with Copy Buttons -->
+                        <div class="url-section">
+                            <div class="url-container">
+                                <span class="url-label">URL:</span>
+                                <span class="url-text">{{generateContentTypeUrl(contentType)}}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Copy buttons positioned absolutely -->
+                        <div class="url-copy-buttons mt-2">
+                            <button 
+                                type="button" 
+                                class="btn btn-copy me-2" 
+                                (click)="copyUrl(contentType)"
+                                title="Copy URL">
+                                <i class="fas fa-link"></i>
+                                <span class="btn-text">Copy URL</span>
+                            </button>
+                            <button 
+                                type="button" 
+                                class="btn btn-copy" 
+                                (click)="copyCurl(contentType)"
+                                title="Copy cURL">
+                                <i class="fas fa-terminal"></i>
+                                <span class="btn-text">Copy cURL</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,7 +136,35 @@
                                 {{childItem.fieldName}} : {{childItem.fieldType}}
                                 <!-- {{item.fieldType}} -->
                             </p>
-                        </div>
+                            </div>
+                            
+                            <!-- URL Display with Copy Buttons -->
+                            <div class="url-section">
+                                <div class="url-container">
+                                    <span class="url-label">URL:</span>
+                                    <span class="url-text">{{generateContentTypeUrl(contentType)}}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Copy buttons positioned absolutely -->
+                            <div class="url-copy-buttons">
+                                <button 
+                                    type="button" 
+                                    class="btn btn-copy" 
+                                    (click)="copyUrl(contentType)"
+                                    title="Copy URL">
+                                    <i class="fas fa-link"></i>
+                                    <span class="btn-text">Copy URL</span>
+                                </button>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-copy" 
+                                    (click)="copyCurl(contentType)"
+                                    title="Copy cURL">
+                                    <i class="fas fa-terminal"></i>
+                                    <span class="btn-text">Copy cURL</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
