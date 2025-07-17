@@ -56,6 +56,12 @@
   flex: 1;
   font-size: 14px;
   color: #0d6efd;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
 }
 
 .fields-preview {
@@ -145,4 +151,54 @@
 .spinner-border {
   width: 3rem;
   height: 3rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .collection-form {
+    padding: 20px;
+  }
+  
+  .api-url {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .api-url code {
+    font-size: 12px;
+    padding: 10px;
+    line-height: 1.4;
+  }
+  
+  .form-section {
+    margin-bottom: 20px;
+  }
+  
+  .filter-item .row {
+    --bs-gutter-x: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 5px;
+  }
+  
+  .collection-form {
+    padding: 15px;
+  }
+  
+  .api-url code {
+    font-size: 11px;
+    padding: 8px;
+  }
+  
+  .page-header h2 {
+    font-size: 1.5rem;
+  }
 } 

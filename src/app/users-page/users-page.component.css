@@ -47,12 +47,20 @@
     font-weight: bold;
     margin-bottom: 8px;
     color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .item .description {
     color: #666;
     margin-bottom: 8px;
     font-size: 0.9em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .item .role {
@@ -125,4 +133,83 @@ button {
 
 .dropdown-item:hover {
     background-color: #f8f9fa;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .viewContainer {
+        padding-right: 10px;
+        padding-left: 10px;
+        width: 100%;
+    }
+    
+    .contentContainer {
+        margin-top: 5px;
+    }
+    
+    /* Make items full width on mobile instead of w-50 */
+    .w-50 {
+        width: 100% !important;
+    }
+    
+    .item {
+        margin-bottom: 15px;
+        padding: 15px;
+        min-height: 100px;
+    }
+    
+    .item .title {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .item .description {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        line-height: 1.4;
+    }
+    
+    /* Grid view adjustments for mobile */
+    .row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4 > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+    
+    .col {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+    
+    .options {
+        right: 8px;
+        top: 8px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .viewContainer {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+    
+    .item {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .item .title {
+        font-size: 0.9rem;
+    }
+    
+    .item .description {
+        font-size: 0.8rem;
+    }
+    
+    .options {
+        right: 5px;
+        top: 5px;
+        font-size: 14px;
+    }
 }

@@ -86,6 +86,26 @@
                                 {{filterItem.fieldName}} : {{filterItem.filterName}}
                             </ul>
                         </div>
+                        
+                        <!-- Copy buttons -->
+                        <div class="copy-buttons">
+                            <button 
+                                type="button" 
+                                class="btn btn-copy" 
+                                (click)="copyUrl(item)"
+                                title="Copy URL"
+                                data-label="Copy URL">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button 
+                                type="button" 
+                                class="btn btn-copy" 
+                                (click)="copyCurl(item)"
+                                title="Copy cURL"
+                                data-label="Copy cURL">
+                                <i class="fas fa-terminal"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -128,6 +148,26 @@
                             <ul class="description" *ngFor="let filterItem of item.filters">
                                 {{filterItem.fieldName}} : {{filterItem.filterName}}
                             </ul>
+                        </div>
+                        
+                        <!-- Copy buttons -->
+                        <div class="copy-buttons">
+                            <button 
+                                type="button" 
+                                class="btn btn-copy" 
+                                (click)="copyUrl(item)"
+                                title="Copy URL"
+                                data-label="URL">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button 
+                                type="button" 
+                                class="btn btn-copy" 
+                                (click)="copyCurl(item)"
+                                title="Copy cURL"
+                                data-label="cURL">
+                                <i class="fas fa-terminal"></i>
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -135,4 +135,33 @@ export class CollectionPageComponent implements OnInit {
     }
     return collection.contentTypeId as string;
   }
+
+  // Copy URL to clipboard
+  copyUrl(collection: Collection) {
+    if (collection.api) {
+      navigator.clipboard.writeText(collection.api).then(() => {
+        console.log('URL copied to clipboard');
+        // You can add a toast notification here if needed
+      }).catch(err => {
+        console.error('Failed to copy URL: ', err);
+      });
+    }
+  }
+
+  // Copy cURL command to clipboard
+  copyCurl(collection: Collection) {
+    if (collection.api) {
+      const token = localStorage.getItem('token');
+      const curlCommand = `curl -X GET "${collection.api}" \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer ${token || 'YOUR_TOKEN_HERE'}"`;
+      
+      navigator.clipboard.writeText(curlCommand).then(() => {
+        console.log('cURL command copied to clipboard');
+        // You can add a toast notification here if needed
+      }).catch(err => {
+        console.error('Failed to copy cURL command: ', err);
+      });
+    }
+  }
 }

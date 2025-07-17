@@ -43,6 +43,27 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+/* Text styling with ellipsis */
+.title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.description {
+    color: #666;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
 /* button style */
 button {
     height: 30px;
@@ -104,4 +125,205 @@ button {
 
 .dropdown-item:hover {
     background-color: #f8f9fa;
+}
+
+/* Copy buttons styling */
+.copy-buttons {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    padding: 4px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.item:hover .copy-buttons {
+    opacity: 1;
+    visibility: visible;
+}
+
+.btn-copy {
+    width: auto;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    border: none;
+    border-radius: 4px;
+    background-color: #343a40;
+    color: white;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-copy:hover {
+    background-color: #495057;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-copy:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.btn-copy i {
+    font-size: 9px;
+    margin-right: 2px;
+}
+
+.btn-copy::after {
+    content: attr(data-label);
+    font-size: 9px;
+    margin-left: 2px;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .viewContainer {
+        padding-right: 10px;
+        padding-left: 10px;
+        width: 100%;
+    }
+    
+    .contentContainer {
+        margin-top: 5px;
+    }
+    
+    /* Make items full width on mobile instead of w-50 */
+    .w-50 {
+        width: 100% !important;
+    }
+    
+    .item {
+        margin-bottom: 15px;
+        padding: 15px;
+        min-height: 100px;
+    }
+    
+    .title {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    .description {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        line-height: 1.4;
+    }
+    
+    /* Grid view adjustments for mobile */
+    .row-cols-1.row-cols-md-2.row-cols-lg-3.row-cols-xl-4 > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+    
+    .col {
+        padding-right: 2px;
+        padding-left: 2px;
+    }
+    
+    .options {
+        right: 8px;
+        top: 8px;
+        font-size: 16px;
+    }
+    
+    /* Copy buttons mobile adjustments */
+    .copy-buttons {
+        bottom: 6px;
+        right: 6px;
+        gap: 3px;
+        padding: 3px;
+    }
+    
+    .btn-copy {
+        min-width: 20px;
+        height: 20px;
+        padding: 0 4px;
+        font-size: 8px;
+    }
+    
+    .btn-copy i {
+        font-size: 8px;
+        margin-right: 1px;
+    }
+    
+    .btn-copy::after {
+        font-size: 8px;
+        margin-left: 1px;
+    }
+    
+    /* Show buttons on mobile without hover */
+    .copy-buttons {
+        opacity: 0.7;
+        visibility: visible;
+    }
+    
+    .item:hover .copy-buttons {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .viewContainer {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+    
+    .item {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .title {
+        font-size: 0.9rem;
+    }
+    
+    .description {
+        font-size: 0.8rem;
+    }
+    
+    .options {
+        right: 5px;
+        top: 5px;
+        font-size: 14px;
+    }
+    
+    /* Copy buttons smaller mobile adjustments */
+    .copy-buttons {
+        bottom: 4px;
+        right: 4px;
+        gap: 2px;
+        padding: 2px;
+    }
+    
+    .btn-copy {
+        min-width: 18px;
+        height: 18px;
+        padding: 0 3px;
+        font-size: 7px;
+    }
+    
+    .btn-copy i {
+        font-size: 7px;
+        margin-right: 1px;
+    }
+    
+    .btn-copy::after {
+        font-size: 7px;
+        margin-left: 1px;
+    }
 }
