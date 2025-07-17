@@ -27,6 +27,7 @@ import { CreateUserRolePageComponent } from './create-user-role-page/create-user
 import { ViewContentTypePageComponent } from './view-content-type-page/view-content-type-page.component';
 import { EditContentTypePageComponent } from './edit-content-type-page/edit-content-type-page.component';
 import { ViewCollectionPageComponent } from './view-collection-page/view-collection-page.component';
+import { ToastTestingComponent } from './toast-testing/toast-testing.component';
 
 export const routes: Routes = [
     {
@@ -177,6 +178,11 @@ export const routes: Routes = [
     {
         path : "settings",
         component : DashboardComponent,
+        canActivate : [authGuard]
+    },
+    {
+        path : "toastTesting",
+        component : ToastTestingComponent,
         canActivate : [authGuard]
     },
 ];

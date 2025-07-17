@@ -1,0 +1,263 @@
+.container {
+  margin-top: 20px;
+}
+
+.contentContainer {
+  margin-top: 10px;
+}
+
+.viewContainer {
+  margin-top: 1%;
+  padding-right: 25px;
+  padding-top: 15px;
+  height: 87vh;
+  width: 99.5%;
+  overflow: auto;
+}
+
+/* Card styling */
+.card {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  font-weight: 600;
+}
+
+.card-header h5 {
+  margin: 0;
+  color: #333;
+}
+
+.card-header i {
+  margin-right: 8px;
+  color: #007bff;
+}
+
+/* Button container */
+.btn-group-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Button styling */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.btn i {
+  margin-right: 6px;
+  font-size: 0.9em;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Success button */
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+/* Danger button */
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+/* Warning button */
+.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #212529;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+  border-color: #d39e00;
+}
+
+/* Info button */
+.btn-info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  color: white;
+}
+
+.btn-info:hover {
+  background-color: #138496;
+  border-color: #117a8b;
+}
+
+/* Primary button */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+/* Secondary button */
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+  border-color: #4e555b;
+}
+
+/* Dark button */
+.btn-dark {
+  background-color: #343a40;
+  border-color: #343a40;
+  color: white;
+}
+
+.btn-dark:hover {
+  background-color: #23272b;
+  border-color: #1d2124;
+}
+
+/* Outline danger button */
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+  background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+  color: white;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+/* Outline secondary button */
+.btn-outline-secondary {
+  color: #6c757d;
+  border-color: #6c757d;
+  background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+  color: white;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+/* Testing list styling */
+.testing-list {
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+
+.testing-list li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.testing-list li:last-child {
+  margin-bottom: 0;
+}
+
+.testing-list strong {
+  color: #333;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .viewContainer {
+    padding-right: 10px;
+    padding-left: 10px;
+    width: 100%;
+  }
+  
+  .btn-group-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+  
+  .card-header h5 {
+    font-size: 1rem;
+  }
+  
+  .testing-list {
+    padding-left: 16px;
+  }
+  
+  .testing-list li {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin-top: 10px;
+  }
+  
+  .viewContainer {
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 10px;
+  }
+  
+  .btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+  
+  .card-header h5 {
+    font-size: 0.9rem;
+  }
+  
+  .testing-list li {
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+} 

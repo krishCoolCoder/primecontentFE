@@ -1,0 +1,122 @@
+
+<div class="container">
+  <div class="contentContainer">
+    <div class="viewContainer">
+      <div class="row">
+        <div class="col-12 mb-4">
+          <h2>Toast Notifications Testing</h2>
+          <p>Test and validate the toast notification system with various scenarios</p>
+        </div>
+      </div>
+      
+      <!-- Basic Toast Types -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5><i class="fas fa-bell"></i> Basic Toast Types</h5>
+            </div>
+            <div class="card-body">
+              <p>Test different types of toast notifications:</p>
+              <div class="btn-group-container">
+                <button type="button" class="btn btn-success me-2 mb-2" (click)="showSuccessToast()">
+                  <i class="fas fa-check-circle"></i> Success Toast
+                </button>
+                <button type="button" class="btn btn-danger me-2 mb-2" (click)="showErrorToast()">
+                  <i class="fas fa-exclamation-circle"></i> Error Toast
+                </button>
+                <button type="button" class="btn btn-warning me-2 mb-2" (click)="showWarningToast()">
+                  <i class="fas fa-exclamation-triangle"></i> Warning Toast
+                </button>
+                <button type="button" class="btn btn-info me-2 mb-2" (click)="showInfoToast()">
+                  <i class="fas fa-info-circle"></i> Info Toast
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Toast Tests -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5><i class="fas fa-cogs"></i> Advanced Toast Tests</h5>
+            </div>
+            <div class="card-body">
+              <p>Test advanced toast functionality:</p>
+              <div class="btn-group-container">
+                <button type="button" class="btn btn-primary me-2 mb-2" (click)="showMultipleToasts()">
+                  <i class="fas fa-layer-group"></i> Multiple Toasts
+                </button>
+                <button type="button" class="btn btn-secondary me-2 mb-2" (click)="showCustomDurationToast()">
+                  <i class="fas fa-clock"></i> Custom Duration (2s)
+                </button>
+                <button type="button" class="btn btn-dark me-2 mb-2" (click)="showLongToast()">
+                  <i class="fas fa-align-left"></i> Long Message (10s)
+                </button>
+                <button type="button" class="btn btn-outline-danger me-2 mb-2" (click)="showPermanentToast()">
+                  <i class="fas fa-infinity"></i> Permanent Toast
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Controls -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5><i class="fas fa-tools"></i> Toast Controls</h5>
+            </div>
+            <div class="card-body">
+              <p>Control and manage active toasts:</p>
+              <div class="btn-group-container">
+                <button type="button" class="btn btn-outline-secondary" (click)="clearAllToasts()">
+                  <i class="fas fa-trash"></i> Clear All Toasts
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testing Instructions -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5><i class="fas fa-clipboard-list"></i> Testing Instructions</h5>
+            </div>
+            <div class="card-body">
+              <h6>What to Test:</h6>
+              <ul class="testing-list">
+                <li><strong>Visual Appearance:</strong> Check colors, icons, and styling for each toast type</li>
+                <li><strong>Animations:</strong> Verify smooth slide-down animations when toasts appear</li>
+                <li><strong>Stacking:</strong> Test multiple toasts appearing in sequence</li>
+                <li><strong>Auto-dismiss:</strong> Confirm toasts disappear after their duration</li>
+                <li><strong>Manual Close:</strong> Test the close button functionality</li>
+                <li><strong>Responsive Design:</strong> Test on different screen sizes</li>
+                <li><strong>Long Messages:</strong> Check text wrapping and layout</li>
+                <li><strong>Permanent Toasts:</strong> Verify they don't auto-dismiss</li>
+              </ul>
+              
+              <h6 class="mt-3">Expected Behavior:</h6>
+              <ul class="testing-list">
+                <li>Toasts should appear at the top center of the screen</li>
+                <li>Each toast type should have distinct colors and icons</li>
+                <li>Multiple toasts should stack vertically with proper spacing</li>
+                <li>Animations should be smooth and professional</li>
+                <li>Text should wrap properly for long messages</li>
+                <li>Close buttons should be easily accessible</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

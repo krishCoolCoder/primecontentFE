@@ -1,0 +1,20 @@
+<div class="toast-container">
+  <div 
+    *ngFor="let toast of toasts; trackBy: trackByToastId" 
+    class="toast-item"
+    [class]="getToastClass(toast.type)"
+    [@slideDown]
+  >
+    <div class="toast-content">
+      <i [class]="getToastIcon(toast.type)" class="toast-icon"></i>
+      <span class="toast-message">{{ toast.message }}</span>
+      <button 
+        class="toast-close" 
+        (click)="removeToast(toast.id)"
+        aria-label="Close"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+</div> 

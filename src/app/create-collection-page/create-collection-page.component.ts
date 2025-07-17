@@ -6,6 +6,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { FilterField, CollectionCreateRequest } from '../models/collection.model';
+import { ToastService } from '../shared/toast/toast.service';
 
 interface ContentTypeField {
   fieldName: string;
@@ -39,7 +40,8 @@ export class CreateCollectionPageComponent implements OnInit {
 
   constructor(
     public router: Router,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private toastService: ToastService
   ) {}
 
   // Copy text to clipboard
@@ -260,6 +262,7 @@ export class CreateCollectionPageComponent implements OnInit {
     this.apiService.createCollection(collectionData).subscribe({
       next: (response) => {
         console.log("Collection created successfully:", response);
+        this.toastService.showSuccess('Collection created successfully!');
         this.router.navigate(["/collection"]);
       },
       error: (error) => {

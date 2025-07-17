@@ -7,6 +7,7 @@ import { FilterModalComponent } from '../modals/filter-modal/filter-modal.compon
 import { DeleteConfirmationModalComponent } from '../modals/delete-confirmation-modal/delete-confirmation-modal.component';
 import { ApiService } from '../services/api.service';
 import { Collection } from '../models/collection.model';
+import { ToastService } from '../shared/toast/toast.service';
 
 @Component({
   selector: 'app-collection-page',
@@ -29,7 +30,8 @@ export class CollectionPageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -105,10 +107,12 @@ export class CollectionPageComponent implements OnInit {
           console.log('Collection deleted:', response);
           this.loadCollections(); // Refresh the list
           this.cancelDelete();
+          this.toastService.showSuccess('Collection deleted successfully!');
         },
         error: (error) => {
           console.error('Error deleting collection:', error);
           this.error = 'Failed to delete collection. Please try again.';
+          this.toastService.showError('Failed to delete collection.');
         }
       });
     }
