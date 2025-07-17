@@ -8,7 +8,7 @@ import { UserAccess, UserAccessResponse, UserAccessUpdateRequest } from '../mode
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = 'http://api.primecontent.in';
 
   constructor(private http: HttpClient) {}
 
