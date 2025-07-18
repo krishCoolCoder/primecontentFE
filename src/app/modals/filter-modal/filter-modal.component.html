@@ -1,31 +1,253 @@
 <div class="filter-overlay" *ngIf="isOpen" (click)="onClose()"></div>
 <div class="filter-modal" [class.open]="isOpen">
   <div class="filter-header">
-    <h5>Filter</h5>
+    <h5>{{ getPageTitle() }}</h5>
     <button type="button" class="btn-close" (click)="onClose()" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   
   <div class="filter-body">
-    <div class="mb-3">
-      <label for="titleFilter" class="form-label">Title Filter</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        id="titleFilter" 
-        [(ngModel)]="titleFilter" 
-        placeholder="Enter title to filter...">
+    <!-- Content Page Filters -->
+    <div *ngIf="pageType === 'content' || pageType === 'contentType'">
+      <div class="mb-3">
+        <label for="contentType" class="form-label">Content Type</label>
+        <select 
+          class="form-select" 
+          id="contentType" 
+          [(ngModel)]="contentType">
+          <option value="">Select content type...</option>
+          <option *ngFor="let type of contentTypes" [value]="type.contentTypeName">
+            {{ type.contentTypeName }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="mb-3">
+        <label for="fromDate" class="form-label">From Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="fromDate" 
+          [(ngModel)]="fromDate"
+          (change)="onDateChange()">
+      </div>
+      
+      <div class="mb-4">
+        <label for="toDate" class="form-label">To Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="toDate" 
+          [(ngModel)]="toDate"
+          (change)="onDateChange()">
+        <div class="text-danger mt-1" *ngIf="dateError">
+          <small>{{ dateError }}</small>
+        </div>
+      </div>
     </div>
     
-    <div class="mb-4">
-      <label for="fieldFilter" class="form-label">Field Filter</label>
-      <input 
-        type="text" 
-        class="form-control" 
-        id="fieldFilter" 
-        [(ngModel)]="fieldFilter" 
-        placeholder="Enter field to filter...">
+    <!-- Tag Page Filters -->
+    <div *ngIf="pageType === 'tag'">
+      <div class="mb-3">
+        <label for="tagName" class="form-label">Tag Name</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="tagName" 
+          [(ngModel)]="tagName"
+          placeholder="Enter tag name...">
+      </div>
+      
+      <div class="mb-3">
+        <label for="fromDate" class="form-label">From Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="fromDate" 
+          [(ngModel)]="fromDate"
+          (change)="onDateChange()">
+      </div>
+      
+      <div class="mb-4">
+        <label for="toDate" class="form-label">To Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="toDate" 
+          [(ngModel)]="toDate"
+          (change)="onDateChange()">
+        <div class="text-danger mt-1" *ngIf="dateError">
+          <small>{{ dateError }}</small>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Collection Page Filters -->
+    <div *ngIf="pageType === 'collection'">
+      <div class="mb-3">
+        <label for="collectionName" class="form-label">Collection Name</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="collectionName" 
+          [(ngModel)]="collectionName"
+          placeholder="Enter collection name...">
+      </div>
+      
+      <div class="mb-3">
+        <label for="fromDate" class="form-label">From Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="fromDate" 
+          [(ngModel)]="fromDate"
+          (change)="onDateChange()">
+      </div>
+      
+      <div class="mb-4">
+        <label for="toDate" class="form-label">To Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="toDate" 
+          [(ngModel)]="toDate"
+          (change)="onDateChange()">
+        <div class="text-danger mt-1" *ngIf="dateError">
+          <small>{{ dateError }}</small>
+        </div>
+      </div>
+    </div>
+    
+    <!-- User Page Filters -->
+    <div *ngIf="pageType === 'user'">
+      <div class="mb-3">
+        <label for="userRole" class="form-label">User Role</label>
+        <select 
+          class="form-select" 
+          id="userRole" 
+          [(ngModel)]="userRole">
+          <option value="">Select user role...</option>
+          <option *ngFor="let role of userRoles" [value]="role.roleName">
+            {{ role.roleName }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="mb-3">
+        <label for="userName" class="form-label">User Name</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="userName" 
+          [(ngModel)]="userName"
+          placeholder="Enter user name...">
+      </div>
+      
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input 
+          type="email" 
+          class="form-control" 
+          id="email" 
+          [(ngModel)]="email"
+          placeholder="Enter email address...">
+      </div>
+      
+      <div class="mb-3">
+        <label for="fromDate" class="form-label">From Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="fromDate" 
+          [(ngModel)]="fromDate"
+          (change)="onDateChange()">
+      </div>
+      
+      <div class="mb-4">
+        <label for="toDate" class="form-label">To Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="toDate" 
+          [(ngModel)]="toDate"
+          (change)="onDateChange()">
+        <div class="text-danger mt-1" *ngIf="dateError">
+          <small>{{ dateError }}</small>
+        </div>
+      </div>
+    </div>
+    
+    <!-- User Role Page Filters -->
+    <div *ngIf="pageType === 'userRole'">
+      <div class="mb-3">
+        <label for="roleName" class="form-label">Role Name</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="roleName" 
+          [(ngModel)]="roleName"
+          placeholder="Enter role name...">
+      </div>
+      
+      <div class="mb-3">
+        <label for="tag" class="form-label">Tags</label>
+        <select 
+          class="form-select" 
+          id="tag" 
+          [(ngModel)]="tag">
+          <option value="">Select tag...</option>
+          <option *ngFor="let tagItem of tags" [value]="tagItem.tagName">
+            {{ tagItem.tagName }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="mb-3">
+        <label for="fromDate" class="form-label">From Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="fromDate" 
+          [(ngModel)]="fromDate"
+          (change)="onDateChange()">
+      </div>
+      
+      <div class="mb-4">
+        <label for="toDate" class="form-label">To Date</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="toDate" 
+          [(ngModel)]="toDate"
+          (change)="onDateChange()">
+        <div class="text-danger mt-1" *ngIf="dateError">
+          <small>{{ dateError }}</small>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Generic Filters for Other Pages -->
+    <div *ngIf="pageType !== 'content' && pageType !== 'contentType' && pageType !== 'tag' && pageType !== 'collection' && pageType !== 'user' && pageType !== 'userRole'">
+      <div class="mb-3">
+        <label for="titleFilter" class="form-label">Title Filter</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="titleFilter" 
+          [(ngModel)]="titleFilter" 
+          placeholder="Enter title to filter...">
+      </div>
+      
+      <div class="mb-4">
+        <label for="fieldFilter" class="form-label">Field Filter</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="fieldFilter" 
+          [(ngModel)]="fieldFilter" 
+          placeholder="Enter field to filter...">
+      </div>
     </div>
   </div>
   
@@ -33,7 +255,11 @@
     <button type="button" class="btn btn-secondary me-2" (click)="onClearFilter()">
       Clear
     </button>
-    <button type="button" class="btn btn-primary" (click)="onApplyFilter()">
+    <button 
+      type="button" 
+      class="btn btn-primary" 
+      (click)="onApplyFilter()"
+      [disabled]="!!dateError">
       Apply Filter
     </button>
   </div>

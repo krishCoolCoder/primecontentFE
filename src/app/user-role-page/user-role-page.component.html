@@ -125,5 +125,7 @@
 <!-- Filter Modal -->
 <app-filter-modal 
     [isOpen]="isFilterOpen"
-    (closeFilter)="closeFilter()">
+    [pageType]="'userRole'"
+    (closeFilter)="closeFilter()"
+    (applyFilter)="onApplyFilter($event)">
 </app-filter-modal>

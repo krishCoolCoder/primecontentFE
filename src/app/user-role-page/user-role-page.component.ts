@@ -3,7 +3,7 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Router } from '@angular/router';
 import { NgFor, CommonModule } from '@angular/common';
-import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
+import { FilterModalComponent, UserRoleFilter } from '../modals/filter-modal/filter-modal.component';
 import { ApiService } from '../services/api.service';
 import { UserRole } from '../models/user-role.model';
 
@@ -20,6 +20,7 @@ export class UserRolePageComponent implements OnInit {
   listView: boolean = true;
   gridView: boolean = false;
   loading: boolean = false;
+  currentFilters: UserRoleFilter | null = null;
 
   constructor(
     private router: Router,
@@ -30,10 +31,18 @@ export class UserRolePageComponent implements OnInit {
     this.loadUserRoles();
   }
 
-  loadUserRoles() {
+  loadUserRoles(filters?: UserRoleFilter) {
     this.loading = true;
     console.log('Loading user roles...');
-    this.apiService.getAllUserRolesData().subscribe({
+    
+    const apiFilters = filters ? {
+      roleName: filters.roleName || undefined,
+      fromDate: filters.fromDate || undefined,
+      toDate: filters.toDate || undefined,
+      tag: filters.tag || undefined
+    } : undefined;
+
+    this.apiService.getAllUserRolesDataWithFilters(apiFilters).subscribe({
       next: (userRoles) => {
         console.log('User roles received:', userRoles);
         console.log('Number of roles:', userRoles.length);
@@ -70,7 +79,7 @@ export class UserRolePageComponent implements OnInit {
     if (confirm(`Are you sure you want to delete the user role "${userRole.roleName}"?`)) {
       this.apiService.deleteUserRole(userRole._id!).subscribe({
         next: () => {
-          this.loadUserRoles(); // Refresh the list
+          this.loadUserRoles(this.currentFilters || undefined); // Refresh with current filters
         },
         error: (error) => {
           console.error('Error deleting user role:', error);
@@ -96,6 +105,12 @@ export class UserRolePageComponent implements OnInit {
 
   closeFilter() {
     this.isFilterOpen = false;
+  }
+
+  onApplyFilter(filters: UserRoleFilter) {
+    this.currentFilters = filters;
+    this.loadUserRoles(filters);
+    this.closeFilter();
   }
 
   // Helper method to check if tags is an object with tagName

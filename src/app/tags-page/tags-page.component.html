@@ -114,7 +114,9 @@
 <!-- Filter Modal -->
 <app-filter-modal 
     [isOpen]="isFilterOpen"
-    (closeFilter)="closeFilter()">
+    [pageType]="'tag'"
+    (closeFilter)="closeFilter()"
+    (applyFilter)="onApplyFilter($event)">
 </app-filter-modal>
 
 <!-- Delete Confirmation Modal -->

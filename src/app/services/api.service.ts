@@ -9,7 +9,7 @@ import { ToastService } from '../shared/toast/toast.service';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://api.primecontent.in';
+  private baseUrl = 'http://localhost:3000';
 
   constructor(
     private http: HttpClient,
@@ -101,6 +101,42 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  // 1a. Get All Users with filters
+  getAllUsersWithFilters(filters?: { userRole?: string, userName?: string, email?: string, fromDate?: string, toDate?: string }): Observable<any> {
+    let url = `${this.baseUrl}/api/users`;
+    
+    if (filters) {
+      const queryParams = new URLSearchParams();
+      
+      if (filters.userRole) {
+        queryParams.append('userRole', filters.userRole);
+      }
+      
+      if (filters.userName) {
+        queryParams.append('userName', filters.userName);
+      }
+      
+      if (filters.email) {
+        queryParams.append('email', filters.email);
+      }
+      
+      if (filters.fromDate) {
+        queryParams.append('fromDate', filters.fromDate);
+      }
+      
+      if (filters.toDate) {
+        queryParams.append('toDate', filters.toDate);
+      }
+      
+      if (queryParams.toString()) {
+        url += `?${queryParams.toString()}`;
+      }
+    }
+    
+    return this.http.get(url, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
   // 2. Get Users Count
   getUsersCount(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/users/count`, { headers: this.getHeaders() })
@@ -145,6 +181,34 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  // 2a. Get All Tags with filters
+  getAllTagsWithFilters(filters?: { tagName?: string, fromDate?: string, toDate?: string }): Observable<any> {
+    let url = `${this.baseUrl}/api/tags`;
+    
+    if (filters) {
+      const queryParams = new URLSearchParams();
+      
+      if (filters.tagName) {
+        queryParams.append('tagName', filters.tagName);
+      }
+      
+      if (filters.fromDate) {
+        queryParams.append('fromDate', filters.fromDate);
+      }
+      
+      if (filters.toDate) {
+        queryParams.append('toDate', filters.toDate);
+      }
+      
+      if (queryParams.toString()) {
+        url += `?${queryParams.toString()}`;
+      }
+    }
+    
+    return this.http.get(url, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
   // 3. Get Tags Count
   getTagsCount(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/tags/count`, { headers: this.getHeaders() })
@@ -180,6 +244,34 @@ export class ApiService {
   // 2. Get All Content Types
   getAllContentTypes(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/content-types`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
+  // 2a. Get All Content Types with filters
+  getAllContentTypesWithFilters(filters?: { contentType?: string, fromDate?: string, toDate?: string }): Observable<any> {
+    let url = `${this.baseUrl}/api/content-types`;
+    
+    if (filters) {
+      const queryParams = new URLSearchParams();
+      
+      if (filters.contentType) {
+        queryParams.append('contentType', filters.contentType);
+      }
+      
+      if (filters.fromDate) {
+        queryParams.append('fromDate', filters.fromDate);
+      }
+      
+      if (filters.toDate) {
+        queryParams.append('toDate', filters.toDate);
+      }
+      
+      if (queryParams.toString()) {
+        url += `?${queryParams.toString()}`;
+      }
+    }
+    
+    return this.http.get(url, { headers: this.getHeaders() })
       .pipe(catchError(this.handleError));
   }
 
@@ -224,6 +316,34 @@ export class ApiService {
   // 2. Get All Contents
   getAllContents(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/contents`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
+  // 2a. Get All Contents with filters
+  getAllContentsWithFilters(filters?: { contentType?: string, fromDate?: string, toDate?: string }): Observable<any> {
+    let url = `${this.baseUrl}/api/contents`;
+    
+    if (filters) {
+      const queryParams = new URLSearchParams();
+      
+      if (filters.contentType) {
+        queryParams.append('contentType', filters.contentType);
+      }
+      
+      if (filters.fromDate) {
+        queryParams.append('fromDate', filters.fromDate);
+      }
+      
+      if (filters.toDate) {
+        queryParams.append('toDate', filters.toDate);
+      }
+      
+      if (queryParams.toString()) {
+        url += `?${queryParams.toString()}`;
+      }
+    }
+    
+    return this.http.get(url, { headers: this.getHeaders() })
       .pipe(catchError(this.handleError));
   }
 
@@ -274,6 +394,34 @@ export class ApiService {
   // 2. Get All Collections
   getAllCollections(): Observable<any> {
     return this.http.get(`${this.baseUrl}/collection`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
+  // 2a. Get All Collections with filters
+  getAllCollectionsWithFilters(filters?: { collectionName?: string, fromDate?: string, toDate?: string }): Observable<any> {
+    let url = `${this.baseUrl}/collection`;
+    
+    if (filters) {
+      const queryParams = new URLSearchParams();
+      
+      if (filters.collectionName) {
+        queryParams.append('collectionName', filters.collectionName);
+      }
+      
+      if (filters.fromDate) {
+        queryParams.append('fromDate', filters.fromDate);
+      }
+      
+      if (filters.toDate) {
+        queryParams.append('toDate', filters.toDate);
+      }
+      
+      if (queryParams.toString()) {
+        url += `?${queryParams.toString()}`;
+      }
+    }
+    
+    return this.http.get(url, { headers: this.getHeaders() })
       .pipe(catchError(this.handleError));
   }
 
@@ -366,6 +514,19 @@ export class ApiService {
     );
   }
 
+  // Get users with username mapping and filters
+  getUsersWithMappingFiltered(filters?: { userRole?: string, userName?: string, email?: string, fromDate?: string, toDate?: string }): Observable<any> {
+    return this.getAllUsersWithFilters(filters).pipe(
+      map((response: any) => ({
+        ...response,
+        data: response.data.map((user: any) => ({
+          ...user,
+          username: user.userName || user.email || ''
+        }))
+      }))
+    );
+  }
+
   // Get user by ID with username mapping
   getUserByIdWithMapping(userId: string): Observable<any> {
     return this.getUserById(userId).pipe(
@@ -420,6 +581,13 @@ export class ApiService {
     );
   }
 
+  // Get all contents with filters
+  getAllContentsDataWithFilters(filters?: { contentType?: string, fromDate?: string, toDate?: string }): Observable<any[]> {
+    return this.getAllContentsWithFilters(filters).pipe(
+      map((response: any) => response.data)
+    );
+  }
+
   // Get content by ID
   getContentByIdData(contentId: string): Observable<any> {
     return this.getContentById(contentId).pipe(
@@ -457,6 +625,13 @@ export class ApiService {
     );
   }
 
+  // Get all tags data with filters
+  getAllTagsDataWithFilters(filters?: { tagName?: string, fromDate?: string, toDate?: string }): Observable<any[]> {
+    return this.getAllTagsWithFilters(filters).pipe(
+      map((response: any) => response.data)
+    );
+  }
+
   // Get tag by ID data
   getTagByIdData(tagId: string): Observable<any> {
     return this.getTagById(tagId).pipe(
@@ -476,6 +651,13 @@ export class ApiService {
   // Get all content types data
   getAllContentTypesData(): Observable<any[]> {
     return this.getAllContentTypes().pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get all content types data with filters
+  getAllContentTypesDataWithFilters(filters?: { contentType?: string, fromDate?: string, toDate?: string }): Observable<any[]> {
+    return this.getAllContentTypesWithFilters(filters).pipe(
       map((response: any) => response.data)
     );
   }
@@ -505,6 +687,38 @@ export class ApiService {
   // 2. Get All User Roles
   getAllUserRoles(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/userRole`, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
+  // 2a. Get All User Roles with filters
+  getAllUserRolesWithFilters(filters?: { roleName?: string, fromDate?: string, toDate?: string, tag?: string }): Observable<any> {
+    let url = `${this.baseUrl}/api/userRole`;
+    
+    if (filters) {
+      const queryParams = new URLSearchParams();
+      
+      if (filters.roleName) {
+        queryParams.append('roleName', filters.roleName);
+      }
+      
+      if (filters.fromDate) {
+        queryParams.append('fromDate', filters.fromDate);
+      }
+      
+      if (filters.toDate) {
+        queryParams.append('toDate', filters.toDate);
+      }
+      
+      if (filters.tag) {
+        queryParams.append('tag', filters.tag);
+      }
+      
+      if (queryParams.toString()) {
+        url += `?${queryParams.toString()}`;
+      }
+    }
+    
+    return this.http.get(url, { headers: this.getHeaders() })
       .pipe(catchError(this.handleError));
   }
 
@@ -547,6 +761,13 @@ export class ApiService {
     );
   }
 
+  // Get all user roles data with filters
+  getAllUserRolesDataWithFilters(filters?: { roleName?: string, fromDate?: string, toDate?: string, tag?: string }): Observable<any[]> {
+    return this.getAllUserRolesWithFilters(filters).pipe(
+      map((response: any) => response.data)
+    );
+  }
+
   // Get user role by ID data
   getUserRoleByIdData(userRoleId: string): Observable<any> {
     return this.getUserRoleById(userRoleId).pipe(
@@ -566,6 +787,13 @@ export class ApiService {
   // Get all collections data
   getAllCollectionsData(): Observable<any[]> {
     return this.getAllCollections().pipe(
+      map((response: any) => response.data)
+    );
+  }
+
+  // Get all collections data with filters
+  getAllCollectionsDataWithFilters(filters?: { collectionName?: string, fromDate?: string, toDate?: string }): Observable<any[]> {
+    return this.getAllCollectionsWithFilters(filters).pipe(
       map((response: any) => response.data)
     );
   }

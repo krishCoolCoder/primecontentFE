@@ -3,7 +3,7 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Router } from '@angular/router';
 import { NgFor, CommonModule } from '@angular/common';
-import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
+import { FilterModalComponent, TagFilter } from '../modals/filter-modal/filter-modal.component';
 import { DeleteTagModalComponent } from '../modals/delete-tag-modal/delete-tag-modal.component';
 import { ApiService } from '../services/api.service';
 
@@ -20,6 +20,7 @@ export class TagsPageComponent implements OnInit {
   listView: boolean = true;
   gridView: boolean = false;
   selectedTag: any = null;
+  currentFilters: TagFilter | null = null;
 
   constructor(
     private router: Router,
@@ -30,8 +31,14 @@ export class TagsPageComponent implements OnInit {
     this.loadTags();
   }
 
-  loadTags() {
-    this.apiService.getAllTagsData().subscribe({
+  loadTags(filters?: TagFilter) {
+    const apiFilters = filters ? {
+      tagName: filters.tagName || undefined,
+      fromDate: filters.fromDate || undefined,
+      toDate: filters.toDate || undefined
+    } : undefined;
+
+    this.apiService.getAllTagsDataWithFilters(apiFilters).subscribe({
       next: (response) => {
         console.log('Tags loaded:', response);
         this.tags = response.reverse(); // Reverse to show recent tags first
@@ -95,8 +102,8 @@ export class TagsPageComponent implements OnInit {
             modal.hide();
           }
           
-          // Reload tags list
-          this.loadTags();
+          // Reload tags list with current filters
+          this.loadTags(this.currentFilters || undefined);
           this.selectedTag = null;
         },
         error: (error) => {
@@ -115,5 +122,12 @@ export class TagsPageComponent implements OnInit {
     if (modal) {
       modal.hide();
     }
+  }
+
+  onApplyFilter(filters: TagFilter) {
+    console.log('Applying filters:', filters);
+    this.currentFilters = filters;
+    this.loadTags(filters);
+    this.closeFilter();
   }
 }

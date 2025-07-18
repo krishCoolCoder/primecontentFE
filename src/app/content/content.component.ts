@@ -4,7 +4,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { CreateContentModelComponent } from '../modals/create-content-model/create-content-model.component';
 import { Router } from '@angular/router';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
+import { FilterModalComponent, ContentFilter } from '../modals/filter-modal/filter-modal.component';
 import { DeleteContentModalComponent } from '../modals/delete-content-modal/delete-content-modal.component';
 import { ApiService } from '../services/api.service';
 import { Content } from '../models/content.model';
@@ -22,6 +22,7 @@ export class ContentComponent implements OnInit {
   isFilterOpen: boolean = false;
   selectedContent: Content | null = null;
   contentList: Content[] = [];
+  currentFilters: ContentFilter | null = null;
   
   constructor(
     private router: Router,
@@ -32,8 +33,14 @@ export class ContentComponent implements OnInit {
     this.loadContents();
   }
 
-  loadContents() {
-    this.apiService.getAllContentsData().subscribe({
+  loadContents(filters?: ContentFilter) {
+    const apiFilters = filters ? {
+      contentType: filters.contentType || undefined,
+      fromDate: filters.fromDate || undefined,
+      toDate: filters.toDate || undefined
+    } : undefined;
+
+    this.apiService.getAllContentsDataWithFilters(apiFilters).subscribe({
       next: (response) => {
         console.log('Contents loaded:', response);
         this.contentList = response.reverse(); // Reverse to show recent contents first
@@ -66,39 +73,37 @@ export class ContentComponent implements OnInit {
     this.isFilterOpen = false;
   }
 
+  onApplyFilter(filters: ContentFilter) {
+    console.log('Applying filters:', filters);
+    this.currentFilters = filters;
+    this.loadContents(filters);
+  }
+
   viewContent(content: Content) {
     console.log('View content clicked:', content);
-    this.router.navigate(['/viewContent', content._id]);
+    if (content._id) {
+      this.router.navigate(['/viewContent', content._id]);
+    }
   }
 
   editContent(content: Content) {
     console.log('Edit content clicked:', content);
-    this.router.navigate(['/editContent', content._id]);
+    if (content._id) {
+      this.router.navigate(['/editContent', content._id]);
+    }
   }
 
   deleteContent(content: Content) {
     console.log('Delete content clicked:', content);
     this.selectedContent = content;
-    // Trigger Bootstrap modal
-    const modal = new (window as any).bootstrap.Modal(document.getElementById('deleteContentModal'));
-    modal.show();
   }
 
   onConfirmDelete() {
-    console.log('Confirm delete clicked for:', this.selectedContent);
     if (this.selectedContent && this.selectedContent._id) {
       this.apiService.deleteContent(this.selectedContent._id).subscribe({
         next: (response) => {
-          console.log('Content deleted successfully:', response);
-          
-          // Hide the modal
-          const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteContentModal'));
-          if (modal) {
-            modal.hide();
-          }
-          
-          // Reload contents list
-          this.loadContents();
+          console.log('Content deleted:', response);
+          this.loadContents(this.currentFilters || undefined); // Refresh the list with current filters
           this.selectedContent = null;
         },
         error: (error) => {
@@ -109,12 +114,6 @@ export class ContentComponent implements OnInit {
   }
 
   onCancelDelete() {
-    console.log('Cancel delete clicked');
     this.selectedContent = null;
-    // Hide the modal
-    const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteContentModal'));
-    if (modal) {
-      modal.hide();
-    }
   }
 }

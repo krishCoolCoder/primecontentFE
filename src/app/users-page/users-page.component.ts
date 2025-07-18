@@ -3,19 +3,22 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { Router } from '@angular/router';
 import { NgFor, CommonModule } from '@angular/common';
+import { FilterModalComponent, UserFilter } from '../modals/filter-modal/filter-modal.component';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-users-page',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule],
+  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule, FilterModalComponent],
   templateUrl: './users-page.component.html',
   styleUrl: './users-page.component.css'
 })
 export class UsersPageComponent implements OnInit {
   users: User[] = [];
   selectedUser: User | null = null;
+  isFilterOpen: boolean = false;
+  currentFilters: UserFilter | null = null;
 
   constructor(
     private router: Router,
@@ -26,8 +29,16 @@ export class UsersPageComponent implements OnInit {
     this.loadUsers();
   }
 
-  loadUsers() {
-    this.apiService.getUsersWithMapping().subscribe({
+  loadUsers(filters?: UserFilter) {
+    const apiFilters = filters ? {
+      userRole: filters.userRole || undefined,
+      userName: filters.userName || undefined,
+      email: filters.email || undefined,
+      fromDate: filters.fromDate || undefined,
+      toDate: filters.toDate || undefined
+    } : undefined;
+
+    this.apiService.getUsersWithMappingFiltered(apiFilters).subscribe({
       next: (response) => {
         console.log('Users loaded:', response);
         this.users = response.data.reverse(); // Reverse to show recent users first
@@ -69,7 +80,7 @@ export class UsersPageComponent implements OnInit {
           }
           
           // Reload users list
-          this.loadUsers();
+          this.loadUsers(this.currentFilters || undefined);
           this.selectedUser = null;
         },
         error: (error) => {
@@ -87,5 +98,20 @@ export class UsersPageComponent implements OnInit {
     if (modal) {
       modal.hide();
     }
+  }
+
+  openFilter() {
+    this.isFilterOpen = true;
+  }
+
+  closeFilter() {
+    this.isFilterOpen = false;
+  }
+
+  onApplyFilter(filters: UserFilter) {
+    console.log('Applying filters:', filters);
+    this.currentFilters = filters;
+    this.loadUsers(filters);
+    this.closeFilter();
   }
 }

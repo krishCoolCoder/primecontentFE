@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { NgFor, CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
 import { DeleteConfirmationModalComponent } from '../modals/delete-confirmation-modal/delete-confirmation-modal.component';
-import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
+import { FilterModalComponent, ContentFilter } from '../modals/filter-modal/filter-modal.component';
 
 @Component({
   selector: 'app-content-type-page',
@@ -20,6 +20,7 @@ export class ContentTypePageComponent implements OnInit {
   listView: boolean = true;
   gridView: boolean = false;
   isFilterOpen: boolean = false;
+  currentFilters: ContentFilter | null = null;
 
   constructor(
     private router: Router,
@@ -30,8 +31,14 @@ export class ContentTypePageComponent implements OnInit {
     this.loadContentTypes();
   }
 
-  loadContentTypes() {
-    this.apiService.getAllContentTypesData().subscribe({
+  loadContentTypes(filters?: ContentFilter) {
+    const apiFilters = filters ? {
+      contentType: filters.contentType || undefined,
+      fromDate: filters.fromDate || undefined,
+      toDate: filters.toDate || undefined
+    } : undefined;
+
+    this.apiService.getAllContentTypesDataWithFilters(apiFilters).subscribe({
       next: (response) => {
         console.log('Content types loaded:', response);
         this.contentTypeList = response;
@@ -84,7 +91,7 @@ export class ContentTypePageComponent implements OnInit {
       this.apiService.deleteContentType(this.selectedContentType._id).subscribe({
         next: (response) => {
           console.log('Content type deleted successfully:', response);
-          this.loadContentTypes(); // Refresh the list
+          this.loadContentTypes(this.currentFilters || undefined); // Refresh with current filters
           this.selectedContentType = null;
         },
         error: (error) => {
@@ -97,6 +104,12 @@ export class ContentTypePageComponent implements OnInit {
 
   onCancelDelete() {
     this.selectedContentType = null;
+  }
+
+  onApplyFilter(filters: ContentFilter) {
+    this.currentFilters = filters;
+    this.loadContentTypes(filters);
+    this.closeFilter();
   }
 
   // Generate URL for content type

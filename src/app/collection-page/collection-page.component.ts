@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { NgFor, CommonModule } from '@angular/common';
-import { FilterModalComponent } from '../modals/filter-modal/filter-modal.component';
+import { FilterModalComponent, CollectionFilter } from '../modals/filter-modal/filter-modal.component';
 import { DeleteConfirmationModalComponent } from '../modals/delete-confirmation-modal/delete-confirmation-modal.component';
 import { ApiService } from '../services/api.service';
 import { Collection } from '../models/collection.model';
@@ -23,6 +23,7 @@ export class CollectionPageComponent implements OnInit {
   gridView: boolean = false;
   loading: boolean = false;
   error: string | null = null;
+  currentFilters: CollectionFilter | null = null;
   
   // Delete confirmation modal state
   selectedCollection: Collection | null = null;
@@ -38,11 +39,17 @@ export class CollectionPageComponent implements OnInit {
     this.loadCollections();
   }
 
-  loadCollections() {
+  loadCollections(filters?: CollectionFilter) {
     this.loading = true;
     this.error = null;
     
-    this.apiService.getAllCollectionsData().subscribe({
+    const apiFilters = filters ? {
+      collectionName: filters.collectionName || undefined,
+      fromDate: filters.fromDate || undefined,
+      toDate: filters.toDate || undefined
+    } : undefined;
+    
+    this.apiService.getAllCollectionsDataWithFilters(apiFilters).subscribe({
       next: (collections) => {
         this.collectionList = collections;
         this.loading = false;
@@ -77,6 +84,12 @@ export class CollectionPageComponent implements OnInit {
     this.isFilterOpen = false;
   }
 
+  onApplyFilter(filters: CollectionFilter) {
+    this.currentFilters = filters;
+    this.loadCollections(filters);
+    this.closeFilter();
+  }
+
   // View collection details
   viewCollection(collection: Collection) {
     if (collection._id) {
@@ -105,7 +118,7 @@ export class CollectionPageComponent implements OnInit {
       this.apiService.deleteCollection(this.selectedCollection._id).subscribe({
         next: (response) => {
           console.log('Collection deleted:', response);
-          this.loadCollections(); // Refresh the list
+          this.loadCollections(this.currentFilters || undefined); // Refresh with current filters
           this.cancelDelete();
           this.toastService.showSuccess('Collection deleted successfully!');
         },

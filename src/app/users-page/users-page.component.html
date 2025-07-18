@@ -10,6 +10,9 @@
                 (click)="redirectToCreateUser()"
                 >Create User</button>
             </div>
+            <div class="contentFilter">
+                <button type="button" class="btn btn-primary" (click)="openFilter()">User filter</button>
+            </div>
         </div>
         
         <!-- List View -->
@@ -47,6 +50,14 @@
         </div>
     </div>
 </div>
+
+<!-- Filter Modal -->
+<app-filter-modal 
+    [isOpen]="isFilterOpen"
+    [pageType]="'user'"
+    (closeFilter)="closeFilter()"
+    (applyFilter)="onApplyFilter($event)">
+</app-filter-modal>
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">

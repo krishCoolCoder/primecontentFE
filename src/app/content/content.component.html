@@ -1,18 +1,13 @@
 <app-header></app-header>
 <div class="d-flex">
     <app-sidebar></app-sidebar>
-    <!-- <app-create-content-model></app-create-content-model> -->
     <div class="container">
         <div class="contentContainer d-flex justify-content-between align-items-center">
-            <!-- <button 
+            <button 
             type="button createContent" 
             class="btn btn-primary" 
-            data-bs-toggle="modal" 
-            data-bs-target="#createContentModelSummon"
             (click)="redirectToCreateContent()"
-            >Create content</button> -->
-            <button type="button createContent" class="btn btn-primary" (click)="redirectToCreateContent()">Create
-                content</button>
+            >Create Content</button>
             <div class="viewOptions d-flex justify-content-center align-items-center">
                 <div class="gridView me-2" (click)="setGridView()">
                     <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,16 +63,13 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center mt-4" *ngIf="contentList.length === 0">
-                <p class="text-muted">No content found. Create your first content!</p>
-            </div>
         </div>
+
         <ng-template #gridViewTemplate>
             <div class="container viewContainer">
-                <div class="row row-cols-4">
-                    <div class="col w-auto" *ngFor="let item of contentList">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+                    <div class="col mb-3" *ngFor="let item of contentList">
                         <div class="item">
-
                             <div class="dropdown">
                                 <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">...</div>
@@ -93,7 +85,6 @@
                                     </li>
                                 </ul>
                             </div>
-
                             <p class="title">
                                 {{item.contentType}}
                             </p>
@@ -117,7 +108,9 @@
 <!-- Filter Modal -->
 <app-filter-modal 
     [isOpen]="isFilterOpen"
-    (closeFilter)="closeFilter()">
+    [pageType]="'content'"
+    (closeFilter)="closeFilter()"
+    (applyFilter)="onApplyFilter($event)">
 </app-filter-modal>
 
 <!-- Delete Confirmation Modal -->

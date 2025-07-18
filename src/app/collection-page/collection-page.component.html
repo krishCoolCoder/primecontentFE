@@ -182,7 +182,9 @@
 <!-- Filter Modal -->
 <app-filter-modal 
     [isOpen]="isFilterOpen"
-    (closeFilter)="closeFilter()">
+    [pageType]="'collection'"
+    (closeFilter)="closeFilter()"
+    (applyFilter)="onApplyFilter($event)">
 </app-filter-modal>
 
 <!-- Delete Confirmation Modal -->
