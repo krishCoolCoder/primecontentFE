@@ -27,32 +27,32 @@ export class UserAccessPageComponent implements OnInit {
     {
       name: 'Content',
       key: 'content',
-      permissions: ['canRead', 'canCreate', 'canUpdate', 'canDelete']
+      permissions: ['canViewAll', 'canRead', 'canCreate', 'canUpdate', 'canDelete']
     },
     {
       name: 'Content Type',
       key: 'contentType',
-      permissions: ['canRead', 'canCreate', 'canUpdate', 'canDelete']
+      permissions: ['canViewAll', 'canRead', 'canCreate', 'canUpdate', 'canDelete']
     },
     {
       name: 'Tag',
       key: 'tag',
-      permissions: ['canRead', 'canCreate', 'canUpdate', 'canDelete']
+      permissions: ['canViewAll', 'canRead', 'canCreate', 'canUpdate', 'canDelete']
     },
     {
       name: 'Collection',
       key: 'collections',
-      permissions: ['canRead', 'canCreate', 'canUpdate', 'canDelete']
+      permissions: ['canViewAll', 'canRead', 'canCreate', 'canUpdate', 'canDelete']
     },
     {
       name: 'User',
       key: 'user',
-      permissions: ['canRead', 'canCreate', 'canUpdate', 'canDelete']
+      permissions: ['canViewAll', 'canRead', 'canCreate', 'canUpdate', 'canDelete']
     },
     {
       name: 'User Role',
       key: 'userRole',
-      permissions: ['canRead', 'canCreate', 'canUpdate', 'canDelete']
+      permissions: ['canViewAll', 'canRead', 'canCreate', 'canUpdate', 'canDelete']
     }
   ];
 

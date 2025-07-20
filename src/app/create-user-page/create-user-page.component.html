@@ -48,12 +48,12 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label for="role" class="form-label">Role</label>
-                    <select id="role" class="form-select w-50" [(ngModel)]="user.role" name="role" required>
-                        <option value="superAdmin">Super Admin</option>
-                        <option value="admin">Admin</option>
-                        <option value="user" selected>User</option>
-                        <option value="annonymous">Anonymous</option>
+                <label for="role" class="form-label">Role *</label>
+                    <select id="role" class="form-select w-50" [(ngModel)]="user.userRoleId" name="userRoleId" (change)="onRoleChange($event)" required>
+                        <option value="">Select a role</option>
+                        <option *ngFor="let userRole of userRoles" [value]="userRole._id">
+                            {{ userRole.roleName }}
+                        </option>
                     </select>
             </div>
             <button type="submit" class="btn btn-primary me-4" [disabled]="!userForm.form.valid">

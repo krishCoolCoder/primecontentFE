@@ -66,7 +66,7 @@
 .permissions-table {
     margin: 0;
     font-size: 14px;
-    min-width: 1400px; /* Increased minimum width to accommodate all columns */
+    min-width: 1700px; /* Increased from 1400px to accommodate canViewAll columns */
     table-layout: auto; /* Changed to auto for better column distribution */
     width: max-content; /* Ensure table takes full width of content */
 }
@@ -169,9 +169,39 @@
     background-color: #e9ecef;
 }
 
+/* Special styling for canViewAll permission */
+.permission-cell.view-all-cell {
+    background-color: #fff3cd;
+    border-left: 3px solid #ffc107;
+}
+
+.permission-cell.view-all-cell:hover {
+    background-color: #ffeaa7;
+}
+
+.permission-header.view-all-header {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+    font-weight: 600;
+}
+
 .permission-checkbox {
     transform: scale(1.2);
     cursor: pointer;
+}
+
+.permission-checkbox.view-all-toggle {
+    transform: scale(1.4);
+    border: 2px solid #ffc107;
+}
+
+.permission-checkbox.view-all-toggle:checked {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.permission-checkbox.view-all-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
 }
 
 .permission-checkbox:checked {

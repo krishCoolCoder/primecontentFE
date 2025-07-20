@@ -18,6 +18,7 @@ export interface PermissionSet {
   canCreate: boolean;
   canUpdate: boolean;
   canDelete: boolean;
+  canViewAll: boolean;
 }
 
 export interface UserAccess {

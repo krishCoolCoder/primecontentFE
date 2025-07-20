@@ -54,8 +54,9 @@
                         <th class="sticky-column"></th>
                         <th class="sticky-column"></th>
                         <ng-container *ngFor="let category of permissionCategories">
-                            <th *ngFor="let permission of category.permissions" class="permission-header">
-                                {{ permission.replace('can', '') | titlecase }}
+                            <th *ngFor="let permission of category.permissions" 
+                                [class]="'permission-header' + (permission === 'canViewAll' ? ' view-all-header' : '')">
+                                {{ permission === 'canViewAll' ? 'View All' : permission.replace('can', '') | titlecase }}
                             </th>
                         </ng-container>
                     </tr>
@@ -72,10 +73,11 @@
                             </div>
                         </td>
                         <ng-container *ngFor="let category of permissionCategories">
-                            <td *ngFor="let permission of category.permissions" class="permission-cell">
+                            <td *ngFor="let permission of category.permissions" 
+                                [class]="'permission-cell' + (permission === 'canViewAll' ? ' view-all-cell' : '')">
                                 <div class="form-check d-flex justify-content-center">
                                     <input 
-                                        class="form-check-input permission-checkbox" 
+                                        [class]="'form-check-input permission-checkbox' + (permission === 'canViewAll' ? ' view-all-toggle' : '')" 
                                         type="checkbox" 
                                         [id]="'permission-' + userAccess._id + '-' + category.key + '-' + permission"
                                         [checked]="getPermissionValue(userAccess, category.key, permission)"

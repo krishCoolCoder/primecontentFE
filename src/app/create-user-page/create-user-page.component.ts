@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user.model';
+import { UserRole } from '../models/user-role.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -22,10 +23,12 @@ export class CreateUserPageComponent implements OnInit {
     username: '',
     email: '',
     password: '',
-    role: 'user',
+    role: '',
+    userRoleId: '',
     createdAt: new Date()
   };
 
+  userRoles: UserRole[] = [];
   isEditMode = false;
   userId: string = '';
 
@@ -36,11 +39,24 @@ export class CreateUserPageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadUserRoles();
     this.route.params.subscribe(params => {
       if (params['id']) {
         this.isEditMode = true;
         this.userId = params['id'];
         this.loadUserForEdit();
+      }
+    });
+  }
+
+  loadUserRoles() {
+    this.apiService.getAllUserRolesData().subscribe({
+      next: (userRoles) => {
+        this.userRoles = userRoles;
+        console.log('User roles loaded:', userRoles);
+      },
+      error: (error) => {
+        console.error('Error loading user roles:', error);
       }
     });
   }
@@ -57,7 +73,9 @@ export class CreateUserPageComponent implements OnInit {
           // Ensure username is set, fallback to email if username doesn't exist
           username: response.data.username || response.data.email || '',
           // Make sure password is empty for edit mode (security)
-          password: ''
+          password: '',
+          // Ensure userRoleId is set
+          userRoleId: response.data.userRoleId || ''
         };
         
         console.log('User object after assignment:', this.user);
@@ -70,6 +88,8 @@ export class CreateUserPageComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('Submitting user data:', this.user);
+    
     if (this.isEditMode) {
       this.apiService.updateUserWithMapping(this.user._id!, this.user).subscribe({
         next: (response) => {
@@ -91,6 +111,24 @@ export class CreateUserPageComponent implements OnInit {
         }
       });
     }
+  }
+
+  onRoleChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const selectedUserRoleId = target.value;
+    
+    this.user.userRoleId = selectedUserRoleId;
+    
+    // Find the selected role to set the role name
+    const selectedRole = this.userRoles.find(role => role._id === selectedUserRoleId);
+    if (selectedRole) {
+      this.user.role = selectedRole.roleName;
+    }
+    
+    console.log('Role changed:', {
+      userRoleId: this.user.userRoleId,
+      role: this.user.role
+    });
   }
 
   redirectToUserPage() {
