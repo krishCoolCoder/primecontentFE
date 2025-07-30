@@ -5,14 +5,13 @@ import { CreateContentModelComponent } from '../modals/create-content-model/crea
 import { Router } from '@angular/router';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FilterModalComponent, ContentFilter } from '../modals/filter-modal/filter-modal.component';
-import { DeleteContentModalComponent } from '../modals/delete-content-modal/delete-content-modal.component';
 import { ApiService } from '../services/api.service';
 import { Content } from '../models/content.model';
 
 @Component({
   selector: 'app-content',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule, NgIf, FilterModalComponent, DeleteContentModalComponent],
+  imports: [HeaderComponent, SidebarComponent, NgFor, CommonModule, NgIf, FilterModalComponent],
   templateUrl: './content.component.html',
   styleUrl: './content.component.css'
 })
@@ -20,6 +19,7 @@ export class ContentComponent implements OnInit {
   listView: boolean = true;
   gridView: boolean = false;
   isFilterOpen: boolean = false;
+  isDeleteModalOpen: boolean = false;
   selectedContent: Content | null = null;
   contentList: Content[] = [];
   currentFilters: ContentFilter | null = null;
@@ -94,8 +94,8 @@ export class ContentComponent implements OnInit {
   }
 
   deleteContent(content: Content) {
-    console.log('Delete content clicked:', content);
     this.selectedContent = content;
+    this.isDeleteModalOpen = true;
   }
 
   onConfirmDelete() {
@@ -105,9 +105,11 @@ export class ContentComponent implements OnInit {
           console.log('Content deleted:', response);
           this.loadContents(this.currentFilters || undefined); // Refresh the list with current filters
           this.selectedContent = null;
+          this.isDeleteModalOpen = false;
         },
         error: (error) => {
           console.error('Error deleting content:', error);
+          this.isDeleteModalOpen = false;
         }
       });
     }
@@ -115,5 +117,6 @@ export class ContentComponent implements OnInit {
 
   onCancelDelete() {
     this.selectedContent = null;
+    this.isDeleteModalOpen = false;
   }
 }

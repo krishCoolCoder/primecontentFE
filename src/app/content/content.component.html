@@ -114,8 +114,21 @@
 </app-filter-modal>
 
 <!-- Delete Confirmation Modal -->
-<app-delete-content-modal 
-    [contentName]="selectedContent?.contentType || ''" 
-    (confirmDelete)="onConfirmDelete()"
-    (cancelDelete)="onCancelDelete()">
-</app-delete-content-modal>
+<div *ngIf="isDeleteModalOpen" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Delete</h5>
+        <button type="button" class="btn-close" (click)="onCancelDelete()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete the content "<strong>{{ selectedContent?.contentType || '' }}</strong>"?</p>
+        <p class="text-muted">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="onConfirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

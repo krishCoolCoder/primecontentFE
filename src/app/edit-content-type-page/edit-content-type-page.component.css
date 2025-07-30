@@ -34,4 +34,77 @@ button {
     color: white;
     background-color: black;
     border-color: black;
+}
+
+/* Field deletion functionality styles */
+.fields-section {
+    margin-bottom: 20px;
+}
+
+.field-row {
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.field-row:hover {
+    background-color: #f8f9fa;
+}
+
+.delete-button-container {
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-button-container .btn {
+    height: 38px;
+    width: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 4px;
+}
+
+.delete-button-container .btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.delete-button-container .btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.delete-button-container .btn-outline-danger:hover:not(:disabled) {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.action-buttons {
+    border-top: 1px solid #dee2e6;
+    padding-top: 20px;
+}
+
+.action-buttons .btn {
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+}
+
+/* Info alert styling */
+.alert-info {
+    border-left: 4px solid #0dcaf0;
+    background-color: #cff4fc;
+    border-color: #b6effb;
+    color: #055160;
+}
+
+/* Form improvements */
+.form-control, .form-select {
+    height: 38px;
 } 
