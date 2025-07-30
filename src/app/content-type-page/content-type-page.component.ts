@@ -6,6 +6,7 @@ import { NgFor, CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
 import { DeleteConfirmationModalComponent } from '../modals/delete-confirmation-modal/delete-confirmation-modal.component';
 import { FilterModalComponent, ContentFilter } from '../modals/filter-modal/filter-modal.component';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-content-type-page',
@@ -24,7 +25,8 @@ export class ContentTypePageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit() {
@@ -142,5 +144,18 @@ export class ContentTypePageComponent implements OnInit {
     }).catch(err => {
       console.error('Failed to copy cURL command: ', err);
     });
+  }
+
+  // Permission checking methods
+  canEditContentType(): boolean {
+    return this.permissionService.hasUpdatePermission('contentType');
+  }
+
+  canDeleteContentType(): boolean {
+    return this.permissionService.hasDeletePermission('contentType');
+  }
+
+  canCreateContentType(): boolean {
+    return this.permissionService.hasCreatePermission('contentType');
   }
 }

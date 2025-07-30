@@ -12,6 +12,7 @@
             (click)="redirectToCreateContent()"
             >Create content</button> -->
             <button 
+            *ngIf="canCreateContentType()"
             type="button createContent" 
             class="btn btn-primary" 
             (click)="redirectToCreateContentType()"
@@ -44,7 +45,7 @@
             <div class="d-flex justify-content-center align-items-center flex-column pt-2">
                 <div class="w-50" *ngFor="let contentType of contentTypeList">
                     <div class="item">
-                        <div class="dropdown">
+                        <div class="dropdown" *ngIf="canEditContentType() || canDeleteContentType()">
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">...</div>
                             <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -54,10 +55,10 @@
                                 <li>
                                     <div class="dropdown-item" (click)="viewContentType(contentType)">View</div>
                                 </li>
-                                <li>
+                                <li *ngIf="canEditContentType()">
                                     <div class="dropdown-item" (click)="editContentType(contentType)">Edit</div>
                                 </li>
-                                <li>
+                                <li *ngIf="canDeleteContentType()">
                                     <div class="dropdown-item" (click)="deleteContentType(contentType)">Delete</div>
                                 </li>
                             </ul>
@@ -113,17 +114,17 @@
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
                     <div class="col mb-3" *ngFor="let contentType of contentTypeList"> 
                         <div class="item">
-                            <div class="dropdown">
+                            <div class="dropdown" *ngIf="canEditContentType() || canDeleteContentType()">
                                 <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">...</div>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <div class="dropdown-item" (click)="viewContentType(contentType)">View</div>
                                     </li>
-                                    <li>
+                                    <li *ngIf="canEditContentType()">
                                         <div class="dropdown-item" (click)="editContentType(contentType)">Edit</div>
                                     </li>
-                                    <li>
+                                    <li *ngIf="canDeleteContentType()">
                                         <div class="dropdown-item" (click)="deleteContentType(contentType)">Delete</div>
                                     </li>
                                 </ul>

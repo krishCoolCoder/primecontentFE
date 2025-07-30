@@ -8,6 +8,7 @@ import { DeleteConfirmationModalComponent } from '../modals/delete-confirmation-
 import { ApiService } from '../services/api.service';
 import { Collection } from '../models/collection.model';
 import { ToastService } from '../shared/toast/toast.service';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-collection-page',
@@ -32,7 +33,8 @@ export class CollectionPageComponent implements OnInit {
   constructor(
     private router: Router,
     private apiService: ApiService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit() {
@@ -180,5 +182,18 @@ export class CollectionPageComponent implements OnInit {
         console.error('Failed to copy cURL command: ', err);
       });
     }
+  }
+
+  // Permission checking methods
+  canEditCollection(): boolean {
+    return this.permissionService.hasUpdatePermission('collections');
+  }
+
+  canDeleteCollection(): boolean {
+    return this.permissionService.hasDeletePermission('collections');
+  }
+
+  canCreateCollection(): boolean {
+    return this.permissionService.hasCreatePermission('collections');
   }
 }

@@ -7,6 +7,7 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FilterModalComponent, ContentFilter } from '../modals/filter-modal/filter-modal.component';
 import { ApiService } from '../services/api.service';
 import { Content } from '../models/content.model';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-content',
@@ -26,7 +27,8 @@ export class ContentComponent implements OnInit {
   
   constructor(
     private router: Router,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private permissionService: PermissionService
   ) {}
   
   ngOnInit() {
@@ -118,5 +120,18 @@ export class ContentComponent implements OnInit {
   onCancelDelete() {
     this.selectedContent = null;
     this.isDeleteModalOpen = false;
+  }
+
+  // Permission checking methods
+  canEditContent(): boolean {
+    return this.permissionService.hasUpdatePermission('content');
+  }
+
+  canDeleteContent(): boolean {
+    return this.permissionService.hasDeletePermission('content');
+  }
+
+  canCreateContent(): boolean {
+    return this.permissionService.hasCreatePermission('content');
   }
 }

@@ -6,6 +6,7 @@ import { NgFor, CommonModule } from '@angular/common';
 import { FilterModalComponent, UserRoleFilter } from '../modals/filter-modal/filter-modal.component';
 import { ApiService } from '../services/api.service';
 import { UserRole } from '../models/user-role.model';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-user-role-page',
@@ -24,7 +25,8 @@ export class UserRolePageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit() {
@@ -124,5 +126,18 @@ export class UserRolePageComponent implements OnInit {
       return tags.tagName;
     }
     return '';
+  }
+
+  // Permission checking methods
+  canEditUserRole(): boolean {
+    return this.permissionService.hasUpdatePermission('userRole');
+  }
+
+  canDeleteUserRole(): boolean {
+    return this.permissionService.hasDeletePermission('userRole');
+  }
+
+  canCreateUserRole(): boolean {
+    return this.permissionService.hasCreatePermission('userRole');
   }
 }

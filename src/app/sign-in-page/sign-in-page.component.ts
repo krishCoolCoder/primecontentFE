@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-sign-in-page',
@@ -12,10 +13,11 @@ import { ApiService } from '../services/api.service';
 })
 export class SignInPageComponent {
 
-  constructor (
+  constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private permissionService: PermissionService
   ) {}
 
   signinForm  = new FormGroup(
@@ -49,8 +51,19 @@ export class SignInPageComponent {
         this.apiService.setToken(response.data.token);
         this.apiService.setUserInfo(response.data.user);
         
-        // Navigate to dashboard
-        this.router.navigate(["/dashboard"]);
+        // Load user permissions after successful login
+        this.permissionService.loadUserPermissions().subscribe({
+          next: (permissions) => {
+            console.log('Permissions loaded after login:', permissions);
+            // Navigate to dashboard after permissions are loaded
+            this.router.navigate(["/dashboard"]);
+          },
+          error: (permissionError) => {
+            console.warn('Failed to load permissions, proceeding anyway:', permissionError);
+            // Navigate to dashboard even if permissions fail to load
+            this.router.navigate(["/dashboard"]);
+          }
+        });
       },
       error: (error) => {
         console.error('Login failed:', error);

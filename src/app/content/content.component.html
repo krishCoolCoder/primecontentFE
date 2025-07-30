@@ -4,6 +4,7 @@
     <div class="container">
         <div class="contentContainer d-flex justify-content-between align-items-center">
             <button 
+            *ngIf="canCreateContent()"
             type="button createContent" 
             class="btn btn-primary" 
             (click)="redirectToCreateContent()"
@@ -36,17 +37,17 @@
                 <div class="w-50" *ngFor="let item of contentList">
                     <div class="item">
 
-                        <div class="dropdown">
+                        <div class="dropdown" *ngIf="canEditContent() || canDeleteContent()">
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
                                 <li>
                                     <div class="dropdown-item" (click)="viewContent(item)">View</div>
                                 </li>
-                                <li>
+                                <li *ngIf="canEditContent()">
                                     <div class="dropdown-item" (click)="editContent(item)">Edit</div>
                                 </li>
-                                <li>
+                                <li *ngIf="canDeleteContent()">
                                     <div class="dropdown-item" (click)="deleteContent(item)">Delete</div>
                                 </li>
                             </ul>
@@ -70,17 +71,17 @@
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
                     <div class="col mb-3" *ngFor="let item of contentList">
                         <div class="item">
-                            <div class="dropdown">
+                            <div class="dropdown" *ngIf="canEditContent() || canDeleteContent()">
                                 <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">...</div>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <div class="dropdown-item" (click)="viewContent(item)">View</div>
                                     </li>
-                                    <li>
+                                    <li *ngIf="canEditContent()">
                                         <div class="dropdown-item" (click)="editContent(item)">Edit</div>
                                     </li>
-                                    <li>
+                                    <li *ngIf="canDeleteContent()">
                                         <div class="dropdown-item" (click)="deleteContent(item)">Delete</div>
                                     </li>
                                 </ul>

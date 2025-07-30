@@ -548,7 +548,8 @@ export class ApiService {
       userName: userData.username, // Map username to userName for API
       email: userData.email,
       password: userData.password,
-      role: userData.role
+      role: userData.role,
+      userRoleId: userData.userRoleId
     };
     return this.createUser(mappedUserData);
   }
@@ -560,7 +561,8 @@ export class ApiService {
       lastName: userData.lastName,
       userName: userData.username, // Map username to userName for API
       email: userData.email,
-      role: userData.role
+      role: userData.role,
+      userRoleId: userData.userRoleId
     };
     return this.updateUser(userId, mappedUserData);
   }

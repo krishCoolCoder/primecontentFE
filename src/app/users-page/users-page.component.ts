@@ -6,6 +6,7 @@ import { NgFor, CommonModule } from '@angular/common';
 import { FilterModalComponent, UserFilter } from '../modals/filter-modal/filter-modal.component';
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user.model';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-users-page',
@@ -22,7 +23,8 @@ export class UsersPageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit() {
@@ -113,5 +115,18 @@ export class UsersPageComponent implements OnInit {
     this.currentFilters = filters;
     this.loadUsers(filters);
     this.closeFilter();
+  }
+
+  // Permission checking methods
+  canEditUser(): boolean {
+    return this.permissionService.hasUpdatePermission('user');
+  }
+
+  canDeleteUser(): boolean {
+    return this.permissionService.hasDeletePermission('user');
+  }
+
+  canCreateUser(): boolean {
+    return this.permissionService.hasCreatePermission('user');
   }
 }

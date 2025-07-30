@@ -4,6 +4,7 @@
     <div class="container">
         <div class="contentContainer d-flex justify-content-between align-items-center">
             <button 
+            *ngIf="canCreateUserRole()"
             type="button createContent" 
             class="btn btn-primary" 
             (click)="redirectToCreateUserRole()"
@@ -45,20 +46,17 @@
             <div class="d-flex justify-content-center align-items-center flex-column pt-2">
                 <div class="w-50" *ngFor="let role of userRoles">
                     <div class="item">
-                        <div class="dropdown">
+                        <div class="dropdown" *ngIf="canEditUserRole() || canDeleteUserRole()">
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
                                 <li>
                                     <div class="dropdown-item" (click)="viewUserRole(role)">View</div>
                                 </li>
-                                <li>
-                                    <div class="dropdown-item" (click)="createUserRole(role)">Create</div>
-                                </li>
-                                <li>
+                                <li *ngIf="canEditUserRole()">
                                     <div class="dropdown-item" (click)="editUserRole(role)">Edit</div>
                                 </li>
-                                <li>
+                                <li *ngIf="canDeleteUserRole()">
                                     <div class="dropdown-item" (click)="deleteUserRole(role)">Delete</div>
                                 </li>
                             </ul>
@@ -85,20 +83,17 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
                 <div class="col mb-3" *ngFor="let role of userRoles">
                     <div class="item">
-                        <div class="dropdown">
+                        <div class="dropdown" *ngIf="canEditUserRole() || canDeleteUserRole()">
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
                                 <li>
                                     <div class="dropdown-item" (click)="viewUserRole(role)">View</div>
                                 </li>
-                                <li>
-                                    <div class="dropdown-item" (click)="createUserRole(role)">Create</div>
-                                </li>
-                                <li>
+                                <li *ngIf="canEditUserRole()">
                                     <div class="dropdown-item" (click)="editUserRole(role)">Edit</div>
                                 </li>
-                                <li>
+                                <li *ngIf="canDeleteUserRole()">
                                     <div class="dropdown-item" (click)="deleteUserRole(role)">Delete</div>
                                 </li>
                             </ul>

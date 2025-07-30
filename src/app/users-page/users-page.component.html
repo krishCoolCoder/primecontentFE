@@ -5,6 +5,7 @@
         <div class="contentContainer d-flex justify-content-between align-items-center">
             <div class="">
                 <button 
+                *ngIf="canCreateUser()"
                 type="button createContent" 
                 class="btn btn-primary me-3" 
                 (click)="redirectToCreateUser()"
@@ -20,14 +21,14 @@
             <div class="d-flex justify-content-center align-items-center flex-column pt-2">
                 <div class="w-50" *ngFor="let user of users">
                     <div class="item">
-                        <div class="dropdown">
+                        <div class="dropdown" *ngIf="canEditUser() || canDeleteUser()">
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
-                                <li>
+                                <li *ngIf="canEditUser()">
                                     <div class="dropdown-item" (click)="editUser(user)">Edit</div>
                                 </li>
-                                <li>
+                                <li *ngIf="canDeleteUser()">
                                     <div class="dropdown-item" (click)="deleteUser(user)">Delete</div>
                                 </li>
                             </ul>

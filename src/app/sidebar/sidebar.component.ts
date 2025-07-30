@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,18 +13,54 @@ import { filter } from 'rxjs/operators';
 })
 export class SidebarComponent implements OnInit {
   activeRoute: string = '';
+  visibleMenuItems: Array<{key: string, label: string, route: string}> = [];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private permissionService: PermissionService
+  ) {}
 
   ngOnInit() {
     // Get initial route
     this.setActiveRoute(this.router.url);
+    
+    // Initialize menu items from cached permissions
+    this.initializeMenuItems();
     
     // Listen for route changes
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
       this.setActiveRoute(event.url);
+    });
+  }
+
+  initializeMenuItems() {
+    // Get current cached permissions without making API call
+    const currentPermissions = this.permissionService.getCurrentPermissions();
+    
+    if (currentPermissions) {
+      // Use cached permissions to build menu items
+      this.visibleMenuItems = this.permissionService.getVisibleMenuItems();
+    } else {
+      // If no cached permissions, show only dashboard
+      this.visibleMenuItems = [{ key: 'dashboard', label: 'Dashboard', route: '/dashboard' }];
+    }
+    
+    // Always subscribe to permission changes to keep sidebar updated
+    this.permissionService.permissions$.subscribe({
+      next: (permissions) => {
+        if (permissions) {
+          this.visibleMenuItems = this.permissionService.getVisibleMenuItems();
+          console.log('Sidebar updated with permissions');
+        } else {
+          // No permissions - show only dashboard
+          this.visibleMenuItems = [{ key: 'dashboard', label: 'Dashboard', route: '/dashboard' }];
+        }
+      },
+      error: (error) => {
+        console.error('Error in permissions subscription:', error);
+      }
     });
   }
 
@@ -84,6 +121,9 @@ export class SidebarComponent implements OnInit {
         console.log("Loggout is clicked : ")
         localStorage.removeItem("userInfo")
         localStorage.removeItem("contentTypeList")
+        localStorage.removeItem("token")
+        // Clear permissions on logout
+        this.permissionService.clearPermissions();
         this.router.navigate(["/"])
         break;
       default:

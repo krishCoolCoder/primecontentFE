@@ -6,6 +6,7 @@ import { NgFor, CommonModule } from '@angular/common';
 import { FilterModalComponent, TagFilter } from '../modals/filter-modal/filter-modal.component';
 import { DeleteTagModalComponent } from '../modals/delete-tag-modal/delete-tag-modal.component';
 import { ApiService } from '../services/api.service';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-tags-page',
@@ -24,7 +25,8 @@ export class TagsPageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit() {
@@ -129,5 +131,18 @@ export class TagsPageComponent implements OnInit {
     this.currentFilters = filters;
     this.loadTags(filters);
     this.closeFilter();
+  }
+
+  // Permission checking methods
+  canEditTag(): boolean {
+    return this.permissionService.hasUpdatePermission('tag');
+  }
+
+  canDeleteTag(): boolean {
+    return this.permissionService.hasDeletePermission('tag');
+  }
+
+  canCreateTag(): boolean {
+    return this.permissionService.hasCreatePermission('tag');
   }
 }

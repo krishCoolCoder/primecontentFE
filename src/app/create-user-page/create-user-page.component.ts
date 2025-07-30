@@ -88,7 +88,6 @@ export class CreateUserPageComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('Submitting user data:', this.user);
     
     if (this.isEditMode) {
       this.apiService.updateUserWithMapping(this.user._id!, this.user).subscribe({

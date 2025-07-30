@@ -12,6 +12,7 @@
             (click)="redirectToCreateContent()"
             >Create content</button> -->
             <button 
+            *ngIf="canCreateTag()"
             type="button createContent" 
             class="btn btn-primary" 
             (click)="redirectToCreateTagPage()"
@@ -44,17 +45,17 @@
             <div class="d-flex justify-content-center align-items-center flex-column pt-2">
                 <div class="w-50" *ngFor="let item of tags">
                     <div class="item">
-                        <div class="dropdown">
+                        <div class="dropdown" *ngIf="canEditTag() || canDeleteTag()">
                             <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">...</div>
                             <ul class="dropdown-menu">
                                 <li>
                                     <div class="dropdown-item" (click)="viewTag(item)">View</div>
                                 </li>
-                                <li>
+                                <li *ngIf="canEditTag()">
                                     <div class="dropdown-item" (click)="editTag(item)">Edit</div>
                                 </li>
-                                <li>
+                                <li *ngIf="canDeleteTag()">
                                     <div class="dropdown-item" (click)="deleteTag(item)">Delete</div>
                                 </li>
                             </ul>
@@ -79,17 +80,17 @@
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
                     <div class="col mb-3" *ngFor="let item of tags">
                         <div class="item">
-                            <div class="dropdown">
+                            <div class="dropdown" *ngIf="canEditTag() || canDeleteTag()">
                                 <div class="dropdown-toggle options" type="button" data-bs-toggle="dropdown"
                                     aria-expanded="false">...</div>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <div class="dropdown-item" (click)="viewTag(item)">View</div>
                                     </li>
-                                    <li>
+                                    <li *ngIf="canEditTag()">
                                         <div class="dropdown-item" (click)="editTag(item)">Edit</div>
                                     </li>
-                                    <li>
+                                    <li *ngIf="canDeleteTag()">
                                         <div class="dropdown-item" (click)="deleteTag(item)">Delete</div>
                                     </li>
                                 </ul>
