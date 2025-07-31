@@ -151,6 +151,12 @@ export class ApiService {
 
   // 4. Create User (Register)
   createUser(userData: any): Observable<any> {
+    console.log('=== FINAL API CALL DEBUG ===');
+    console.log('Final payload being sent to API:', userData);
+    console.log('Role field in final payload:', userData.role);
+    console.log('UserRoleId field in final payload:', userData.userRoleId);
+    console.log('API endpoint:', `${this.baseUrl}/api/users/register`);
+    
     return this.http.post(`${this.baseUrl}/api/users/register`, userData)
       .pipe(catchError(this.handleError));
   }
@@ -551,6 +557,13 @@ export class ApiService {
       role: userData.role,
       userRoleId: userData.userRoleId
     };
+    
+    console.log('=== API SERVICE CREATE USER DEBUG ===');
+    console.log('Original userData:', userData);
+    console.log('Mapped userData being sent to API:', mappedUserData);
+    console.log('userRoleId in mapped data:', mappedUserData.userRoleId);
+    console.log('role name in mapped data:', mappedUserData.role);
+    
     return this.createUser(mappedUserData);
   }
 
@@ -564,6 +577,13 @@ export class ApiService {
       role: userData.role,
       userRoleId: userData.userRoleId
     };
+    
+    console.log('=== API SERVICE UPDATE USER DEBUG ===');
+    console.log('Original userData:', userData);
+    console.log('Mapped userData being sent to API:', mappedUserData);
+    console.log('userRoleId in mapped data:', mappedUserData.userRoleId);
+    console.log('role name in mapped data:', mappedUserData.role);
+    
     return this.updateUser(userId, mappedUserData);
   }
 

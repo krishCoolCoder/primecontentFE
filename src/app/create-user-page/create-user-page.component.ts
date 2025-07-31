@@ -39,14 +39,15 @@ export class CreateUserPageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadUserRoles();
     this.route.params.subscribe(params => {
       if (params['id']) {
         this.isEditMode = true;
         this.userId = params['id'];
-        this.loadUserForEdit();
       }
     });
+    
+    // Load user roles first, then load user for edit if needed
+    this.loadUserRoles();
   }
 
   loadUserRoles() {
@@ -54,6 +55,11 @@ export class CreateUserPageComponent implements OnInit {
       next: (userRoles) => {
         this.userRoles = userRoles;
         console.log('User roles loaded:', userRoles);
+        
+        // After user roles are loaded, load user for edit if in edit mode
+        if (this.isEditMode && this.userId) {
+          this.loadUserForEdit();
+        }
       },
       error: (error) => {
         console.error('Error loading user roles:', error);
@@ -78,7 +84,21 @@ export class CreateUserPageComponent implements OnInit {
           userRoleId: response.data.userRoleId || ''
         };
         
-        console.log('User object after assignment:', this.user);
+        // Find and set the role name based on userRoleId
+        if (this.user.userRoleId && this.userRoles.length > 0) {
+          const userRole = this.userRoles.find(role => role._id === this.user.userRoleId);
+          if (userRole) {
+            this.user.role = userRole.roleName;
+            console.log('Set role name for edit mode:', this.user.role);
+          } else {
+            console.warn('Could not find role name for userRoleId:', this.user.userRoleId);
+            this.user.role = response.data.role || ''; // Fallback to API response role if available
+          }
+        } else {
+          this.user.role = response.data.role || ''; // Fallback to API response role if available
+        }
+        
+        console.log('User object after assignment and role mapping:', this.user);
       },
       error: (error) => {
         console.error('Error loading user:', error);
@@ -88,8 +108,39 @@ export class CreateUserPageComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('=== USER SUBMISSION DEBUG ===');
+    console.log('User data being submitted:', this.user);
+    console.log('userRoleId specifically:', this.user.userRoleId);
+    console.log('role specifically:', this.user.role);
+    console.log('Is edit mode:', this.isEditMode);
+    
+    // Validate that userRoleId is selected for create mode
+    if (!this.isEditMode && (!this.user.userRoleId || this.user.userRoleId.trim() === '')) {
+      alert('Please select a user role before creating the user.');
+      return;
+    }
+    
+    // Validate that userRoleId is selected for edit mode too
+    if (this.isEditMode && (!this.user.userRoleId || this.user.userRoleId.trim() === '')) {
+      alert('Please select a user role before updating the user.');
+      return;
+    }
+    
+    // Additional validation to ensure role name is also set
+    if (!this.user.role || this.user.role.trim() === '') {
+      console.warn('Role name is missing, trying to find it from userRoleId...');
+      const selectedRole = this.userRoles.find(role => role._id === this.user.userRoleId);
+      if (selectedRole) {
+        this.user.role = selectedRole.roleName;
+        console.log('Found and set role name:', this.user.role);
+      } else {
+        alert('Unable to determine role name. Please reselect the user role.');
+        return;
+      }
+    }
     
     if (this.isEditMode) {
+      console.log('Updating user with data:', this.user);
       this.apiService.updateUserWithMapping(this.user._id!, this.user).subscribe({
         next: (response) => {
           console.log('User updated successfully:', response);
@@ -100,6 +151,7 @@ export class CreateUserPageComponent implements OnInit {
         }
       });
     } else {
+      console.log('Creating user with data:', this.user);
       this.apiService.createUserWithMapping(this.user).subscribe({
         next: (response) => {
           console.log('User created successfully:', response);
@@ -116,17 +168,28 @@ export class CreateUserPageComponent implements OnInit {
     const target = event.target as HTMLSelectElement;
     const selectedUserRoleId = target.value;
     
+    console.log('=== ROLE CHANGE DEBUG ===');
+    console.log('Selected userRoleId:', selectedUserRoleId);
+    console.log('Available userRoles:', this.userRoles);
+    
     this.user.userRoleId = selectedUserRoleId;
     
     // Find the selected role to set the role name
     const selectedRole = this.userRoles.find(role => role._id === selectedUserRoleId);
+    console.log('Found selectedRole:', selectedRole);
+    
     if (selectedRole) {
       this.user.role = selectedRole.roleName;
+      console.log('Set role name to:', this.user.role);
+    } else {
+      console.warn('No role found for userRoleId:', selectedUserRoleId);
+      this.user.role = ''; // Clear role if not found
     }
     
-    console.log('Role changed:', {
+    console.log('Final user object after role change:', {
       userRoleId: this.user.userRoleId,
-      role: this.user.role
+      role: this.user.role,
+      fullUser: this.user
     });
   }
 
