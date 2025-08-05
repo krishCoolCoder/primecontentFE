@@ -146,6 +146,75 @@ export class ContentTypePageComponent implements OnInit {
     });
   }
 
+  // Copy create content cURL command to clipboard
+  copyCreateContentCurl(contentType: any) {
+    const baseUrl = 'localhost:3000'; // Matching the reference format
+    const url = `${baseUrl}/api/contents`; // Note: 'contents' with 's'
+    const token = localStorage.getItem('token');
+    
+    // Generate contentFields array based on content type fields
+    const contentFields: any[] = [];
+    
+    if (contentType.contentTypeList && contentType.contentTypeList.length > 0) {
+      contentType.contentTypeList.forEach((field: any) => {
+        let sampleValue: any;
+        
+        switch (field.fieldType) {
+          case 'String':
+            sampleValue = field.fieldName === 'title' ? `My First ${contentType.contentTypeName}` : 
+                         field.fieldName === 'author' ? 'John Doe' : 
+                         `Sample ${field.fieldName}`;
+            break;
+          case 'Text':
+            sampleValue = `This is the ${field.fieldName} of my first ${contentType.contentTypeName.toLowerCase()}.`;
+            break;
+          case 'Number':
+            sampleValue = 123;
+            break;
+          case 'Boolean':
+            sampleValue = true;
+            break;
+          case 'Date':
+            sampleValue = new Date().toISOString();
+            break;
+          case 'Array':
+            sampleValue = [`Sample ${field.fieldName} item 1`, `Sample ${field.fieldName} item 2`];
+            break;
+          case 'Object':
+            sampleValue = { key: `Sample ${field.fieldName} value` };
+            break;
+          default:
+            sampleValue = `Sample ${field.fieldName}`;
+        }
+        
+        contentFields.push({
+          fieldName: field.fieldName,
+          fieldType: field.fieldType,
+          fieldValue: sampleValue
+        });
+      });
+    }
+    
+    // Generate the payload matching the reference structure
+    const samplePayload = {
+      contentType: contentType.contentTypeName,
+      contentTypeId: contentType._id,
+      contentFields: contentFields
+    };
+    
+    const curlCommand = `curl --location '${url}' \\
+--header 'Content-Type: application/json' \\
+--header 'Authorization: Bearer ${token || 'YOUR_TOKEN_HERE'}' \\
+--data '${JSON.stringify(samplePayload, null, 4)}'`;
+    
+    navigator.clipboard.writeText(curlCommand).then(() => {
+      console.log('Create content cURL command copied to clipboard');
+      // You can add a toast notification here if needed
+    }).catch(err => {
+      console.error('Failed to copy create content cURL command: ', err);
+    });
+  }
+
   // Permission checking methods
   canEditContentType(): boolean {
     return this.permissionService.hasUpdatePermission('contentType');

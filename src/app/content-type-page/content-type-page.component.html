@@ -93,11 +93,19 @@
                             </button>
                             <button 
                                 type="button" 
-                                class="btn btn-copy" 
+                                class="btn btn-copy me-2" 
                                 (click)="copyCurl(contentType)"
                                 title="Copy cURL">
                                 <i class="fas fa-terminal"></i>
-                                <span class="btn-text">Copy cURL</span>
+                                <span class="btn-text">Copy content list cURL</span>
+                            </button>
+                            <button 
+                                type="button" 
+                                class="btn btn-copy" 
+                                (click)="copyCreateContentCurl(contentType)"
+                                title="Copy create content cURL">
+                                <i class="fas fa-plus-circle"></i>
+                                <span class="btn-text">Copy create content cURL</span>
                             </button>
                         </div>
                     </div>
@@ -164,6 +172,14 @@
                                     title="Copy cURL">
                                     <i class="fas fa-terminal"></i>
                                     <span class="btn-text">Copy cURL</span>
+                                </button>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-copy" 
+                                    (click)="copyCreateContentCurl(contentType)"
+                                    title="Copy create content cURL">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span class="btn-text">Copy create content cURL</span>
                                 </button>
                             </div>
                         </div>
