@@ -19,35 +19,82 @@
                                 </div>
                                 <div class="mb-1 d-flex">
                                     <label for="exampleInputEmail1" class="form-label flex-grow-1">Content Field Name</label>
-                                    <label for="exampleInputEmail1" class="form-label flex-grow-2 me-5 ">Field type</label>
+                                    <label for="exampleInputEmail1" class="form-label flex-grow-2 me-5">Field type</label>
+                                    <label for="exampleInputEmail1" class="form-label" style="width: 50px;">Action</label>
                                 </div>
-                                <div class="" *ngFor="let field of contentType.contentTypeList; index as i">
-                                <div class="mb-3 d-flex">
-                                    <div class="flex-grow-1">
-                                        <input type="text" name="fieldName{{ i }}" [(ngModel)]="field.fieldName" placeholder="Content Field Name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                                    </div>
-                                    <div class="flex-grow-2 me-2 ms-2">
-                                        <select id="exampleInputEmail1" class="form-select w-15"
-                                        name="fieldType{{ i }}"
-                                        [(ngModel)]="field.fieldType"
-                                        >
-                                          <option value="String">String</option>
-                                          <option value="Number">Number</option>
-                                          <option value="Boolean">Boolean</option>
-                                          <option value="Date">Date</option>
-                                          <option value="Array">Array</option>
-                                          <option value="Object">Object</option>
-                                        </select>
+                                <div class="field-row" *ngFor="let field of contentType.contentTypeList; index as i">
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="flex-grow-1 me-2">
+                                            <input type="text" 
+                                                   name="fieldName{{ i }}" 
+                                                   [(ngModel)]="field.fieldName" 
+                                                   placeholder="Content Field Name" 
+                                                   class="form-control" 
+                                                   id="fieldName{{ i }}" 
+                                                   aria-describedby="fieldNameHelp">
+                                        </div>
+                                        <div class="flex-grow-2 me-2 ms-2">
+                                            <select id="fieldType{{ i }}" 
+                                                    class="form-select w-15"
+                                                    name="fieldType{{ i }}"
+                                                    [(ngModel)]="field.fieldType">
+                                                <option value="String">String</option>
+                                                <option value="Number">Number</option>
+                                                <option value="Boolean">Boolean</option>
+                                                <option value="Date">Date</option>
+                                                <option value="Array">Array</option>
+                                                <option value="Object">Object</option>
+                                            </select>
+                                        </div>
+                                        <div class="delete-button-container">
+                                            <button type="button"
+                                                    class="btn btn-outline-danger btn-sm"
+                                                    (click)="confirmDeleteField(i)"
+                                                    [disabled]="contentType.contentTypeList.length <= 1"
+                                                    [title]="contentType.contentTypeList.length <= 1 ? 'Cannot delete the last field' : 'Delete this field'">X
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                                 
-                                <button class="btn btn-primary me-3 mb-2" (click)="addAnotherField()">Add another field</button>
-                                <button class="btn btn-primary mb-2" (click)="createContentType()">Create content type</button>
+                                <!-- Info alert when only one field remains -->
+                                <div class="alert alert-info mt-3" *ngIf="contentType.contentTypeList.length === 1">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Note:</strong> A content type must have at least one field. You cannot delete the last remaining field.
+                                </div>
+                                
+                                <button class="btn btn-primary me-3 mb-2" (click)="addAnotherField()">
+                                    <i class="fas fa-plus me-2"></i>Add another field
+                                </button>
+                                <button class="btn btn-primary mb-2" (click)="createContentType()">
+                                    <i class="fas fa-save me-2"></i>Create content type
+                                </button>
                             </form>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Field Deletion</h5>
+                <button type="button" class="btn-close" (click)="cancelDeleteField()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the field "<strong>{{ fieldToDelete?.fieldName || 'Unnamed Field' }}</strong>" of type "<strong>{{ fieldToDelete?.fieldType }}</strong>"?</p>
+                <p class="text-muted">This action cannot be undone and will permanently remove this field from the content type.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cancelDeleteField()">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="executeDeleteField()">
+                    <i class="fas fa-trash me-2"></i>Delete Field
+                </button>
             </div>
         </div>
     </div>
